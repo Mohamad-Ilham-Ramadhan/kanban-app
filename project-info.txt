@@ -1,0 +1,2 @@
+font: 'Jakarta Plus Sans'
+Reference: https://kanban-app-jay.netlify.app/
