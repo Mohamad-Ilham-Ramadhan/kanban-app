@@ -2,9 +2,9 @@
 import Draggable, { DraggableProps } from "react-draggable"
 import { DraggableCore } from "react-draggable"
 import { useState, useEffect, useRef } from "react"
-import type { Todo } from "../_redux/reducers/todoReducer"
+import type { Todo } from "../_redux/reducers/taskReducer"
 import { useDispatch } from "react-redux"
-import { swap, move, setPageYTop, setPageYBottom } from "../_redux/reducers/todoReducer"
+import { swap, move, setPageYTop, setPageYBottom } from "../_redux/reducers/taskReducer"
 
 export default function Todo({ text, y, id, index, pageYTop, pageYBottom }: { text: Todo['text']; y: Todo['y']; id: Todo['id']; pageYTop: Todo['pageYTop']; pageYBottom: Todo['pageYBottom']; index: number }) {
    const dispatch = useDispatch()

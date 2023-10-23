@@ -3,8 +3,8 @@ import Draggable from "react-draggable"
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from "../_redux/store"
 import Todo from "../_components/Todo"
-import type { Todo as typeTodo } from "../_redux/reducers/todoReducer"
-import { swap, move, resetY } from "../_redux/reducers/todoReducer"
+import type { Todo as typeTodo } from "../_redux/reducers/taskReducer"
+import { swap, move, resetY } from "../_redux/reducers/taskReducer"
 import { useState } from "react"
 
 export default function Drag() {

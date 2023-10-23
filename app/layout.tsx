@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <Provider store={store}>
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className='bg-dark'>
       <ThemeProvider attribute='class'>
         {children}
 
