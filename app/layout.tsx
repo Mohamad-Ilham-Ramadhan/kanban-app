@@ -2,9 +2,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Provider } from "react-redux"
-import { store } from "./_redux/store"
+import { store, persistor } from "./_redux/store"
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 // export const metadata: Metadata = {
@@ -18,15 +19,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <Provider store={store}>
     <html lang="en" suppressHydrationWarning>
       <body className='bg-dark'>
-      <ThemeProvider attribute='class'>
-        {children}
-
-      </ThemeProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ThemeProvider attribute='class'>
+              {children}
+            </ThemeProvider>
+          </PersistGate>
+        </Provider>
       </body>
     </html>
-    </Provider>
   )
 }
