@@ -35,172 +35,181 @@ export type Board = {
 interface TaskState {
    tasks: Task[]
 }
-const initialState: { boards: Board[] } = {
-   boards: [
-      {
-         id: uuidv4(), 
-         name: 'Platform Launch', 
-         columns: [
-            {
-               id: uuidv4(), 
-               name: 'Todo', 
-               tasks: [
-                  {id: uuidv4(), title: 'Build UI for onboarding flow.', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Sign up page', isDone: true},
-                     {id: uuidv4(), text: 'Sign in page', isDone: false},
-                     {id: uuidv4(), text: 'Welcome page', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Build UI for search.', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Search page', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Build settings UI.', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Account page', isDone: false},
-                     {id: uuidv4(), text: 'Billing page', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'QA and test all major user journeys.', description: 'Once we feel version one is ready, we need to rigorously test it both internally and externally to identify any major gaps.', subtasks: [
-                     {id: uuidv4(), text: 'Internal testing', isDone: false},
-                     {id: uuidv4(), text: 'External testing', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            },
-            {
-               id: uuidv4(), 
-               name: 'Doing', 
-               tasks: [
-                  {id: uuidv4(), title: 'Design settings and search pages', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Settings - Accoung page', isDone: true},
-                     {id: uuidv4(), text: 'Settings - Billing page', isDone: true},
-                     {id: uuidv4(), text: 'Search page', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Add account management endpoints', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Upgrade plan', isDone: true},
-                     {id: uuidv4(), text: 'Cancel plan', isDone: true},
-                     {id: uuidv4(), text: 'Update payment method', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Design onboarding flow', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Sign up page', isDone: true},
-                     {id: uuidv4(), text: 'Sign in page', isDone: false},
-                     {id: uuidv4(), text: 'Welcome page', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Add search endpoints', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Add search endpoint', isDone: true},
-                     {id: uuidv4(), text: 'Define search filters', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Add authentication endpoints', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Define user model', isDone: true},
-                     {id: uuidv4(), text: 'Add auth endpoints', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Research pricing points of various competitors and trial different business models', description: "We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.", subtasks: [
-                     {id: uuidv4(), text: 'Research competitor pricing and business models', isDone: true},
-                     {id: uuidv4(), text: 'Outline a business model that works for our solution', isDone: false},
-                     {id: uuidv4(), text: 'Talk to potential customers about our proposed solution and a sk for fair price expectancy', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            },
-            {
-               id: uuidv4(), 
-               name: 'Done', 
-               tasks: [
-                  {id: uuidv4(), title: 'Conduct 5 wireframes tests', description: 'Ensure the layout continues to make sense and we have strong buy-in from potential users.', subtasks: [
-                     {id: uuidv4(), text: 'Complete 5 wireframe prototype tests', isDone: true},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Create wireframe prototype', description: 'Create a greyscale clickable wireframe prototype to test our asssumptions so far.', subtasks: [
-                     {id: uuidv4(), text: 'Create clickable wireframe prototype in Balsamiq', isDone: true},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Review result of usability tests and iterate', description: "Keep iterating through the subtasks until we're clear on the core concepts for the app.", subtasks: [
-                     {id: uuidv4(), text: 'Meet to review notes from previous tests and plan changes', isDone: true},
-                     {id: uuidv4(), text: 'Make changes to paper prototypes', isDone: true},
-                     {id: uuidv4(), text: 'Conduct 5 usability tests', isDone: true},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Create paper prototypes and conduct 10 usability tests with potential customers', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Create paper prototypes for version one', isDone: true},
-                     {id: uuidv4(), text: 'Complete 10 usability tests', isDone: true},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            }
-            
-            
-         ] 
-      },
+const initialState: Board[] = [
+   {
+      id: uuidv4(), 
+      name: 'Platform Launch', 
+      columns: [
+         {
+            id: uuidv4(), 
+            name: 'Todo', 
+            tasks: [
+               {id: uuidv4(), title: 'Build UI for onboarding flow.', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Sign up page', isDone: true},
+                  {id: uuidv4(), text: 'Sign in page', isDone: false},
+                  {id: uuidv4(), text: 'Welcome page', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Build UI for search.', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Search page', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Build settings UI.', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Account page', isDone: false},
+                  {id: uuidv4(), text: 'Billing page', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'QA and test all major user journeys.', description: 'Once we feel version one is ready, we need to rigorously test it both internally and externally to identify any major gaps.', subtasks: [
+                  {id: uuidv4(), text: 'Internal testing', isDone: false},
+                  {id: uuidv4(), text: 'External testing', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         },
+         {
+            id: uuidv4(), 
+            name: 'Doing', 
+            tasks: [
+               {id: uuidv4(), title: 'Design settings and search pages', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Settings - Accoung page', isDone: true},
+                  {id: uuidv4(), text: 'Settings - Billing page', isDone: true},
+                  {id: uuidv4(), text: 'Search page', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Add account management endpoints', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Upgrade plan', isDone: true},
+                  {id: uuidv4(), text: 'Cancel plan', isDone: true},
+                  {id: uuidv4(), text: 'Update payment method', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Design onboarding flow', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Sign up page', isDone: true},
+                  {id: uuidv4(), text: 'Sign in page', isDone: false},
+                  {id: uuidv4(), text: 'Welcome page', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Add search endpoints', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Add search endpoint', isDone: true},
+                  {id: uuidv4(), text: 'Define search filters', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Add authentication endpoints', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Define user model', isDone: true},
+                  {id: uuidv4(), text: 'Add auth endpoints', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Research pricing points of various competitors and trial different business models', description: "We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.", subtasks: [
+                  {id: uuidv4(), text: 'Research competitor pricing and business models', isDone: true},
+                  {id: uuidv4(), text: 'Outline a business model that works for our solution', isDone: false},
+                  {id: uuidv4(), text: 'Talk to potential customers about our proposed solution and a sk for fair price expectancy', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         },
+         {
+            id: uuidv4(), 
+            name: 'Done', 
+            tasks: [
+               {id: uuidv4(), title: 'Conduct 5 wireframes tests', description: 'Ensure the layout continues to make sense and we have strong buy-in from potential users.', subtasks: [
+                  {id: uuidv4(), text: 'Complete 5 wireframe prototype tests', isDone: true},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Create wireframe prototype', description: 'Create a greyscale clickable wireframe prototype to test our asssumptions so far.', subtasks: [
+                  {id: uuidv4(), text: 'Create clickable wireframe prototype in Balsamiq', isDone: true},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Review result of usability tests and iterate', description: "Keep iterating through the subtasks until we're clear on the core concepts for the app.", subtasks: [
+                  {id: uuidv4(), text: 'Meet to review notes from previous tests and plan changes', isDone: true},
+                  {id: uuidv4(), text: 'Make changes to paper prototypes', isDone: true},
+                  {id: uuidv4(), text: 'Conduct 5 usability tests', isDone: true},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Create paper prototypes and conduct 10 usability tests with potential customers', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Create paper prototypes for version one', isDone: true},
+                  {id: uuidv4(), text: 'Complete 10 usability tests', isDone: true},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         }
+         
+         
+      ] 
+   },
 
-      {
-         id: uuidv4(), 
-         name: 'Marketing Plan', 
-         columns: [
-            {
-               id: uuidv4(), 
-               name: 'Todo', 
-               tasks: [
-                  {id: uuidv4(), title: 'Plan Product Hunt launch', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Find hunter', isDone: false},
-                     {id: uuidv4(), text: 'Gather assets', isDone: false},
-                     {id: uuidv4(), text: 'Draft product page', isDone: false},
-                     {id: uuidv4(), text: 'Notify customers', isDone: false},
-                     {id: uuidv4(), text: 'Notify network', isDone: false},
-                     {id: uuidv4(), text: 'Launch!', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Share on Show HN', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Draft out HN post', isDone: false},
-                     {id: uuidv4(), text: 'Get feedback and refine', isDone: false},
-                     {id: uuidv4(), text: 'Publish post', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-                  {id: uuidv4(), title: 'Write launch article to publish on multiple channels', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Write article', isDone: false},
-                     {id: uuidv4(), text: 'Publish on LinkedIn', isDone: false},
-                     {id: uuidv4(), text: 'Publish on Indie Hackers', isDone: false},
-                     {id: uuidv4(), text: 'Publish on Medium', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            },
-            {
-               id: uuidv4(), 
-               name: 'Doing', 
-               tasks: []
-            },
-         ] 
-      },
+   {
+      id: uuidv4(), 
+      name: 'Marketing Plan', 
+      columns: [
+         {
+            id: uuidv4(), 
+            name: 'Todo', 
+            tasks: [
+               {id: uuidv4(), title: 'Plan Product Hunt launch', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Find hunter', isDone: false},
+                  {id: uuidv4(), text: 'Gather assets', isDone: false},
+                  {id: uuidv4(), text: 'Draft product page', isDone: false},
+                  {id: uuidv4(), text: 'Notify customers', isDone: false},
+                  {id: uuidv4(), text: 'Notify network', isDone: false},
+                  {id: uuidv4(), text: 'Launch!', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Share on Show HN', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Draft out HN post', isDone: false},
+                  {id: uuidv4(), text: 'Get feedback and refine', isDone: false},
+                  {id: uuidv4(), text: 'Publish post', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+               {id: uuidv4(), title: 'Write launch article to publish on multiple channels', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Write article', isDone: false},
+                  {id: uuidv4(), text: 'Publish on LinkedIn', isDone: false},
+                  {id: uuidv4(), text: 'Publish on Indie Hackers', isDone: false},
+                  {id: uuidv4(), text: 'Publish on Medium', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         },
+         {
+            id: uuidv4(), 
+            name: 'Doing', 
+            tasks: []
+         },
+      ] 
+   },
 
-      {
-         id: uuidv4(), 
-         name: 'Roadmap', 
-         columns: [
-            {
-               id: uuidv4(), 
-               name: 'Now', 
-               tasks: [
-                  {id: uuidv4(), title: 'Launch version one', description: '', subtasks: [
-                     {id: uuidv4(), text: 'Launch privately to our waitlist', isDone: false},
-                     {id: uuidv4(), text: 'Launch publicly on PH, HN, etc.', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            },
-            {
-               id: uuidv4(), 
-               name: 'Next', 
-               tasks: [
-                  {id: uuidv4(), title: 'Review early feedback and plan next steps for roadmap', description: "Beyond the initial launch, we're keeping the initial roadmap completely empty. This meeting will help us plan out our next steps based on actual customer feedback.", subtasks: [
-                     {id: uuidv4(), text: 'Interview 10 customers', isDone: false},
-                     {id: uuidv4(), text: 'Review common customer pain points and suggestions', isDone: false},
-                     {id: uuidv4(), text: 'Outline next steps for our roadmap', isDone: false},
-                  ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
-               ]
-            },
-            {
-               id: uuidv4(),
-               name: 'Later',
-               tasks: []
-            }
-         ] 
-      },
-   ]
-}
+   {
+      id: uuidv4(), 
+      name: 'Roadmap', 
+      columns: [
+         {
+            id: uuidv4(), 
+            name: 'Now', 
+            tasks: [
+               {id: uuidv4(), title: 'Launch version one', description: '', subtasks: [
+                  {id: uuidv4(), text: 'Launch privately to our waitlist', isDone: false},
+                  {id: uuidv4(), text: 'Launch publicly on PH, HN, etc.', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         },
+         {
+            id: uuidv4(), 
+            name: 'Next', 
+            tasks: [
+               {id: uuidv4(), title: 'Review early feedback and plan next steps for roadmap', description: "Beyond the initial launch, we're keeping the initial roadmap completely empty. This meeting will help us plan out our next steps based on actual customer feedback.", subtasks: [
+                  {id: uuidv4(), text: 'Interview 10 customers', isDone: false},
+                  {id: uuidv4(), text: 'Review common customer pain points and suggestions', isDone: false},
+                  {id: uuidv4(), text: 'Outline next steps for our roadmap', isDone: false},
+               ], y: 0, pageYTop: 0, pageYBottom: 0, moved: ''},
+            ]
+         },
+         {
+            id: uuidv4(),
+            name: 'Later',
+            tasks: []
+         }
+      ] 
+   },
+]
 
 
-export const taskSlice = createSlice({
+
+export const boardSlice = createSlice({
    name: 'board',
    initialState,
    reducers: {
-     
+      createNewBoard: (state, action) => {
+         state.push({
+            id: uuidv4(),
+            name:  action.payload.name,
+            columns: action.payload.columns.map( (c: string )=> ({
+               id: uuidv4(),
+               name: c,
+               subtasks: []
+            }))
+         })
+      }
    }
 })
 
@@ -262,4 +271,5 @@ export const taskSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const tasks = (state: RootState) => state.task.tasks
 
-export default taskSlice.reducer
+export const {  createNewBoard } =  boardSlice.actions
+export default boardSlice.reducer

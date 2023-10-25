@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className='bg-dark'>
+      <body className='bg-[#20212c]'>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider attribute='class'>

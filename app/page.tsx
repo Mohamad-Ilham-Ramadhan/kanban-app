@@ -7,8 +7,8 @@ import logo from './_assets/kanban-logo.svg'
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './_redux/store';
-import { addList, deleteList } from './_redux/reducers/listReducer';
-import { increment, decrement } from './_redux/reducers/counterReducer';
+import { createNewBoard } from './_redux/reducers/boardReducer';
+import ButtonPillLg from './_components/buttons/buttonPillLg';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState<'light' | 'dark'>('light')
@@ -23,50 +23,15 @@ export default function Home() {
   const [listText, setListText] = useState('')
   return (
     <>
-    <div className="grid grid-rows-1 grid-cols-[300px,1fr] py-4 bg-slate-400">
-      <div>
-        <img src={logo.src} alt="Kanban App" />
+      <div className="flex bg-[#2b2c37] border-b border-gray-700">
+        <div className="w-[300px] p-8 border-r border-gray-700">
+          <img src={logo.src} alt="Kanban App" />
+        </div>
+        <div className="p-8 flex">
+          <div className="text-2xl font-bold">Get job</div>
+          <ButtonPillLg text={'+ Add New Task'} onClick={() => {alert('fuck you')}} />
+        </div>
       </div>
-    </div>
-    <div>
-      <div>Add list:</div>
-      <div>
-        <label htmlFor="">Text: </label>
-        <input type="text" value={listText} onChange={(e) => setListText(e.target.value)} />
-        <button className="px-2 bg-slate-500 active:bg-slate-700"
-          onClick={() => {
-            dispatch(addList({id: uuidv4(), text: listText}))
-            setListText('')
-          }}
-        >Add</button>
-      </div>
-    </div>
-    <div>List:</div>
-    <div>
-      {state.list.map( (l, idx) => (
-          <li data-index={idx}>
-            {l.text}
-            <span>
-              <button 
-                className="px-1 bg-slate-500 active:bg-slate-700"
-                onClick={() => {
-                  dispatch(deleteList(Number(idx)))
-                }}
-              >x</button></span></li>
-        ))}
-    </div>
-
-    <div>
-      <div>Counter:</div>
-      <div>
-        <button className="px-2 bg-slate-500 active:bg-slate-700"
-          onClick={() => {dispatch(decrement())} }
-        >-</button>
-        {state.counter}
-        <button className="px-2 bg-slate-500 active:bg-slate-700"
-          onClick={() => {dispatch(increment())} }
-        >+</button></div>
-    </div>
     </>
   )
 }
