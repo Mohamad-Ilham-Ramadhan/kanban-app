@@ -8,11 +8,12 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    colors: {
-      'primary': '#635FC7',
-      'primary-light': '#A8A4FF',
-    },
     extend: {
+      colors: {
+        'primary': '#635FC7',
+        'primary-light': '#A8A4FF',
+        'dark': '#20212c'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
