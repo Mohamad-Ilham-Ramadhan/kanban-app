@@ -14,6 +14,7 @@ import { ScrollContainer } from 'react-indiana-drag-scroll';
 import 'react-indiana-drag-scroll/dist/style.css'
 // import boardIcon from './_assets/icons/board.svg'
 import BoardIcon from './_assets/icons/board.svg'
+import clsx from 'clsx';
 
 
 export default function Home() {
@@ -62,13 +63,13 @@ export default function Home() {
             <nav className="list-none">
               {boards.map( (b, index) => (
                 <li 
-                  className="text-slate-400 font-bold mb-2 py-2 pl-8 hover:bg-primary-light hover:text-white hover:cursor-pointer rounded-r-full flex items-center"
+                  className={clsx("text-slate-400 font-bold mb-2 py-3 pl-8 hover:cursor-pointer rounded-r-full flex items-center", state.board.activeBoard === index ? 'bg-primary text-white' : 'hover:bg-primary-light hover:text-white')}
                   onClick={() => {
                     dispatch(setActiveBoard(index))
                   }}
                 >
                   <BoardIcon className="mr-4" />
-                  <span>{b.name}</span>
+                  <span>{b.name}</span> 
                 </li>
               ))}
             </nav>
