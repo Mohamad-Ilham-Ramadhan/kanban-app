@@ -72,6 +72,16 @@ export default function Home() {
                   <span>{b.name}</span> 
                 </li>
               ))}
+              <li 
+                className="flex items-center text-primary font-bold py-3 pl-8 hover:cursor-pointer hover:opacity-50"
+                onClick={() => {
+                  alert('bikin anak')
+                }}
+              >
+                
+                <BoardIcon className="mr-4" />
+                <span>+ Create New Board</span>
+              </li>
             </nav>
           </div>
         </aside>
