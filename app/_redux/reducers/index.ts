@@ -3,7 +3,9 @@ import { combineReducers } from "@reduxjs/toolkit";
 import listReducer from "./listReducer";
 import counterReducer from "./counterReducer";
 import boardReducer from "./boardReducer";
+import activeBoardReducer from "./activeBoardReducer";
 
 export const rootReducer = combineReducers({
-   boards: boardReducer
+   boards: boardReducer,
+   activeboard: activeBoardReducer,
 });

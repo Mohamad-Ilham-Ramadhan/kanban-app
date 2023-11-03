@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import KanbanLogo from './_assets/kanban-logo.svg'
 import { v4 as uuidv4 } from 'uuid';
@@ -14,6 +14,7 @@ import { ScrollContainer } from 'react-indiana-drag-scroll';
 import 'react-indiana-drag-scroll/dist/style.css'
 // import boardIcon from './_assets/icons/board.svg'
 import BoardIcon from './_assets/icons/board.svg'
+import { setActiveBoard } from './_redux/reducers/activeBoardReducer';
 
 
 export default function Home() {
@@ -24,9 +25,18 @@ export default function Home() {
   const dispatch = useDispatch();
   console.log('STATE', state)
 
-  console.log('uuidv4', uuidv4())
-
+  // set active board 
+  useEffect(() => {
+    if (state.activeboard === '') {
+      dispatch(setActiveBoard(state.boards[0].id))
+    }
+  }, [])
   const [listText, setListText] = useState('')
+
+  const boards = state.boards 
+
+
+  // const columns = state.boards.co
   return (
     <>
       <header className="flex items-center fixed z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
@@ -61,8 +71,10 @@ export default function Home() {
             </nav>
           </div>
         </aside>
-        <section className="grow overflow-x-scroll">
-              
+        <section className="grow overflow-x-scroll bg-red-500">
+          <div className='flex flex-row'>
+                {}
+          </div>
         </section>
       </main>
     </>
