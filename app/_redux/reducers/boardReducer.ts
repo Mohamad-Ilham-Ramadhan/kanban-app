@@ -35,7 +35,7 @@ export type Board = {
 interface TaskState {
    tasks: Task[]
 }
-const initialState: Board[] = [
+const boards: Board[] = [
    {
       id: uuidv4(), 
       name: 'Platform Launch', 
@@ -197,10 +197,13 @@ const initialState: Board[] = [
 
 export const boardSlice = createSlice({
    name: 'board',
-   initialState,
+   initialState: {
+      boards,
+      activeBoard: 0
+   },
    reducers: {
       createNewBoard: (state, action) => {
-         state.push({
+         state.boards.push({
             id: uuidv4(),
             name:  action.payload.name,
             columns: action.payload.columns.map( (c: string )=> ({
@@ -209,6 +212,9 @@ export const boardSlice = createSlice({
                subtasks: []
             }))
          })
+      },
+      setActiveBoard: (state, action) => {
+         state.activeBoard = action.payload
       }
    }
 })
@@ -271,5 +277,5 @@ export const boardSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const tasks = (state: RootState) => state.task.tasks
 
-export const {  createNewBoard } =  boardSlice.actions
+export const {  createNewBoard, setActiveBoard } =  boardSlice.actions
 export default boardSlice.reducer

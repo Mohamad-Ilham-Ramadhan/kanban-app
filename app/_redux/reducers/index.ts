@@ -6,6 +6,6 @@ import boardReducer from "./boardReducer";
 import activeBoardReducer from "./activeBoardReducer";
 
 export const rootReducer = combineReducers({
-   boards: boardReducer,
-   activeboard: activeBoardReducer,
+   board: boardReducer,
+   // activeboard: activeBoardReducer,
 });
