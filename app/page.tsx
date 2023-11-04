@@ -118,6 +118,7 @@ export default function Home() {
                             return prev.slice()
                           })
                         }
+                        error={true}
                       />
                       {addColumns.length === 1
                         ? null
