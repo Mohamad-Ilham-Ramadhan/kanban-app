@@ -18,7 +18,8 @@ import XIcon from './_assets/icons/x.svg'
 import clsx from 'clsx';
 import Modal from 'react-modal'
 import Input from '@/app/_components/Input'
-
+import { Formik, FieldArray } from 'formik'
+import * as yup from 'yup'
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState<'light' | 'dark'>('light')
@@ -54,6 +55,7 @@ export default function Home() {
           </div>
         </div>
       </header>
+
       <main className="flex fixed z-10 pt-[96px]">
         <aside className="flex flex-col h-[100vw] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700">
           {/* #828fa3 */}
@@ -81,7 +83,9 @@ export default function Home() {
                 <BoardIcon className="mr-4" />
                 <span>+ Create New Board</span>
               </li>
+
               <Modal
+                ariaHideApp={false}
                 isOpen={modalOpen}
                 style={{
                   overlay: {
@@ -99,53 +103,88 @@ export default function Home() {
                 }}
                 contentElement={(props, children) => <div onClick={props.onClick} className={clsx(props.className, 'absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[480px] bg-[#2b2c37] p-6 rounded')}>{children}</div>}
               >
-                <div className="text-lg font-bold mb-4">Add New Board</div>
-
-                <div className='mb-4'>
-                  <label htmlFor="board-name" className="block font-semibold text-xs mb-2">Name</label>
-                  <Input value={addBoardName} id="board-name" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)} />
-                </div>
-
-                <div className="mb-4">
-                  <div className="block font-semibold text-xs mb-2">Columns</div>
-                  {addColumns.map((val, index) => (
-                    <div className="flex mb-2">
-                      <Input
-                        value={val}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setAddColumns(prev => {
-                            prev[index] = e.target.value
-                            return prev.slice()
-                          })
-                        }
-                        error={true}
-                      />
-                      {addColumns.length === 1
-                        ? null
-                        : <button className="w-[50px] flex justify-center items-center"
-                          onClick={() => {
-                            setAddColumns(prev => {
-                              let newColumns = prev.slice()
-                              newColumns.splice(index, 1)
-                              return newColumns
-                            })
-                          }}
-                        >
-                          <XIcon />
-                        </button>
-                      }
-                    </div>
-                  ))}
-                </div>
-                <ButtonPill text="+ Add New Column" size="small" className="w-full bg-white hover:bg-gray-200 text-primary"
-                  onClick={() => {
-                    setAddColumns(prev => {
-                      const newColumns = prev.slice()
-                      newColumns.push('')
-                      return newColumns
-                    })
+                <Formik
+                  initialValues={{
+                    name: 'asdf',
+                    columns: [''],
                   }}
-                />
+                  validationSchema={yup.object().shape({
+                    name: yup.string().required(),
+                    columns: yup.array().of(yup.string().required())
+                  })}
+                  onSubmit={(values) => {
+                    alert('add new board!')
+                    console.log('submit values', values)
+                  }}
+                >
+                  {({ values, errors, touched, handleChange, handleBlur, setFieldValue, submitForm }) => {
+                    console.log('errors', errors)
+                    console.log('touched', touched)
+                    return (
+                      <>
+                        <div className="text-lg font-bold mb-4">Add New Board</div>
+                        <div className='mb-4'>
+                          <label htmlFor="name" className="block font-semibold text-xs mb-2">Name</label>
+                          <div className="relative">
+                            <Input id="name"
+                              value={values.name}
+                              // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)}
+                              onChange={handleChange}
+                              error={errors.name ? true : false}
+                            />
+                            {errors.name ?
+                              <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">Required</div>
+                              : null}
+                          </div>
+                        </div>
+                        <FieldArray
+                          name="columns"
+                          render={({ push, remove }) => (
+                            <>
+                              <div className="mb-4">
+                                <div className="block font-semibold text-xs mb-2">Columns</div>
+                                {values.columns.map((val, index) => (
+                                  <div className="flex mb-2" key={index}>
+                                    <div className="relative w-full">
+                                      <Input
+                                        value={values.columns[index]}
+                                        id={`columns[${index}]`}
+                                        onChange={handleChange}
+                                        error={(errors.columns !== undefined && errors.columns[index]) ? true : false}
+                                      />
+                                      {(errors.columns && errors.columns[index]) ? (
+                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">Required</div>
+                                      ) : null}
+                                    </div>
+                                    {values.columns.length === 1
+                                      ? null
+                                      : <button className="w-[50px] flex justify-center items-center"
+                                        onClick={() => { remove(index) }}
+                                      >
+                                        <XIcon />
+                                      </button>
+                                    }
+
+                                  </div>
+                                ))}
+                              </div>
+                              <ButtonPill text="+ Add New Column" size="small" className="w-full bg-white hover:bg-gray-200 text-primary mb-4"
+                                onClick={() => { push('') }}
+                              />
+                            </>
+                          )}
+                        />
+
+
+                        <ButtonPill text="Create New Board" size="small" className="w-full"
+                          onClick={submitForm}
+                        />
+                      </>
+                    )
+                  }}
+
+                </Formik>
+
               </Modal>
             </nav>
           </div>
