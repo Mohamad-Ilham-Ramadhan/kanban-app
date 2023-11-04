@@ -1,8 +1,21 @@
 import clsx from 'clsx'
 
-export default function ButtonPillLg({text, className, onClick} : {text: string, className?: string; onClick?: React.MouseEventHandler<HTMLButtonElement>}) {
+type ButtonPillProps = {
+   text?: string;
+   className?: string; 
+   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+   size?: 'small' | 'medium'
+}
+export default function ButtonPill({text, className, onClick, size = 'medium'} : ButtonPillProps) {
+   // size class 
+   let sizeClass; 
+   if (size == 'medium') {
+      sizeClass = 'py-3 px-5  text-[0.95rem]'
+   } else if (size == 'small') {
+      sizeClass = 'py-2.5 px-3 text-xs'
+   }
    return (
-      <button className={clsx("bg-primary hover:bg-primary-light transition-colors rounded-full py-3 px-5 font-bold text-[0.95rem]", className)} onClick={onClick}>
+      <button className={clsx("bg-primary hover:bg-primary-light transition-colors rounded-full font-bold ", sizeClass, className)} onClick={onClick}>
          {text}
       </button>
    )

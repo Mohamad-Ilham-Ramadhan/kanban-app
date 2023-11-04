@@ -25,11 +25,13 @@ export default function Home() {
   // @ts-ignore
   const state: RootState = useSelector<RootState>(state => state);
   const dispatch = useDispatch();
-  console.log('STATE', state)
 
   const boards = state.board.boards 
   const board = state.board.boards[state.board.activeBoard]
   const [modalOpen, setModalOpen] = useState(true)
+  const [addBoardName, setAddBoardname] = useState('')
+  const [addColumns, setAddColumns] = useState([''])
+  console.log('addColumns', addColumns)
 
   return (
     <>
@@ -97,14 +99,27 @@ export default function Home() {
                 contentElement={(props, children) => <div  onClick={props.onClick} className={clsx(props.className, 'absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[480px] bg-[#2b2c37] p-6 rounded')}>{children}</div>}
               >
                 <div className="text-lg font-bold mb-4">Add New Board</div>
+
                 <div>
                   <label htmlFor="board-name" className="block font-semibold text-xs mb-2">Name</label>
-                  <input type="text" id="board-name" className="block w-full bg-transparent border-2 border-gray-500 focus:border-primary outline-0 rounded py-2 px-4 text-xs font-semibold"/>
+                  <Input value={addBoardName} id="board-name" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)} />
                 </div>
+
                 <div>
-                  <label htmlFor="board-name" className="block font-semibold text-xs mb-2">Name</label>
-                  <Input />
+                  <div className="block font-semibold text-xs mb-2">Columns</div>
+                  {addColumns.map((val, index) => (
+                    <Input 
+                      value={val} 
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                        setAddColumns( prev => {
+                          prev[index] = e.target.value 
+                          return prev.slice()
+                        } )
+                      } 
+                    />
+                  ))}
                 </div>
+                <ButtonPill text="+ Add New Column" size="small" className="w-full" />
               </Modal>
             </nav>
           </div>
