@@ -105,7 +105,7 @@ export default function Home() {
               >
                 <Formik
                   initialValues={{
-                    name: 'asdf',
+                    name: '',
                     columns: [''],
                   }}
                   validationSchema={yup.object().shape({
@@ -113,13 +113,12 @@ export default function Home() {
                     columns: yup.array().of(yup.string().required())
                   })}
                   onSubmit={(values) => {
-                    alert('add new board!')
-                    console.log('submit values', values)
+                    dispatch(createNewBoard({name: values.name, columns: values.columns}))
                   }}
                 >
                   {({ values, errors, touched, handleChange, handleBlur, setFieldValue, submitForm }) => {
-                    console.log('errors', errors)
-                    console.log('touched', touched)
+                    // console.log('errors', errors)
+                    // console.log('touched', touched)
                     return (
                       <>
                         <div className="text-lg font-bold mb-4">Add New Board</div>
