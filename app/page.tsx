@@ -30,11 +30,15 @@ export default function Home() {
 
   const boards = state.board.boards
   const board = state.board.boards[state.board.activeBoard]
-  const [modalOpen, setModalOpen] = useState(true)
-  const [addBoardName, setAddBoardname] = useState('')
-  const [addColumns, setAddColumns] = useState([''])
-  console.log('addColumns', addColumns)
-
+  const [modalOpen, setModalOpen] = useState(false)
+  /*
+    #49C4E5
+    primary
+    #67e2ae
+    #e5a449
+    #2a3fdb
+    #c36e6e
+  */
   return (
     <>
       <header className="flex items-center fixed z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
@@ -167,9 +171,11 @@ export default function Home() {
                                   </div>
                                 ))}
                               </div>
-                              <ButtonPill text="+ Add New Column" size="small" className="w-full bg-white hover:bg-gray-200 text-primary mb-4"
-                                onClick={() => { push('') }}
-                              />
+                              {values.columns.length === 6 ? null : (
+                                <ButtonPill text="+ Add New Column" size="small" className="w-full bg-white hover:bg-gray-200 text-primary mb-4"
+                                  onClick={() => { push('') }}
+                                />
+                              )}
                             </>
                           )}
                         />
@@ -188,6 +194,8 @@ export default function Home() {
             </nav>
           </div>
         </aside>
+
+
         <section className="grow overflow-x-scroll bg-red-500">
           <div className='flex flex-row'>
             <input type="text" />
