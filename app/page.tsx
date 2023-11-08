@@ -115,6 +115,8 @@ export default function Home() {
                   })}
                   onSubmit={(values) => {
                     dispatch(createNewBoard({name: values.name, columns: values.columns}))
+                    setModalOpen(false)
+                    dispatch(setActiveBoard(boards.length))
                   }}
                 >
                   {({ values, errors, touched, handleChange, handleBlur, setFieldValue, submitForm }) => {
