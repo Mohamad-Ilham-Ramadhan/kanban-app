@@ -209,7 +209,7 @@ export const boardSlice = createSlice({
             columns: action.payload.columns.map( (c: string )=> ({
                id: uuidv4(),
                name: c,
-               subtasks: []
+               tasks: []
             }))
          })
       },
