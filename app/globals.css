@@ -138,6 +138,20 @@ body {
 
 }
 
+.main-section::-webkit-scrollbar {
+  width: 12px;    
+  height: 12px;           
+}
+
+.main-section::-webkit-scrollbar-track {
+  background: transparent;        
+}
+
+.main-section::-webkit-scrollbar-thumb {
+  background-color: theme('colors.zinc.700');    
+  border-radius: 20px;       
+}
+
 .ReactModal__Content {
   opacity: 0;
   transition: opacity 200ms ease-out;

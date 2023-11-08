@@ -194,7 +194,7 @@ export default function Home() {
         </aside>
 
 
-        <section className="grow py-6 px-8 overflow-auto">
+        <section className="main-section grow py-6 px-8 overflow-auto">
 
           <div className='flex flex-row'>
             {/* bg-column[] is defined in tailwind.config.ts */}
