@@ -31,12 +31,13 @@ export default function Home() {
   const boards = state.board.boards
   const board = state.board.boards[state.board.activeBoard]
   const columns = board.columns
+  console.log('board', board)
   console.log('columns', columns)
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <>
-      <header className="flex items-center fixed z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
+      <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
         <div className="flex items-center w-[300px] h-full px-8 border-r border-gray-700">
           <KanbanLogo />
         </div>
@@ -55,7 +56,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex fixed z-10 pt-[96px]">
+      <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen">
         <aside className="flex flex-col h-[100vw] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700">
           {/* #828fa3 */}
           <div className="pt-4 pr-4">
@@ -187,21 +188,47 @@ export default function Home() {
                 </Formik>
 
               </Modal>
+
             </nav>
           </div>
         </aside>
 
 
-        <section className="grow overflow-x-scroll">
+        <section className="grow py-6 px-8 overflow-auto">
 
           <div className='flex flex-row'>
             {/* bg-column[] is defined in tailwind.config.ts */}
             {columns.map((c, index) => (
-              <div className="flex flex-row" key={c.id}>
-                <div className={`w-4 h-4 rounded-full bg-column${index}`}></div>
-                <div>{c.name}</div>
+              <div className="shrink-0 w-[280px] mr-8">
+                <div className="flex flex-row items-center mb-6" key={c.id}>
+                  <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
+                  <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
+                </div>
+                
+                {c.tasks.length > 0 && c.tasks.map((task, index) => (
+                  <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
+                    <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
+                    {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
+                    <div className="text-xs text-slate-400 font-semibold">0 of {task.subtasks.length} subtasks</div>
+                  </div>
+                ))}
               </div>
             ))}
+          </div>
+
+          <div>
+            {/* <select name="name" id="name" className="bg-transparent border-2 border-gray-500 focus:border-primary rounded-md p-4">
+              <option value="1"  className="bg-gray-700 hover:bg-gray-700 py-2">satu Lorem </option>
+              <option value="2"  className="bg-gray-700 hover:bg-gray-700 py-2">dua</option>
+              <option value="3"  className="bg-gray-700 hover:bg-gray-700 py-2">tiga</option>
+              <option value="4"  className="bg-gray-700 hover:bg-gray-700 py-2">empat</option>
+              <option value="5"  className="bg-gray-700 hover:bg-gray-700 py-2">lima</option>
+              <option value="6"  className="bg-gray-700 hover:bg-gray-700 py-2">enam</option>
+              <option value="7"  className="bg-gray-700 hover:bg-gray-700 py-2">tujuh</option>
+              <option value="8"  className="bg-gray-700 hover:bg-gray-700 py-2">delapan</option>
+              <option value="9"  className="bg-gray-700 hover:bg-gray-700 py-2">sembilan</option>
+              <option value="10" className="bg-gray-700 hover:bg-gray-700 py-2">sepuluh</option>
+            </select> */}
           </div>
         </section>
       </main>
