@@ -30,15 +30,10 @@ export default function Home() {
 
   const boards = state.board.boards
   const board = state.board.boards[state.board.activeBoard]
+  const columns = board.columns
+  console.log('columns', columns)
   const [modalOpen, setModalOpen] = useState(false)
-  /*
-    #49C4E5
-    primary
-    #67e2ae
-    #e5a449
-    #2a3fdb
-    #c36e6e
-  */
+
   return (
     <>
       <header className="flex items-center fixed z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
@@ -72,6 +67,7 @@ export default function Home() {
                   onClick={() => {
                     dispatch(setActiveBoard(index))
                   }}
+                  key={b.id}
                 >
                   <BoardIcon className="mr-4" />
                   <span>{b.name}</span>
@@ -196,9 +192,16 @@ export default function Home() {
         </aside>
 
 
-        <section className="grow overflow-x-scroll bg-red-500">
+        <section className="grow overflow-x-scroll">
+
           <div className='flex flex-row'>
-            <input type="text" />
+            {/* bg-column[] is defined in tailwind.config.ts */}
+            {columns.map((c, index) => (
+              <div className="flex flex-row" key={c.id}>
+                <div className={`w-4 h-4 rounded-full bg-column${index}`}></div>
+                <div>{c.name}</div>
+              </div>
+            ))}
           </div>
         </section>
       </main>

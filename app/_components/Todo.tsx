@@ -6,7 +6,7 @@ import type { Todo } from "../_redux/reducers/taskReducer"
 import { useDispatch } from "react-redux"
 import { swap, move, setPageYTop, setPageYBottom } from "../_redux/reducers/taskReducer"
 
-export default function Todo({ text, y, id, index, pageYTop, pageYBottom }: { text: Todo['text']; y: Todo['y']; id: Todo['id']; pageYTop: Todo['pageYTop']; pageYBottom: Todo['pageYBottom']; index: number }) {
+export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text: Todo['text']; y: Todo['y']; id: Todo['id']; pageYTop: Todo['pageYTop']; pageYBottom: Todo['pageYBottom']; index: number }) {
    const dispatch = useDispatch()
    const [startX, setStartX] = useState(0)
    const [targetIndex, setTargetIndex] = useState<null | number>(null)
