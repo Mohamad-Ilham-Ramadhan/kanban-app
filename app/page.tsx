@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTheme } from 'next-themes';
 import KanbanLogo from './_assets/kanban-logo.svg'
 import { v4 as uuidv4 } from 'uuid';
@@ -10,9 +11,6 @@ import { RootState } from './_redux/store';
 import { createNewBoard, setActiveBoard } from './_redux/reducers/boardReducer';
 import ButtonPill from './_components/buttons/ButtonPill';
 import ButtonIcon from './_components/buttons/ButtonIcon';
-import { ScrollContainer } from 'react-indiana-drag-scroll';
-import 'react-indiana-drag-scroll/dist/style.css'
-// import boardIcon from './_assets/icons/board.svg'
 import BoardIcon from './_assets/icons/board.svg'
 import XIcon from './_assets/icons/x.svg'
 import clsx from 'clsx';
@@ -20,6 +18,11 @@ import Modal from 'react-modal'
 import Input from '@/app/_components/Input'
 import { Formik, FieldArray } from 'formik'
 import * as yup from 'yup'
+import { Popper } from '@mui/base/Popper';
+// import { Select } from '@mui/base/Select';
+import { Option } from '@mui/base/Option';
+import Slider from '@/app/_components/Slider'
+import Select from '@/app/_components/Select'
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState<'light' | 'dark'>('light')
@@ -35,6 +38,10 @@ export default function Home() {
   console.log('columns', columns)
   const [modalOpen, setModalOpen] = useState(false)
 
+  // Popper
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openPopper = Boolean(anchorEl)
+  const id = openPopper ? 'simple-popper' : undefined;
   return (
     <>
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
@@ -45,13 +52,34 @@ export default function Home() {
         <div className="px-8 flex grow justify-between items-center">
           <div className="text-2xl font-bold">{board.name}</div>
           <div className="flex items-center">
-            <ButtonPill text={'+ Add New Task'} onClick={() => { alert('fuck you') }} className='mr-2' />
+            <ButtonPill text={'+ Add New Task'} onClick={() => { alert('fuck you') }} className='mr-4' />
 
             <ButtonIcon
               icon={
                 <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}><g fill="currentColor" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"></circle><circle cx="2.308" cy="10" r="2.308"></circle><circle cx="2.308" cy="17.692" r="2.308"></circle></g></svg>
               }
+              onClick={(e: React.MouseEvent<HTMLElement>) => {
+                setAnchorEl(anchorEl ? null : e.currentTarget)
+              }}
+              className="text-gray-400 hover:bg-board transition-colors"
             />
+            <Popper id={id} open={openPopper} anchorEl={anchorEl} placement='bottom-end' className='z-[10000] py-[14px]'>
+              <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
+                <button className="text-gray-400 hover:opacity-50 font-semibold mb-2">Edit Board</button>
+                <button className="text-red-600 hover:opacity-50 font-semibold">Delete Board</button>
+              </div>
+            </Popper>
+            {createPortal(
+              <>
+                {openPopper &&
+                  <div className="fixed inset-0 z-[10000]"
+                    onClick={() => setAnchorEl(null)}
+                  ></div>
+                }
+              </>
+              ,
+              document.body)
+            }
           </div>
         </div>
       </header>
@@ -114,7 +142,7 @@ export default function Home() {
                     columns: yup.array().of(yup.string().required())
                   })}
                   onSubmit={(values) => {
-                    dispatch(createNewBoard({name: values.name, columns: values.columns}))
+                    dispatch(createNewBoard({ name: values.name, columns: values.columns }))
                     setModalOpen(false)
                     dispatch(setActiveBoard(boards.length))
                   }}
@@ -206,7 +234,7 @@ export default function Home() {
                   <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
                   <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
                 </div>
-                
+
                 {c.tasks.length > 0 && c.tasks.map((task, index) => (
                   <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
                     <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
@@ -218,19 +246,18 @@ export default function Home() {
             ))}
           </div>
 
+          <div className="relative">
+            <Select defaultValue={10}>
+              <Option value={10} className="text-red-300 bg-gray-700">Ten</Option>
+              <Option value={20} className="text-red-300 bg-gray-700">Twenty</Option>
+              <Option value={30} className="text-red-300 bg-gray-700">Thirty</Option>
+            </Select>
+            <Slider />
+          </div>
           <div>
-            {/* <select name="name" id="name" className="bg-transparent border-2 border-gray-500 focus:border-primary rounded-md p-4">
-              <option value="1"  className="bg-gray-700 hover:bg-gray-700 py-2">satu Lorem </option>
-              <option value="2"  className="bg-gray-700 hover:bg-gray-700 py-2">dua</option>
-              <option value="3"  className="bg-gray-700 hover:bg-gray-700 py-2">tiga</option>
-              <option value="4"  className="bg-gray-700 hover:bg-gray-700 py-2">empat</option>
-              <option value="5"  className="bg-gray-700 hover:bg-gray-700 py-2">lima</option>
-              <option value="6"  className="bg-gray-700 hover:bg-gray-700 py-2">enam</option>
-              <option value="7"  className="bg-gray-700 hover:bg-gray-700 py-2">tujuh</option>
-              <option value="8"  className="bg-gray-700 hover:bg-gray-700 py-2">delapan</option>
-              <option value="9"  className="bg-gray-700 hover:bg-gray-700 py-2">sembilan</option>
-              <option value="10" className="bg-gray-700 hover:bg-gray-700 py-2">sepuluh</option>
-            </select> */}
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis repellat nulla nam quibusdam id corporis nostrum suscipit provident molestias, sint dolorem modi? Quod pariatur eligendi totam dolor ullam aliquam perspiciatis.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio natus porro excepturi voluptatem debitis et amet dignissimos nesciunt, culpa laudantium, consequuntur provident odit suscipit? Eveniet est quasi excepturi voluptate quidem.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, sit. Eum minus eveniet nostrum. Tempore sapiente totam exercitationem inventore earum dolore architecto nisi quis, hic dolor incidunt. Accusantium, omnis earum.
           </div>
         </section>
       </main>
