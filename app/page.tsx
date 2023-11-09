@@ -249,34 +249,38 @@ export default function Home() {
         <section className="main-section grow py-6 px-8 overflow-auto">
 
           {board !== null ? (
-            <div className='flex flex-row'>
-              {/* bg-column[] is defined in tailwind.config.ts */}
-              {columns !== null && columns.map((c, index) => (
-                <div className="shrink-0 w-[280px] mr-8">
-                  <div className="flex flex-row items-center mb-6" key={c.id}>
-                    <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
-                    <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
-                  </div>
-
-                  {c.tasks.length > 0 && c.tasks.map((task, index) => (
-                    <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
-                      <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
-                      {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
-                      <div className="text-xs text-slate-400 font-semibold">0 of {task.subtasks.length} subtasks</div>
+            <>
+              <div className='flex flex-row h-full'>
+                {/* bg-column[] is defined in tailwind.config.ts */}
+                {columns !== null && columns.map((c, index) => (
+                  <div className="shrink-0 w-[280px] rounded-lg mr-8">
+                    <div className="flex flex-row items-center mb-6" key={c.id}>
+                      <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
+                      <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
                     </div>
-                  ))}
+
+                    {c.tasks.length > 0 ? c.tasks.map((task, index) => (
+                      <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
+                        <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
+                        {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
+                        <div className="text-xs text-slate-400 font-semibold">0 of {task.subtasks.length} subtasks</div>
+                      </div>
+                    )) : (<div className="border-2 border-dashed border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>)}
+                  </div>
+                ))}
+                <div className="rounded-lg h-full shrink-0 w-[280px]">
+                  <div className="h-10"></div>
+                  <div className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary">+ New Column</div>
                 </div>
-              ))}
-
-            </div>
-
+              </div>
+            </>
           ) : (
             <>
               {/* When there is no single board in the store. */}
               <div className="flex flex-col items-center justify-center">
                 <div className="mb-4">There is no single board. Create a new one to get started.</div>
-                <ButtonPill text="+ Create New Board" className="w-fit" 
-                  onClick={() => {setModalCreateNewBoardOpen(true)}}
+                <ButtonPill text="+ Create New Board" className="w-fit"
+                  onClick={() => { setModalCreateNewBoardOpen(true) }}
                 />
               </div>
             </>
