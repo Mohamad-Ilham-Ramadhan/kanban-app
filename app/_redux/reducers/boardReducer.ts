@@ -215,6 +215,10 @@ export const boardSlice = createSlice({
       },
       setActiveBoard: (state, action) => {
          state.activeBoard = action.payload
+      },
+      deleteActiveBoard: (state) => {
+         state.boards.splice(state.activeBoard, 1)
+         state.activeBoard = 0
       }
    }
 })
@@ -277,5 +281,5 @@ export const boardSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const tasks = (state: RootState) => state.task.tasks
 
-export const {  createNewBoard, setActiveBoard } =  boardSlice.actions
+export const {  createNewBoard, setActiveBoard, deleteActiveBoard } =  boardSlice.actions
 export default boardSlice.reducer

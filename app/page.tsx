@@ -8,7 +8,7 @@ import KanbanLogo from './_assets/kanban-logo.svg'
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './_redux/store';
-import { createNewBoard, setActiveBoard } from './_redux/reducers/boardReducer';
+import { createNewBoard, setActiveBoard, deleteActiveBoard } from './_redux/reducers/boardReducer';
 import ButtonPill from './_components/buttons/ButtonPill';
 import ButtonIcon from './_components/buttons/ButtonIcon';
 import BoardIcon from './_assets/icons/board.svg'
@@ -76,8 +76,15 @@ export default function Home() {
                   <div className="font-bold text-red-500 text-lg mb-4">Delete this board?</div>
                   <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">Are you sure you want to delete the '{board.name}' board? This action will remove all columns and tasks and cannot be reversed.</div>
                   <div className="flex flex-row justify-center items-center">
-                    <ButtonPill color="text-white" backgroundColor='bg-red-500 hover:bg-red-500' text="Delete" size="small" className="w-full hover:opacity-70 mr-4" />
-                    <ButtonPill color="text-gray-500" backgroundColor='bg-gray-100 hover:bg-gray-100' text="Cancel" size="small" className="w-full hover:opacity-70" />
+                    <ButtonPill color="text-white" backgroundColor='bg-red-500 hover:bg-red-500' text="Delete" size="small" className="w-full hover:opacity-70 mr-4" 
+                      onClick={() =>{ 
+                        dispatch(deleteActiveBoard())
+                        setModalDeleteBoardOpen(false)
+                      }}
+                    />
+                    <ButtonPill color="text-gray-500" backgroundColor='bg-gray-100 hover:bg-gray-100' text="Cancel" size="small" className="w-full hover:opacity-70" 
+                      onClick={() => setModalDeleteBoardOpen(false)}
+                    />
                   </div>
                 </>
               </Modal>
