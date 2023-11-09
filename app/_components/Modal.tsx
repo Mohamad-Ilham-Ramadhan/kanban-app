@@ -21,7 +21,7 @@ export default function CustomModal({isOpen, onRequestClose, children} : CustomM
          shouldCloseOnOverlayClick={true}
          shouldCloseOnEsc={true}
          onRequestClose={onRequestClose}
-         contentElement={(props, children) => <div onClick={props.onClick} className={clsx(props.className, 'absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[480px] bg-[#2b2c37] p-6 rounded-lg')}>{children}</div>}
+         contentElement={(props, children) => <div onClick={props.onClick} className={clsx(props.className, 'absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[480px] bg-[#2b2c37] p-8 rounded-lg')}>{children}</div>}
       >
          {children}
       </Modal>

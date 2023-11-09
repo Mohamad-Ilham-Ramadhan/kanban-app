@@ -36,7 +36,9 @@ export default function Home() {
   const columns = board.columns
   console.log('board', board)
   console.log('columns', columns)
-  const [modalOpen, setModalOpen] = useState(false)
+
+  const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false)
+  const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false)
 
   // Popper
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -54,32 +56,57 @@ export default function Home() {
           <div className="flex items-center">
             <ButtonPill text={'+ Add New Task'} onClick={() => { alert('fuck you') }} className='mr-4' />
 
-            <ButtonIcon
-              icon={
-                <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}><g fill="currentColor" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"></circle><circle cx="2.308" cy="10" r="2.308"></circle><circle cx="2.308" cy="17.692" r="2.308"></circle></g></svg>
-              }
-              onClick={(e: React.MouseEvent<HTMLElement>) => {
-                setAnchorEl(anchorEl ? null : e.currentTarget)
-              }}
-              className="text-gray-400 hover:bg-board transition-colors"
-            />
-            <Popper id={id} open={openPopper} anchorEl={anchorEl} placement='bottom-end' className='z-[10000] py-[14px]'>
-              <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
-                <button className="text-gray-400 hover:opacity-50 font-semibold mb-2">Edit Board</button>
-                <button className="text-red-600 hover:opacity-50 font-semibold">Delete Board</button>
-              </div>
-            </Popper>
-            {createPortal(
-              <>
-                {openPopper &&
-                  <div className="fixed inset-0 z-[10000]"
-                    onClick={() => setAnchorEl(null)}
-                  ></div>
+            <div>
+              <ButtonIcon
+                icon={
+                  <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}><g fill="currentColor" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"></circle><circle cx="2.308" cy="10" r="2.308"></circle><circle cx="2.308" cy="17.692" r="2.308"></circle></g></svg>
                 }
-              </>
-              ,
-              document.body)
-            }
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
+                  setAnchorEl(anchorEl ? null : e.currentTarget)
+                }}
+                className="text-gray-400 hover:bg-board transition-colors"
+              />
+              <Modal /* Modal delete current active board */
+                isOpen={modalDeleteBoardOpen}
+                onRequestClose={(e: React.MouseEvent<Element>) => {
+                  setModalDeleteBoardOpen(false)
+                }}
+              >
+                <>
+                  <div className="font-bold text-red-500 text-lg mb-4">Delete this board?</div>
+                  <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">Are you sure you want to delete the '{board.name}' board? This action will remove all columns and tasks and cannot be reversed.</div>
+                  <div className="flex flex-row justify-center items-center">
+                    <ButtonPill text="Delete" size="small" className="w-full bg-red-500 text-white mr-4" />
+                    <ButtonPill text="Cancel" size="small" className="w-full bg-gray-100 text-gray-500" />
+                  </div>
+                </>
+              </Modal>
+              <Popper id={id} open={openPopper} anchorEl={anchorEl} placement='bottom-end' className='z-[10000] py-[14px]'>
+                <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
+                  <button className="text-gray-400 hover:opacity-50 font-semibold mb-2"
+                    
+                  >Edit Board</button>
+                  <button className="text-red-600 hover:opacity-50 font-semibold"
+                    onClick={() => {
+                      setAnchorEl(null)
+                      setModalDeleteBoardOpen(true)
+                    }}
+                  >Delete Board</button>
+                </div>
+              </Popper>
+              {createPortal(
+                <>
+                  {openPopper &&
+                    <div className="fixed inset-0 z-[10000]"
+                      onClick={() => setAnchorEl(null)}
+                    ></div>
+                  }
+                </>
+                ,
+                document.body)
+              }
+            </div>
+
           </div>
         </div>
       </header>
@@ -105,7 +132,7 @@ export default function Home() {
               <li
                 className="flex items-center text-primary font-bold py-3 pl-8 hover:cursor-pointer hover:opacity-50"
                 onClick={() => {
-                  setModalOpen(true)
+                  setModalCreateNewBoardOpen(true)
                 }}
               >
 
@@ -114,10 +141,10 @@ export default function Home() {
               </li>
 
               <Modal
-                isOpen={modalOpen}
+                isOpen={modalCreateNewBoardOpen}
                 onRequestClose={(e: React.MouseEvent<Element>) => {
                   e.stopPropagation()
-                  setModalOpen(false)
+                  setModalCreateNewBoardOpen(false)
                 }}
               >
                 <Formik
@@ -131,7 +158,7 @@ export default function Home() {
                   })}
                   onSubmit={(values) => {
                     dispatch(createNewBoard({ name: values.name, columns: values.columns }))
-                    setModalOpen(false)
+                    setModalCreateNewBoardOpen(false)
                     dispatch(setActiveBoard(boards.length))
                   }}
                 >
