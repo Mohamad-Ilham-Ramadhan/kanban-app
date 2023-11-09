@@ -219,6 +219,9 @@ export const boardSlice = createSlice({
       deleteActiveBoard: (state) => {
          state.boards.splice(state.activeBoard, 1)
          state.activeBoard = 0
+      },
+      addNewColumns: (state, action) => {
+         
       }
    }
 })

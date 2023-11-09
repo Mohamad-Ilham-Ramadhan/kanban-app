@@ -39,6 +39,7 @@ export default function Home() {
 
   const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false)
   const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false)
+  const [modalCreateNewColumnOpen, setModalCreateNewColumnOpen] = useState(false)
 
   // Popper
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -221,7 +222,7 @@ export default function Home() {
                                 ))}
                               </div>
                               {values.columns.length === 6 ? null : (
-                                <ButtonPill text="+ Add New Column" size="small" className="w-full bg-white hover:bg-gray-200 text-primary mb-4"
+                                <ButtonPill text="+ Add New Column" size="small" className="w-full mb-4" color="text-primary" backgroundColor='bg-white hover:bg-gray-200'
                                   onClick={() => { push('') }}
                                 />
                               )}
@@ -270,8 +271,76 @@ export default function Home() {
                 ))}
                 <div className="rounded-lg h-full shrink-0 w-[280px]">
                   <div className="h-10"></div>
-                  <div className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary">+ New Column</div>
+                  <div className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
+                    onClick={() => setModalCreateNewColumnOpen(true)}
+                  >+ New Column</div>
                 </div>
+                {/* Modal add new Column */}
+                <Modal
+                  isOpen={modalCreateNewColumnOpen}
+                  onRequestClose={() => { setModalCreateNewColumnOpen(false) }}
+                >
+                  <Formik
+                    initialValues={{
+                      columns: columns !== null ? columns.map(c => ({name: c.name, preserved: true})) : []
+                    }}
+                    onSubmit={(values) => {
+                      console.log('SUBMIT add new columns', values)
+                      // dispatch()
+                    }}
+                  >
+                    {({ values, handleChange, errors, submitForm }) => (
+                      <>
+                        <div className="font-bold text-lg mb-4">Add New Column</div>
+                        <div className="mb-6">
+                          <label htmlFor="column-name" className="block font-semibold text-xs mb-2">Name</label>
+                          <Input value={board !== null ? board.name : ''} disabled id="column-name" />
+                        </div>
+                        <FieldArray
+                          name="columns"
+                          render={({ push, remove }) => (
+                            <>
+                              <div className="mb-4">
+                                <div className="block font-semibold text-xs mb-2">Columns</div>
+                                {values.columns.map((val, index) => (
+                                  <div className="flex mb-2" key={index}>
+                                    <div className="relative w-full">
+                                      <Input
+                                        value={values.columns[index].name}
+                                        id={`columns[${index}].name`}
+                                        onChange={handleChange}
+                                        error={(errors.columns !== undefined && errors.columns[index]) ? true : false}
+                                      />
+                                      {(errors.columns && errors.columns[index]) ? (
+                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">Required</div>
+                                      ) : null}
+                                    </div>
+                                    {values.columns.length === 1
+                                      ? null
+                                      : <button className="w-[50px] flex justify-center items-center" 
+                                        disabled={values.columns[index].preserved}
+                                        onClick={() => { remove(index) }}
+                                      >
+                                        <XIcon className={values.columns[index].preserved ? 'text-gray-700' : 'text-gray-500'} />
+                                      </button>
+                                    }
+
+                                  </div>
+                                ))}
+                              </div>
+                              {values.columns.length === 6 ? null : (
+                                <ButtonPill text="+ Add New Column" size="small" className="w-full mb-4" color="text-primary" backgroundColor='bg-white hover:bg-gray-200'
+                                  onClick={() => { push({name: '', preserved: false}) }}
+                                />
+                              )}
+                            </>
+                          )}
+                        />
+                        <ButtonPill text="Create New Board" size="small" className="w-full" onClick={submitForm} />
+                      </>
+                    )}
+                  </Formik>
+                </Modal>
               </div>
             </>
           ) : (
