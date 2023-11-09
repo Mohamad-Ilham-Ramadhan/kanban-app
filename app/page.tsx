@@ -14,7 +14,7 @@ import ButtonIcon from './_components/buttons/ButtonIcon';
 import BoardIcon from './_assets/icons/board.svg'
 import XIcon from './_assets/icons/x.svg'
 import clsx from 'clsx';
-import Modal from 'react-modal'
+import Modal from '@/app/_components/Modal'
 import Input from '@/app/_components/Input'
 import { Formik, FieldArray } from 'formik'
 import * as yup from 'yup'
@@ -114,23 +114,11 @@ export default function Home() {
               </li>
 
               <Modal
-                ariaHideApp={false}
                 isOpen={modalOpen}
-                style={{
-                  overlay: {
-                    zIndex: '1000',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    display: 'flex',
-                  },
-                }}
-                shouldCloseOnOverlayClick={true}
-                shouldCloseOnEsc={true}
-                onRequestClose={(e) => {
-                  console.log('e', e)
+                onRequestClose={(e: React.MouseEvent<Element>) => {
                   e.stopPropagation()
                   setModalOpen(false)
                 }}
-                contentElement={(props, children) => <div onClick={props.onClick} className={clsx(props.className, 'absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[480px] bg-[#2b2c37] p-6 rounded')}>{children}</div>}
               >
                 <Formik
                   initialValues={{
@@ -147,9 +135,7 @@ export default function Home() {
                     dispatch(setActiveBoard(boards.length))
                   }}
                 >
-                  {({ values, errors, touched, handleChange, handleBlur, setFieldValue, submitForm }) => {
-                    // console.log('errors', errors)
-                    // console.log('touched', touched)
+                  {({ values, errors, handleChange, submitForm }) => {
                     return (
                       <>
                         <div className="text-lg font-bold mb-4">Add New Board</div>

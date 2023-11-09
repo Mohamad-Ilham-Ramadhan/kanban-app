@@ -152,20 +152,14 @@ body {
   border-radius: 20px;       
 }
 
-.ReactModal__Content {
-  opacity: 0;
-  transition: opacity 200ms ease-out;
-}
-.ReactModal__Content.ReactModal__Content--after-open {
-  opacity: 1 !important;
-}
+
 
 .ReactModal__content--before-close{
   opacity: 0;
 }
 .ReactModal__Content {
   opacity: 0;
-  transition: opacity 200ms ease-out;
+  transition: opacity 250ms ease-out;
 }
 .ReactModal__Content.ReactModal__Content--after-open {
   opacity: 1 !important;
