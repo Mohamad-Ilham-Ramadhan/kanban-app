@@ -4,9 +4,11 @@ type ButtonPillProps = {
    text?: string;
    className?: string; 
    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-   size?: 'small' | 'medium'
+   size?: 'small' | 'medium';
+   backgroundColor?: string;
+   color?: string; // text color
 }
-export default function ButtonPill({text, className, onClick, size = 'medium'} : ButtonPillProps) {
+export default function ButtonPill({text, className, onClick, size = 'medium', color = 'text-white', backgroundColor = 'bg-primary hover:bg-primary-light'} : ButtonPillProps) {
    // size class 
    let sizeClass; 
    if (size == 'medium') {
@@ -14,8 +16,9 @@ export default function ButtonPill({text, className, onClick, size = 'medium'} :
    } else if (size == 'small') {
       sizeClass = 'py-2.5 px-3 text-[0.8rem]'
    }
+
    return (
-      <button className={clsx("bg-primary hover:bg-primary-light transition-colors rounded-full font-bold ", sizeClass, className)} onClick={onClick}>
+      <button className={clsx("transition-colors transition-opacity rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick}>
          {text}
       </button>
    )

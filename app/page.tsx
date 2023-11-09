@@ -76,8 +76,8 @@ export default function Home() {
                   <div className="font-bold text-red-500 text-lg mb-4">Delete this board?</div>
                   <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">Are you sure you want to delete the '{board.name}' board? This action will remove all columns and tasks and cannot be reversed.</div>
                   <div className="flex flex-row justify-center items-center">
-                    <ButtonPill text="Delete" size="small" className="w-full bg-red-500 text-white mr-4" />
-                    <ButtonPill text="Cancel" size="small" className="w-full bg-gray-100 text-gray-500" />
+                    <ButtonPill color="text-white" backgroundColor='bg-red-500 hover:bg-red-500' text="Delete" size="small" className="w-full hover:opacity-70 mr-4" />
+                    <ButtonPill color="text-gray-500" backgroundColor='bg-gray-100 hover:bg-gray-100' text="Cancel" size="small" className="w-full hover:opacity-70" />
                   </div>
                 </>
               </Modal>
