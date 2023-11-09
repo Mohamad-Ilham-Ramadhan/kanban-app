@@ -15,7 +15,7 @@
     --background-end-rgb: 32, 33, 44;
   }
   body {
-    background-color: #20212c;
+    background-color: theme('colors.board');
   }
 }
 

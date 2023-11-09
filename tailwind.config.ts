@@ -19,6 +19,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        'board': '#20212c',
         'primary': '#635FC7',
         'primary-light': '#A8A4FF',
         'column0': '#49C4E5',
