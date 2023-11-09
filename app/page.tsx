@@ -32,8 +32,8 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const boards = state.board.boards
-  const board = state.board.boards[state.board.activeBoard]
-  const columns = board.columns
+  const board = state.board.boards.length > 0 ? state.board.boards[state.board.activeBoard] : null
+  const columns = board !== null ? board.columns : null
   console.log('board', board)
   console.log('columns', columns)
 
@@ -52,69 +52,71 @@ export default function Home() {
         </div>
 
         <div className="px-8 flex grow justify-between items-center">
-          <div className="text-2xl font-bold">{board.name}</div>
-          <div className="flex items-center">
-            <ButtonPill text={'+ Add New Task'} onClick={() => { alert('fuck you') }} className='mr-4' />
+          <div className="text-2xl font-bold">{board !== null ? board.name : 'No Board Found'}</div>
+          {board !== null ? (
+            <div className="flex items-center">
+              <ButtonPill text={'+ Add New Task'} onClick={() => { alert('fuck you') }} className='mr-4' />
 
-            <div>
-              <ButtonIcon
-                icon={
-                  <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}><g fill="currentColor" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"></circle><circle cx="2.308" cy="10" r="2.308"></circle><circle cx="2.308" cy="17.692" r="2.308"></circle></g></svg>
-                }
-                onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  setAnchorEl(anchorEl ? null : e.currentTarget)
-                }}
-                className="text-gray-400 hover:bg-board transition-colors"
-              />
-              <Modal /* Modal delete current active board */
-                isOpen={modalDeleteBoardOpen}
-                onRequestClose={(e: React.MouseEvent<Element>) => {
-                  setModalDeleteBoardOpen(false)
-                }}
-              >
-                <>
-                  <div className="font-bold text-red-500 text-lg mb-4">Delete this board?</div>
-                  <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">Are you sure you want to delete the '{board.name}' board? This action will remove all columns and tasks and cannot be reversed.</div>
-                  <div className="flex flex-row justify-center items-center">
-                    <ButtonPill color="text-white" backgroundColor='bg-red-500 hover:bg-red-500' text="Delete" size="small" className="w-full hover:opacity-70 mr-4" 
-                      onClick={() =>{ 
-                        dispatch(deleteActiveBoard())
-                        setModalDeleteBoardOpen(false)
-                      }}
-                    />
-                    <ButtonPill color="text-gray-500" backgroundColor='bg-gray-100 hover:bg-gray-100' text="Cancel" size="small" className="w-full hover:opacity-70" 
-                      onClick={() => setModalDeleteBoardOpen(false)}
-                    />
-                  </div>
-                </>
-              </Modal>
-              <Popper id={id} open={openPopper} anchorEl={anchorEl} placement='bottom-end' className='z-[10000] py-[14px]'>
-                <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
-                  <button className="text-gray-400 hover:opacity-50 font-semibold mb-2"
-                    
-                  >Edit Board</button>
-                  <button className="text-red-600 hover:opacity-50 font-semibold"
-                    onClick={() => {
-                      setAnchorEl(null)
-                      setModalDeleteBoardOpen(true)
-                    }}
-                  >Delete Board</button>
-                </div>
-              </Popper>
-              {createPortal(
-                <>
-                  {openPopper &&
-                    <div className="fixed inset-0 z-[10000]"
-                      onClick={() => setAnchorEl(null)}
-                    ></div>
+              <div>
+                <ButtonIcon
+                  icon={
+                    <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}><g fill="currentColor" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"></circle><circle cx="2.308" cy="10" r="2.308"></circle><circle cx="2.308" cy="17.692" r="2.308"></circle></g></svg>
                   }
-                </>
-                ,
-                document.body)
-              }
-            </div>
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                    setAnchorEl(anchorEl ? null : e.currentTarget)
+                  }}
+                  className="text-gray-400 hover:bg-board transition-colors"
+                />
+                <Modal /* Modal delete current active board */
+                  isOpen={modalDeleteBoardOpen}
+                  onRequestClose={(e: React.MouseEvent<Element>) => {
+                    setModalDeleteBoardOpen(false)
+                  }}
+                >
+                  <>
+                    <div className="font-bold text-red-500 text-lg mb-4">Delete this board?</div>
+                    <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">Are you sure you want to delete the '{board.name}' board? This action will remove all columns and tasks and cannot be reversed.</div>
+                    <div className="flex flex-row justify-center items-center">
+                      <ButtonPill color="text-white" backgroundColor='bg-red-500 hover:bg-red-500' text="Delete" size="small" className="w-full hover:opacity-70 mr-4"
+                        onClick={() => {
+                          dispatch(deleteActiveBoard())
+                          setModalDeleteBoardOpen(false)
+                        }}
+                      />
+                      <ButtonPill color="text-gray-500" backgroundColor='bg-gray-100 hover:bg-gray-100' text="Cancel" size="small" className="w-full hover:opacity-70"
+                        onClick={() => setModalDeleteBoardOpen(false)}
+                      />
+                    </div>
+                  </>
+                </Modal>
+                <Popper id={id} open={openPopper} anchorEl={anchorEl} placement='bottom-end' className='z-[10000] py-[14px]'>
+                  <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
+                    <button className="text-gray-400 hover:opacity-50 font-semibold mb-2"
 
-          </div>
+                    >Edit Board</button>
+                    <button className="text-red-600 hover:opacity-50 font-semibold"
+                      onClick={() => {
+                        setAnchorEl(null)
+                        setModalDeleteBoardOpen(true)
+                      }}
+                    >Delete Board</button>
+                  </div>
+                </Popper>
+                {createPortal(
+                  <>
+                    {openPopper &&
+                      <div className="fixed inset-0 z-[10000]"
+                        onClick={() => setAnchorEl(null)}
+                      ></div>
+                    }
+                  </>
+                  ,
+                  document.body)
+                }
+              </div>
+
+            </div>
+          ) : null}
         </div>
       </header>
 
@@ -246,26 +248,40 @@ export default function Home() {
 
         <section className="main-section grow py-6 px-8 overflow-auto">
 
-          <div className='flex flex-row'>
-            {/* bg-column[] is defined in tailwind.config.ts */}
-            {columns.map((c, index) => (
-              <div className="shrink-0 w-[280px] mr-8">
-                <div className="flex flex-row items-center mb-6" key={c.id}>
-                  <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
-                  <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
-                </div>
-
-                {c.tasks.length > 0 && c.tasks.map((task, index) => (
-                  <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
-                    <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
-                    {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
-                    <div className="text-xs text-slate-400 font-semibold">0 of {task.subtasks.length} subtasks</div>
+          {board !== null ? (
+            <div className='flex flex-row'>
+              {/* bg-column[] is defined in tailwind.config.ts */}
+              {columns !== null && columns.map((c, index) => (
+                <div className="shrink-0 w-[280px] mr-8">
+                  <div className="flex flex-row items-center mb-6" key={c.id}>
+                    <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
+                    <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
                   </div>
-                ))}
-              </div>
-            ))}
-          </div>
 
+                  {c.tasks.length > 0 && c.tasks.map((task, index) => (
+                    <div key={task.id} className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700">
+                      <div className="font-semibold text-[.95rem] mb-3">{task.title}</div>
+                      {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
+                      <div className="text-xs text-slate-400 font-semibold">0 of {task.subtasks.length} subtasks</div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+            </div>
+
+          ) : (
+            <>
+              {/* When there is no single board in the store. */}
+              <div className="flex flex-col items-center justify-center">
+                <div className="mb-4">There is no single board. Create a new one to get started.</div>
+                <ButtonPill text="+ Create New Board" className="w-fit" 
+                  onClick={() => {setModalCreateNewBoardOpen(true)}}
+                />
+              </div>
+            </>
+          )}
+          {/* 
           <div className="relative">
             <Select defaultValue={10}>
               <Option value={10} className="text-red-300 bg-gray-700">Ten</Option>
@@ -278,9 +294,9 @@ export default function Home() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis repellat nulla nam quibusdam id corporis nostrum suscipit provident molestias, sint dolorem modi? Quod pariatur eligendi totam dolor ullam aliquam perspiciatis.
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio natus porro excepturi voluptatem debitis et amet dignissimos nesciunt, culpa laudantium, consequuntur provident odit suscipit? Eveniet est quasi excepturi voluptate quidem.
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, sit. Eum minus eveniet nostrum. Tempore sapiente totam exercitationem inventore earum dolore architecto nisi quis, hic dolor incidunt. Accusantium, omnis earum.
-          </div>
+          </div> */}
         </section>
-      </main>
+      </main >
     </>
   )
 }
