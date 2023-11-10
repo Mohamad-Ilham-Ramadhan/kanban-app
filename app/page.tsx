@@ -8,7 +8,7 @@ import KanbanLogo from './_assets/kanban-logo.svg'
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './_redux/store';
-import { createNewBoard, setActiveBoard, deleteActiveBoard } from './_redux/reducers/boardReducer';
+import { createNewBoard, setActiveBoard, deleteActiveBoard, addNewColumns } from './_redux/reducers/boardReducer';
 import ButtonPill from './_components/buttons/ButtonPill';
 import ButtonIcon from './_components/buttons/ButtonIcon';
 import BoardIcon from './_assets/icons/board.svg'
@@ -282,11 +282,11 @@ export default function Home() {
                 >
                   <Formik
                     initialValues={{
-                      columns: columns !== null ? columns.map(c => ({name: c.name, preserved: true})) : []
+                      columns: columns !== null ? columns.map(c => ({id: c.id, name: c.name, preserved: true})) : []
                     }}
                     onSubmit={(values) => {
-                      console.log('SUBMIT add new columns', values)
-                      // dispatch()
+                      dispatch(addNewColumns(values.columns))
+                      setModalCreateNewColumnOpen(false)
                     }}
                   >
                     {({ values, handleChange, errors, submitForm }) => (
@@ -296,6 +296,7 @@ export default function Home() {
                           <label htmlFor="column-name" className="block font-semibold text-xs mb-2">Name</label>
                           <Input value={board !== null ? board.name : ''} disabled id="column-name" />
                         </div>
+                        
                         <FieldArray
                           name="columns"
                           render={({ push, remove }) => (
@@ -336,7 +337,7 @@ export default function Home() {
                             </>
                           )}
                         />
-                        <ButtonPill text="Create New Board" size="small" className="w-full" onClick={submitForm} />
+                        <ButtonPill text="Save Changes" size="small" className="w-full" onClick={submitForm} />
                       </>
                     )}
                   </Formik>
@@ -346,7 +347,7 @@ export default function Home() {
           ) : (
             <>
               {/* When there is no single board in the store. */}
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center h-full">
                 <div className="mb-4">There is no single board. Create a new one to get started.</div>
                 <ButtonPill text="+ Create New Board" className="w-fit"
                   onClick={() => { setModalCreateNewBoardOpen(true) }}
