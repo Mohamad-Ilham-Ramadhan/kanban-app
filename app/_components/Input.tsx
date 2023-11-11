@@ -20,5 +20,6 @@ export default function Input({className, error, disabled, ...props} : InputProp
          )
       } 
       {...props}
+      disabled={disabled}
    />
 }
