@@ -18,7 +18,7 @@ export default function ButtonPill({text, className, onClick, size = 'medium', c
    }
 
    return (
-      <button className={clsx("transition-colors transition-opacity rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick}>
+      <button className={clsx("transition-all rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick}>
          {text}
       </button>
    )

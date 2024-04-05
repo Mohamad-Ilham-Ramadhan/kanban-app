@@ -254,7 +254,7 @@ export default function Home() {
               <div className='flex flex-row h-full'>
                 {/* bg-column[] is defined in tailwind.config.ts */}
                 {columns !== null && columns.map((c, index) => (
-                  <div className="shrink-0 w-[280px] rounded-lg mr-8">
+                  <div key={c.id} className="shrink-0 w-[280px] rounded-lg mr-8">
                     <div className="flex flex-row items-center mb-6" key={c.id}>
                       <div className={`w-4 h-4 rounded-full bg-column${index} mr-3`}></div>
                       <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400"><span>{c.name}</span><span>({c.tasks.length})</span></div>
@@ -331,7 +331,12 @@ export default function Home() {
                               </div>
                               {values.columns.length === 6 ? null : (
                                 <ButtonPill text="+ Add New Column" size="small" className="w-full mb-4" color="text-primary" backgroundColor='bg-white hover:bg-gray-200'
-                                  onClick={() => { push({name: '', preserved: false}) }}
+                                  onClick={() => { 
+                                    push({name: '', preserved: false}) 
+                                    setTimeout(() => {
+                                      document.getElementById(`columns[${values.columns.length}].name`)?.focus()
+                                    }, 1)
+                                  }}
                                 />
                               )}
                             </>
@@ -342,6 +347,7 @@ export default function Home() {
                     )}
                   </Formik>
                 </Modal>
+                {/* Modal add new Column [end] */}
               </div>
             </>
           ) : (
