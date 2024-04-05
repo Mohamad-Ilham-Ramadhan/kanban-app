@@ -259,18 +259,24 @@ export const boardSlice = createSlice({
          state.activeBoard = 0
       },
       addNewColumns: (state, action) => {
-         action.payload.forEach((nc: {name: string; preserved: boolean}, index: number) => {
+         // action.payload.forEach((nc: {name: string; preserved: boolean}, index: number) => {
 
-            if (nc.preserved) {
-               state.boards[state.activeBoard].columns[index].name = nc.name
-            } else {
-               state.boards[state.activeBoard].columns.push({
-                  id: uuidv4(),
-                  name: nc.name,
-                  tasks: []
-               })
-            }
-         })
+         //    if (nc.preserved) {
+         //       state.boards[state.activeBoard].columns[index].name = nc.name
+         //    } else {
+         //       state.boards[state.activeBoard].columns.push({
+         //          id: uuidv4(),
+         //          name: nc.name,
+         //          tasks: []
+         //       })
+         //    }
+         // })
+         console.log('addNewColumn action', action.payload);
+         // state.boards[state.activeBoard].columns.push({
+         //    id: uuidv4(),
+         //    name: nc.name,
+         //    tasks: []
+         // })
       }
    }
 })
