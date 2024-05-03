@@ -27,6 +27,17 @@ const config: Config = {
         'column3': '#e5a449',
         'column4': '#2a3fdb',
         'column5': '#c36e6e',
+        'primary-hover': '#8c89e0',
+        'dark-light': '#2b2c37',
+        'drag-card-dark': '#23242c', // when card-task ready/available to drag (theme === dark)
+        'drag-card-light': '#e2e8f0', // when card-task ready/available to drag (theme === ligth)
+        'light-theme-bg': '#f4f7fd',
+        'slate-400': '#828fa3',
+        'red-450': '#ea5555',
+        'gray-750': '#313a48',
+      },
+      borderRadius: {
+        xl: '.75rem',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
