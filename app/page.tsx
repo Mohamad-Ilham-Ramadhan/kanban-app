@@ -29,8 +29,10 @@ import { Popper } from "@mui/base/Popper";
 import { Option } from "@mui/base/Option";
 import Slider from "@/app/_components/Slider";
 import Select from "@/app/_components/Select";
+import Kikuk from '@/app/_components/Kikuk';
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
   const [darkMode, setDarkMode] = useState<"light" | "dark">("light");
   const { theme, setTheme } = useTheme();
   // @ts-ignore
@@ -56,6 +58,8 @@ export default function Home() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openPopper = Boolean(anchorEl);
   const id = openPopper ? "simple-popper" : undefined;
+
+  console.log('current board', board);
   return (
     <>
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
@@ -87,13 +91,23 @@ export default function Home() {
                   initialValues={{
                     title: "",
                     description: "",
-                    subtasks: [""],
+                    subtasks: [{id: uuidv4(), text: '', isDone: false}],
+                    status: board.columns[0],
                   }}
                   validationSchema={yup.object().shape({
                     title: yup.string().required(),
-                    columns: yup.array().of(yup.string().required()),
+                    description: yup.string().required(),
+                    subtasks: yup.array().of(
+                      yup.object().shape({
+                        id: yup.string().required(),
+                        text: yup.string().required(),
+                        isDone: yup.boolean().required()
+                      })
+                    ),
+                    // status: yup.array().of(yup.string().required()),
                   })}
                   onSubmit={(values) => {
+                    console.log('submit add new task', values)
                     // dispatch(
                     //   createNewBoard({
                     //     name: values.name,
@@ -146,7 +160,7 @@ export default function Home() {
                               value={values.description}
                               onChange={handleChange}
                               error={errors.description ? true : false}
-                              rows={4}
+                              rows="4"
                             />
                             {errors.description ? (
                               <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
@@ -167,8 +181,8 @@ export default function Home() {
                                   <div className="flex mb-2" key={index}>
                                     <div className="relative w-full">
                                       <Input
-                                        value={values.subtasks[index]}
-                                        id={`subtasks[${index}]`}
+                                        value={values.subtasks[index].text}
+                                        id={`subtasks[${index}].text`}
                                         onChange={handleChange}
                                         error={
                                           errors.subtasks !== undefined &&
@@ -205,7 +219,7 @@ export default function Home() {
                                   color="text-primary"
                                   backgroundColor="bg-white hover:bg-gray-200"
                                   onClick={() => {
-                                    push("");
+                                    push({id: uuidv4(), text: '', isDone: false});
                                   }}
                                 />
                               )}
@@ -213,8 +227,20 @@ export default function Home() {
                           )}
                         />
 
+                        <div className="mb-4">
+                          <label
+                            htmlFor="status"
+                            className="block font-semibold text-xs mb-2"
+                          >
+                            Status
+                          </label>
+                          {/* <Select /> */}
+
+                          <Kikuk name="status" open={open} data={ board.columns.map((c, index) => ({index: index, name: c.name})) } onClick={() => setOpen(prev => !prev)} />
+                        </div>
+
                         <ButtonPill
-                          text="Create New Board"
+                          text="Create Task"
                           size="small"
                           className="w-full"
                           onClick={submitForm}

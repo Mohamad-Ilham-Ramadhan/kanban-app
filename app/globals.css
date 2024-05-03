@@ -8,7 +8,7 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 32, 33, 44;
     --background-start-rgb: 32, 33, 44;
@@ -17,7 +17,7 @@
   body {
     background-color: theme('colors.board');
   }
-}
+} */
 
 /* plus-jakarta-sans-200 - latin */
 @font-face {

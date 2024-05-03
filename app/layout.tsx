@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import { Provider } from "react-redux"
 import { store, persistor } from "./_redux/store"
 import './globals.css'
-import { ThemeProvider } from 'next-themes'
+// import { ThemeProvider } from 'next-themes'
 import { PersistGate } from 'redux-persist/integration/react'
 
 
@@ -23,9 +23,9 @@ export default function RootLayout({
       <body>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <ThemeProvider attribute='class'>
+            {/* <ThemeProvider attribute='class'> */}
               {children}
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
           </PersistGate>
         </Provider>
       </body>

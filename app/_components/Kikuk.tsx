@@ -1,9 +1,14 @@
 'use client'
+import { useState, useEffect, useRef} from 'react';
+import { useField } from 'formik';
+import { createPortal } from 'react-dom';
 
-import { useState, useEffect, useRef} from 'react'
-
-export default function Kikuk({open, onClick} : {open: boolean, onClick: React.MouseEventHandler<HTMLButtonElement>}) {
+export default function Kikuk({name, open, data, onClick} : {name: string, open: boolean, data: {index: number, name: string}[], onClick: React.MouseEventHandler<HTMLButtonElement>}) {
    const paperRef = useRef(null);
+   const [field, meta, helpers] = useField(name);
+
+   console.log('kikuk useFIeld', field, 'meta', meta, 'helpers', helpers);
+
    useEffect(() => {
       console.log(paperRef.current)
    }, [open])
@@ -12,14 +17,34 @@ export default function Kikuk({open, onClick} : {open: boolean, onClick: React.M
          <button
             onClick={onClick}
             className="hover:cursor-pointer"
-         type="button">Button</button>
-         {open && (
-         <div ref={paperRef}>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-         </div>
+            type="button"
+         >
+            {field.value.name}
+         </button>
+         {open && 
+         createPortal(
+            <div className='overlay-wrapper absolute inset-0 z-[1000]'>
+               <div className='overlay absolute inset-0'></div>
+               <ul ref={paperRef} className='listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-slate-700 drop-shadow'>
+                  {data.map((value) => 
+                     <li 
+                        key={value.name} 
+                        data-value={value.index}
+                        onClick={() => helpers.setValue({index: value.index, name: value.name})}
+                     >
+                           {value.name}
+                     </li>
+                  )}
+               </ul>
+            </div>,
+            document.body
          )}
       </>
    )
+}
+
+function Option({value, label} : {value: string, label: string}) {
+   return (
+      <li data-value={value}>{label}</li>
+   );
 }

@@ -7,6 +7,7 @@ type TextareaProps = {
    id?: string;
    error?: boolean;
    disabled?: boolean;
+   rows?: string;
 }
 export default function Input({className, error, disabled, ...props} : TextareaProps) {
    return <textarea 
