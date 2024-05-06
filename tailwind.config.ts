@@ -28,6 +28,7 @@ const config: Config = {
         'column4': '#2a3fdb',
         'column5': '#c36e6e',
         'primary-hover': '#8c89e0',
+        'dark': '#20212c',
         'dark-light': '#2b2c37',
         'drag-card-dark': '#23242c', // when card-task ready/available to drag (theme === dark)
         'drag-card-light': '#e2e8f0', // when card-task ready/available to drag (theme === ligth)

@@ -135,10 +135,15 @@
 
 body {
   font-family: 'Plus Jakarta Sans';
-
+  color: #000;
+  background-color: theme('colors.light-theme-bg');
+  overflow: hidden;
 }
-
-
+/* dark theme */
+html.dark body {
+  background-color: theme('colors.dark');
+  color: #fff;
+}
 
 textarea::-webkit-scrollbar {
   width: 8px;
