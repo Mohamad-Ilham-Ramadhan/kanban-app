@@ -192,7 +192,6 @@ const boards: Board[] = [
          },
       ]
    },
-
    {
       id: uuidv4(),
       name: 'Roadmap',
@@ -237,9 +236,17 @@ export const boardSlice = createSlice({
    name: 'board',
    initialState: {
       boards,
-      activeBoard: 0
+      activeBoard: 0,
+      theme: 0, // 0 = dark, 1 = light
    },
    reducers: {
+      toggleTheme: (state) => {
+         if (state.theme) {
+            state.theme = 0;
+         } else {
+            state.theme = 1;
+         }
+      },
       createNewBoard: (state, action) => {
          state.boards.push({
             id: uuidv4(),
@@ -339,5 +346,5 @@ export const boardSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const tasks = (state: RootState) => state.task.tasks
 
-export const { createNewBoard, setActiveBoard, deleteActiveBoard, addNewColumns } = boardSlice.actions
+export const { createNewBoard, setActiveBoard, deleteActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer

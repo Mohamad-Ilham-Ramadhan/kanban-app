@@ -1,14 +1,12 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useTheme } from "next-themes";
 import KanbanLogo from "./_assets/kanban-logo.svg";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./_redux/store";
 import {
+  toggleTheme,
   createNewBoard,
   setActiveBoard,
   deleteActiveBoard,
@@ -33,8 +31,6 @@ import Kikuk from '@/app/_components/Kikuk';
 
 export default function Home() {
   const [open, setOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState<"light" | "dark">("light");
-  const { theme, setTheme } = useTheme();
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
   const dispatch = useDispatch();
@@ -45,6 +41,7 @@ export default function Home() {
       ? state.board.boards[state.board.activeBoard]
       : null;
   const columns = board !== null ? board.columns : null;
+  console.log('state', state);
   console.log("board", board);
   console.log("columns", columns);
 
@@ -59,16 +56,27 @@ export default function Home() {
   const openPopper = Boolean(anchorEl);
   const id = openPopper ? "simple-popper" : undefined;
 
-  console.log('current board', board);
+  function theme() {
+    // document.documentElement.classList.toggle('dark');
+    dispatch(toggleTheme());
+  }
+
+  useEffect(() => {
+    if (state.board.theme) {
+      document.documentElement.classList.remove('dark')
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  }, [state.board.theme])
   return (
     <>
-      <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-[#2b2c37] border-b border-gray-700">
+      <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-dark-light border-b border-gray-700">
         <div className="flex items-center w-[300px] h-full px-8 border-r border-gray-700">
           <KanbanLogo />
         </div>
 
         <div className="px-8 flex grow justify-between items-center">
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold dark:text-white">
             {board !== null ? board.name : "No Board Found"}
           </div>
           {board !== null ? (
@@ -121,7 +129,7 @@ export default function Home() {
                   {({ values, errors, handleChange, submitForm }) => {
                     return (
                       <>
-                        <div className="text-lg font-bold mb-4">
+                        <div className="text-lg dark:text-white font-bold mb-4">
                           Add New Task
                         </div>
                         <div className="mb-4">
@@ -236,7 +244,7 @@ export default function Home() {
                           </label>
                           {/* <Select /> */}
 
-                          <Kikuk name="status" open={open} data={ board.columns.map((c, index) => ({index: index, name: c.name})) } onClick={() => setOpen(prev => !prev)} />
+                          <Kikuk name="status" open={open} close={() => {setOpen(prev => !prev)}} data={ board.columns.map((c, index) => ({index: index, name: c.name})) } onClick={() => setOpen(prev => !prev)} />
                         </div>
 
                         <ButtonPill
@@ -251,6 +259,7 @@ export default function Home() {
                 </Formik>
               </Modal>
               {/* Modal Add New Task [end] */}
+              
               <div>
                 <ButtonIcon
                   icon={
@@ -349,7 +358,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen">
+      <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-dark">
         <aside className="flex flex-col h-[100vw] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700">
           {/* #828fa3 */}
           <div className="pt-4 pr-4">
@@ -509,6 +518,8 @@ export default function Home() {
                 </Formik>
               </Modal>
             </nav>
+
+            <button onClick={theme}>Switch</button>
           </div>
         </aside>
 
