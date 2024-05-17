@@ -26,6 +26,7 @@ export default function Kikuk({name, open, close, data, className, onClick} : {n
          listboxRect = listbox.getBoundingClientRect();
          listbox.style.left = `${btnRect?.left}px`;
          listbox.style.top = `${btnRect?.bottom + 8}px`;
+         listbox.style.width = `${btnRect?.width}px`;
       }
 
    }, [open])
@@ -54,12 +55,13 @@ export default function Kikuk({name, open, close, data, className, onClick} : {n
                   className='overlay absolute inset-0'
                   onClick={() => close()}
                ></div>
-               <ul ref={listboxRef} className='listbox absolute z-[1001] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow'>
+               <ul ref={listboxRef} className='listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow'>
                   {data.map((value) => 
                      <li 
                         key={value.name} 
                         data-value={value.index}
                         onClick={() => helpers.setValue({index: value.index, name: value.name})}
+                        className="px-4 mb-1 text-[13px] hover:font-semibold text-slate-400 hover:text-black dark:hover:text-white hover:cursor-pointer"
                      >
                            {value.name}
                      </li>
