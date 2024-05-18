@@ -590,15 +590,22 @@ export default function Home() {
                 >
                   <Formik
                     initialValues={{
-                      columns: columns === null ? [] : columns,
+                      columns: columns === null ? [] : columns.map(c => ({...c, preserved: true})),
                     }}
+                    validationSchema={yup.object().shape({
+                      columns: yup.array().of(yup.object({
+                        name: yup.string().required()
+                      })),
+                      // status: yup.array().of(yup.string().required()),
+                    })}
                     onSubmit={(values) => {
+                      console.log('form add new column')
                       dispatch(addNewColumns(values.columns));
                       setModalCreateNewColumnOpen(false);
                     }}
                   >
-                    {({ values, handleChange, errors, submitForm }) => (
-                      <>
+                    {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+                      <form onSubmit={handleSubmit} className="asdf">
                         <div className="font-bold text-lg mb-4">
                           Add New Column
                         </div>
@@ -654,6 +661,7 @@ export default function Home() {
                                         onClick={() => {
                                           remove(index);
                                         }}
+                                        type="button"
                                       >
                                         <XIcon
                                           className={
@@ -684,6 +692,7 @@ export default function Home() {
                                         ?.focus();
                                     }, 1);
                                   }}
+                                  type="button"
                                 />
                               )}
                             </>
@@ -694,8 +703,9 @@ export default function Home() {
                           size="small"
                           className="w-full"
                           onClick={submitForm}
+                          type="submit"
                         />
-                      </>
+                      </form>
                     )}
                   </Formik>
                 </Modal>
