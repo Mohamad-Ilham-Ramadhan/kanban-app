@@ -7,8 +7,9 @@ type ButtonPillProps = {
    size?: 'small' | 'medium';
    backgroundColor?: string;
    color?: string; // text color
+   type?: 'submit' | 'reset' | 'button' | undefined;
 }
-export default function ButtonPill({text, className, onClick, size = 'medium', color = 'text-white', backgroundColor = 'bg-primary hover:bg-primary-light'} : ButtonPillProps) {
+export default function ButtonPill({text, className, onClick, size = 'medium', color = 'text-white', backgroundColor = 'bg-primary hover:bg-primary-light', type} : ButtonPillProps) {
    // size class 
    let sizeClass; 
    if (size == 'medium') {
@@ -18,7 +19,7 @@ export default function ButtonPill({text, className, onClick, size = 'medium', c
    }
 
    return (
-      <button className={clsx("transition-all rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick}>
+      <button className={clsx("transition-all rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick} type={type}>
          {text}
       </button>
    )
