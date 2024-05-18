@@ -117,9 +117,9 @@ export default function Home() {
                     setModalAddNewTaskOpen(false);
                   }}
                 >
-                  {({ values, errors, handleChange, submitForm }) => {
+                  {({ values, errors, handleChange, handleSubmit, submitForm }) => {
                     return (
-                      <>
+                      <form onSubmit={handleSubmit}>
                         <div className="text-lg dark:text-white font-bold mb-4">
                           Add New Task
                         </div>
@@ -224,6 +224,7 @@ export default function Home() {
                                       newInput?.focus()
                                     })
                                   }}
+                                  type="button"
                                 />
                               )}
                             </>
@@ -253,8 +254,9 @@ export default function Home() {
                           size="small"
                           className="w-full"
                           onClick={submitForm}
+                          type="submit"
                         />
-                      </>
+                      </form>
                     );
                   }}
                 </Formik>
@@ -421,9 +423,9 @@ export default function Home() {
                     dispatch(setActiveBoard(boards.length));
                   }}
                 >
-                  {({ values, errors, handleChange, submitForm }) => {
+                  {({ values, errors, handleChange, submitForm, handleSubmit }) => {
                     return (
-                      <>
+                      <form onSubmit={handleSubmit}>
                         <div className="text-lg font-bold mb-4">
                           Add New Board
                         </div>
@@ -513,7 +515,7 @@ export default function Home() {
                           className="w-full"
                           onClick={submitForm}
                         />
-                      </>
+                      </form>
                     );
                   }}
                 </Formik>
