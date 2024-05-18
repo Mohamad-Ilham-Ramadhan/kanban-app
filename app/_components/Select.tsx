@@ -39,6 +39,12 @@ export default function Select({
       listbox.style.left = `${btnRect?.left}px`;
       listbox.style.top = `${btnRect?.bottom + 8}px`;
       listbox.style.width = `${btnRect?.width}px`;
+
+      // if listbox overflowing window.innerHeight 
+      const diff = window.innerHeight - listbox.getBoundingClientRect().bottom;
+      if (diff < 0) {
+        listbox.style.top = `${btnRect?.bottom + 8 + diff - 8}px`;
+      }
     }
   }, [open]);
   return (
@@ -69,29 +75,31 @@ export default function Select({
           classNames="select"
           unmountOnExit
         >
-          <div className="overlay-wrapper absolute inset-0 z-[1000]">
+          <div className="overlay-wrapper  absolute inset-0 z-[1000]">
             <div
               className="overlay absolute inset-0"
               onClick={() => close()}
             ></div>
-            <ul
-              ref={listboxRef}
-              className="listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow"
-            >
-              {data.map((value) => (
-                <li
-                  key={value.name}
-                  data-value={value.index}
-                  onClick={() => {
-                    helpers.setValue({ index: value.index, name: value.name });
-                    close();
-                  }}
-                  className="px-4 mb-2 last:mb-0 text-[13px] hover:font-semibold text-slate-400 hover:text-black dark:hover:text-white hover:cursor-pointer"
-                >
-                  {value.name}
-                </li>
-              ))}
-            </ul>
+            <div>
+              <ul
+                ref={listboxRef}
+                className="listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow"
+              >
+                {data.map((value) => (
+                  <li
+                    key={value.name}
+                    data-value={value.index}
+                    onClick={() => {
+                      helpers.setValue({ index: value.index, name: value.name });
+                      close();
+                    }}
+                    className="px-4 mb-2 last:mb-0 text-[13px] hover:font-semibold text-slate-400 hover:text-black dark:hover:text-white hover:cursor-pointer"
+                  >
+                    {value.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </CSSTransition>,
         document.body

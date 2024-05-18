@@ -182,12 +182,12 @@ textarea::-webkit-scrollbar-thumb, .main-section::-webkit-scrollbar-thumb {
 
 .select-enter {
   opacity: 0;
-  transform: scale(0.92);
+  /* transform: scale(0.92); */
 }
 .select-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 200ms, transform 200ms;
+  transition: opacity 200ms;
 }
 .select-exit {
   opacity: 1;
