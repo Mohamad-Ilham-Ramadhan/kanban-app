@@ -533,7 +533,8 @@ export default function Home() {
                 <BoardIcon className="mr-4" />
                 <span>+ Create New Board</span>
               </li>
-
+              
+              {/* modal create new board [start] */}
               <Modal
                 isOpen={modalCreateNewBoardOpen}
                 onRequestClose={(e: React.MouseEvent<Element>) => {
@@ -625,7 +626,7 @@ export default function Home() {
                                           remove(index);
                                         }}
                                       >
-                                        <XIcon /> asdf
+                                        <XIcon />
                                       </button>
                                     )}
                                   </div>
@@ -660,6 +661,8 @@ export default function Home() {
                   }}
                 </Formik>
               </Modal>
+              {/* modal create new board [end] */}
+
             </nav>
 
             <button onClick={theme}>Switch</button>
