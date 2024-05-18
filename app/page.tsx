@@ -11,6 +11,7 @@ import {
   setActiveBoard,
   deleteActiveBoard,
   addNewColumns,
+  addNewTask
 } from "./_redux/reducers/boardReducer";
 import ButtonPill from "./_components/buttons/ButtonPill";
 import ButtonIcon from "./_components/buttons/ButtonIcon";
@@ -41,9 +42,6 @@ export default function Home() {
       ? state.board.boards[state.board.activeBoard]
       : null;
   const columns = board !== null ? board.columns : null;
-  console.log('state', state);
-  console.log("board", board);
-  console.log("columns", columns);
 
   const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false);
   const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
@@ -100,7 +98,7 @@ export default function Home() {
                     title: "",
                     description: "",
                     subtasks: [{id: uuidv4(), text: '', isDone: false}],
-                    status: board.columns[0],
+                    status: {...board.columns[0], index: 0},
                   }}
                   validationSchema={yup.object().shape({
                     title: yup.string().required(),
@@ -115,15 +113,8 @@ export default function Home() {
                     // status: yup.array().of(yup.string().required()),
                   })}
                   onSubmit={(values) => {
-                    console.log('submit add new task', values)
-                    // dispatch(
-                    //   createNewBoard({
-                    //     name: values.name,
-                    //     columns: values.columns,
-                    //   })
-                    // );
-                    setModalCreateNewBoardOpen(false);
-                    // dispatch(setActiveBoard(boards.length));
+                    dispatch(addNewTask(values));
+                    setModalAddNewTaskOpen(false);
                   }}
                 >
                   {({ values, errors, handleChange, submitForm }) => {
@@ -248,7 +239,13 @@ export default function Home() {
                           </label>
                           {/* <Select /> */}
 
-                          <Kikuk name="status" open={open} close={() => {setOpen(prev => !prev)}} data={ board.columns.map((c, index) => ({index: index, name: c.name})) } onClick={() => setOpen(prev => !prev)} />
+                          <Kikuk 
+                            name="status" 
+                            open={open} 
+                            close={() => {setOpen(prev => !prev)}} 
+                            data={ board.columns.map((c, index) => ({index: index, name: c.name})) } 
+                            onClick={() => setOpen(prev => !prev)} 
+                          />
                         </div>
 
                         <ButtonPill

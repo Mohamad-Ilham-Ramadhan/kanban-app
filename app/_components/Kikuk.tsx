@@ -19,7 +19,7 @@ export default function Kikuk({
   open: boolean;
   close: Function;
   data: { index: number; name: string }[];
-  className: string;
+  className?: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   const listboxRef = useRef<HTMLUListElement>(null);
@@ -100,6 +100,3 @@ export default function Kikuk({
   );
 }
 
-function Option({ value, label }: { value: string; label: string }) {
-  return <li data-value={value}>{label}</li>;
-}

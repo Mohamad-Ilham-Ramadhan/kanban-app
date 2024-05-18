@@ -15,10 +15,10 @@ export type Task = {
    description: string;
    subtasks: SubTask[];
    // for drag n swap 
-   y: number;
-   pageYTop: number;
-   pageYBottom: number;
-   moved: string;
+   // y: number;
+   // pageYTop: number;
+   // pageYBottom: number;
+   // moved: string;
 }
 export type Column = {
    id: string;
@@ -149,7 +149,6 @@ const boards: Board[] = [
 
       ]
    },
-
    {
       id: uuidv4(),
       name: 'Marketing Plan',
@@ -247,7 +246,7 @@ export const boardSlice = createSlice({
             state.theme = 1;
          }
       },
-      createNewBoard: (state, action) => {
+      createNewBoard(state, action)  {
          state.boards.push({
             id: uuidv4(),
             name: action.payload.name,
@@ -256,6 +255,15 @@ export const boardSlice = createSlice({
                name: c,
                tasks: []
             }))
+         })
+      },
+      addNewTask(state, action) {
+         const task = action.payload;
+         state.boards[state.activeBoard].columns[action.payload.status.index].tasks.push({
+            id: uuidv4(),
+            title: task.title,
+            description: task.description,
+            subtasks: task.subtasks,
          })
       },
       setActiveBoard: (state, action) => {
@@ -346,5 +354,5 @@ export const boardSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const tasks = (state: RootState) => state.task.tasks
 
-export const { createNewBoard, setActiveBoard, deleteActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { createNewBoard, addNewTask, setActiveBoard, deleteActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer
