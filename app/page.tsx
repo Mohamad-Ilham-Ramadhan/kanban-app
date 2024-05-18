@@ -10,6 +10,7 @@ import {
   createNewBoard,
   setActiveBoard,
   deleteActiveBoard,
+  editActiveBoard,
   addNewColumns,
   addNewTask
 } from "./_redux/reducers/boardReducer";
@@ -44,7 +45,7 @@ export default function Home() {
 
   const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false);
   const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
-  const [modalEditBoardOpen, setModalEditBoardOpen] = useState(false);
+  const [modalEditActiveBoardOpen, setModalEditActiveBoardOpen] = useState(false);
   const [modalCreateNewColumnOpen, setModalCreateNewColumnOpen] =
     useState(false);
   const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
@@ -324,15 +325,15 @@ export default function Home() {
                 </Modal>
                 {/* modal edit board [start] */}
                 <Modal
-                  isOpen={modalEditBoardOpen}
+                  isOpen={modalEditActiveBoardOpen}
                   onRequestClose={(e: React.MouseEvent<Element>) => {
-                    setModalEditBoardOpen(false);
+                    setModalEditActiveBoardOpen(false);
                   }}
                 >
                   <Formik
                     initialValues={{
                       name: board.name,
-                      columns: columns === null ? [] : columns.map(c => ({...c, preserved: true})),
+                      columns: columns === null ? [] : columns,
                     }}
                     validationSchema={yup.object().shape({
                       name: yup.string(),
@@ -342,9 +343,8 @@ export default function Home() {
                       // status: yup.array().of(yup.string().required()),
                     })}
                     onSubmit={(values) => {
-                      console.log('form edit board')
-                      // dispatch(addNewColumns(values.columns));
-                      // setModalCreateNewColumnOpen(false);
+                      dispatch(editActiveBoard(values));
+                      setModalEditActiveBoardOpen(false);
                     }}
                   >
                     {({ values, handleChange, handleSubmit, errors, submitForm }) => (
@@ -360,8 +360,10 @@ export default function Home() {
                             Name
                           </label>
                           <Input
-                            value={board !== null ? board.name : ""}
-                            id="column-name"
+                            value={values.name}
+                            id="name"
+                            onChange={handleChange}
+                            
                           />
                         </div>
 
@@ -398,7 +400,7 @@ export default function Home() {
                                       <button
                                         className="w-[50px] flex justify-center items-center"
                                         disabled={
-                                          values.columns[index].preserved
+                                          values.columns[index].tasks.length > 0
                                         }
                                         onClick={() => {
                                           remove(index);
@@ -407,7 +409,7 @@ export default function Home() {
                                       >
                                         <XIcon
                                           className={
-                                            values.columns[index].preserved
+                                            values.columns[index].tasks.length > 0
                                               ? "text-gray-700"
                                               : "text-gray-500"
                                           }
@@ -425,7 +427,7 @@ export default function Home() {
                                   color="text-primary"
                                   backgroundColor="bg-white hover:bg-gray-200"
                                   onClick={() => {
-                                    push({ name: "", preserved: false });
+                                    push({ name: "", tasks: [] });
                                     setTimeout(() => {
                                       document
                                         .getElementById(
@@ -462,7 +464,7 @@ export default function Home() {
                   <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
                     <button 
                       className="text-gray-400 hover:opacity-50 font-semibold mb-2"
-                      onClick={() => setModalEditBoardOpen(true)}
+                      onClick={() => setModalEditActiveBoardOpen(true)}
                     >
                       Edit Board
                     </button>
@@ -726,7 +728,7 @@ export default function Home() {
                 >
                   <Formik
                     initialValues={{
-                      columns: columns === null ? [] : columns.map(c => ({...c, preserved: true})),
+                      columns: columns === null ? [] : columns,
                     }}
                     validationSchema={yup.object().shape({
                       columns: yup.array().of(yup.object({
@@ -819,7 +821,7 @@ export default function Home() {
                                   color="text-primary"
                                   backgroundColor="bg-white hover:bg-gray-200"
                                   onClick={() => {
-                                    push({ name: "", preserved: false });
+                                    push({ name: "", tasks: [] });
                                     setTimeout(() => {
                                       document
                                         .getElementById(
