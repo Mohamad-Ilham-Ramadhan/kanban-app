@@ -500,7 +500,7 @@ export default function Home() {
       </header>
 
       <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-dark">
-        <aside className="flex flex-col h-[100vw] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700">
+        <aside className="flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700">
           {/* #828fa3 */}
           <div className="pt-4 pr-4">
             <div className="text-slate-400 text-xs font-semibold uppercase tracking-[2px] pl-8 mb-5">
@@ -664,6 +664,8 @@ export default function Home() {
               {/* modal create new board [end] */}
 
             </nav>
+          </div>
+          <div className="">
 
             <button onClick={theme}>Switch</button>
           </div>
