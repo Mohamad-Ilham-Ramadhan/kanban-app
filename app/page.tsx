@@ -27,8 +27,7 @@ import { Popper } from "@mui/base/Popper";
 // import { Select } from '@mui/base/Select';
 import { Option } from "@mui/base/Option";
 import Slider from "@/app/_components/Slider";
-import Select from "@/app/_components/Select";
-import Kikuk from '@/app/_components/Kikuk';
+import Select from '@/app/_components/Select';
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -45,6 +44,7 @@ export default function Home() {
 
   const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false);
   const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
+  const [modalEditBoardOpen, setModalEditBoardOpen] = useState(false);
   const [modalCreateNewColumnOpen, setModalCreateNewColumnOpen] =
     useState(false);
   const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
@@ -240,7 +240,7 @@ export default function Home() {
                           </label>
                           {/* <Select /> */}
 
-                          <Kikuk 
+                          <Select 
                             name="status" 
                             open={open} 
                             close={() => {setOpen(prev => !prev)}} 
@@ -322,6 +322,136 @@ export default function Home() {
                     </div>
                   </>
                 </Modal>
+                {/* modal edit board [start] */}
+                <Modal
+                  isOpen={modalEditBoardOpen}
+                  onRequestClose={(e: React.MouseEvent<Element>) => {
+                    setModalEditBoardOpen(false);
+                  }}
+                >
+                  <Formik
+                    initialValues={{
+                      name: board.name,
+                      columns: columns === null ? [] : columns.map(c => ({...c, preserved: true})),
+                    }}
+                    validationSchema={yup.object().shape({
+                      name: yup.string(),
+                      columns: yup.array().of(yup.object({
+                        name: yup.string().required()
+                      })),
+                      // status: yup.array().of(yup.string().required()),
+                    })}
+                    onSubmit={(values) => {
+                      console.log('form edit board')
+                      // dispatch(addNewColumns(values.columns));
+                      // setModalCreateNewColumnOpen(false);
+                    }}
+                  >
+                    {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+                      <form onSubmit={handleSubmit} className="asdf">
+                        <div className="font-bold text-lg mb-4">
+                          Edit board
+                        </div>
+                        <div className="mb-6">
+                          <label
+                            htmlFor="column-name"
+                            className="block font-semibold text-xs mb-2"
+                          >
+                            Name
+                          </label>
+                          <Input
+                            value={board !== null ? board.name : ""}
+                            id="column-name"
+                          />
+                        </div>
+
+                        <FieldArray
+                          name="columns"
+                          render={({ push, remove }) => (
+                            <>
+                              <div className="mb-4">
+                                <div className="block font-semibold text-xs mb-2">
+                                  Columns
+                                </div>
+                                {values.columns.map((val, index) => (
+                                  <div className="flex mb-2" key={index}>
+                                    <div className="relative w-full">
+                                      <Input
+                                        value={values.columns[index].name}
+                                        id={`columns[${index}].name`}
+                                        onChange={handleChange}
+                                        error={
+                                          errors.columns !== undefined &&
+                                          errors.columns[index]
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                      {errors.columns &&
+                                      errors.columns[index] ? (
+                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
+                                          Required
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                    {values.columns.length === 1 ? null : (
+                                      <button
+                                        className="w-[50px] flex justify-center items-center"
+                                        disabled={
+                                          values.columns[index].preserved
+                                        }
+                                        onClick={() => {
+                                          remove(index);
+                                        }}
+                                        type="button"
+                                      >
+                                        <XIcon
+                                          className={
+                                            values.columns[index].preserved
+                                              ? "text-gray-700"
+                                              : "text-gray-500"
+                                          }
+                                        />
+                                      </button>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                              {values.columns.length === 6 ? null : (
+                                <ButtonPill
+                                  text="+ Add New Column"
+                                  size="small"
+                                  className="w-full mb-4"
+                                  color="text-primary"
+                                  backgroundColor="bg-white hover:bg-gray-200"
+                                  onClick={() => {
+                                    push({ name: "", preserved: false });
+                                    setTimeout(() => {
+                                      document
+                                        .getElementById(
+                                          `columns[${values.columns.length}].name`
+                                        )
+                                        ?.focus();
+                                    }, 1);
+                                  }}
+                                  type="button"
+                                />
+                              )}
+                            </>
+                          )}
+                        />
+                        <ButtonPill
+                          text="Save Changes"
+                          size="small"
+                          className="w-full"
+                          onClick={submitForm}
+                          type="submit"
+                        />
+                      </form>
+                    )}
+                  </Formik>
+                </Modal>
+                {/* modal edit board [end] */}
                 <Popper
                   id={id}
                   open={openPopper}
@@ -330,9 +460,15 @@ export default function Home() {
                   className="z-[10000] py-[14px]"
                 >
                   <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
-                    <button className="text-gray-400 hover:opacity-50 font-semibold mb-2">
+                    <button 
+                      className="text-gray-400 hover:opacity-50 font-semibold mb-2"
+                      onClick={() => setModalEditBoardOpen(true)}
+                    >
                       Edit Board
                     </button>
+                    
+                    
+
                     <button
                       className="text-red-600 hover:opacity-50 font-semibold"
                       onClick={() => {
@@ -656,7 +792,7 @@ export default function Home() {
                                       <button
                                         className="w-[50px] flex justify-center items-center"
                                         disabled={
-                                          values.columns[index].preserved
+                                          values.columns[index].tasks.length > 0
                                         }
                                         onClick={() => {
                                           remove(index);
@@ -665,7 +801,7 @@ export default function Home() {
                                       >
                                         <XIcon
                                           className={
-                                            values.columns[index].preserved
+                                            values.columns[index].tasks.length > 0
                                               ? "text-gray-700"
                                               : "text-gray-500"
                                           }

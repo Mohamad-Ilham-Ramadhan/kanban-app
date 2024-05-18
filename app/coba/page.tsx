@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef} from 'react'
-import Kikuk from '../_components/Kikuk'
+import Kikuk from '../_components/Select'
 
 export default function Page() {
    const [open, setOpen] = useState(false);
