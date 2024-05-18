@@ -18,6 +18,8 @@ import ButtonPill from "./_components/buttons/ButtonPill";
 import ButtonIcon from "./_components/buttons/ButtonIcon";
 import BoardIcon from "./_assets/icons/board.svg";
 import XIcon from "./_assets/icons/x.svg";
+import MoonIcon from "./_assets/icons/moon.svg";
+import SunIcon from "./_assets/icons/sun.svg";
 import clsx from "clsx";
 import Modal from "@/app/_components/Modal";
 import Input from "@/app/_components/Input";
@@ -61,6 +63,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    console.log('state.board.theme', state.board.theme);
     if (state.board.theme) {
       document.documentElement.classList.remove('dark')
     } else {
@@ -665,9 +668,17 @@ export default function Home() {
 
             </nav>
           </div>
-          <div className="">
-
-            <button onClick={theme}>Switch</button>
+          <div className="flex justify-center items-center h-[48px] w-[80%] mx-auto rounded-md bg-dark">
+            <MoonIcon className="text-slate-400" />
+            <button 
+              onClick={theme}
+              className="flex items-center h-[20px] w-[40px] bg-primary rounded-full px-1 mx-6"
+            >
+              <div className="relative h-full w-full flex items-center">
+                <div className={clsx("bg-white h-[15px] w-[15px] rounded-full absolute transition-all", state.board.theme ? 'left-[50%]' : 'left-0')}></div>
+              </div>
+            </button>
+            <SunIcon className="text-slate-400" />
           </div>
         </aside>
 
