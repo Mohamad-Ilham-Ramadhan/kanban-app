@@ -228,6 +228,10 @@ export default function Home() {
                                   backgroundColor="bg-white hover:bg-gray-200"
                                   onClick={() => {
                                     push({id: uuidv4(), text: '', isDone: false});
+                                    setTimeout(() => {
+                                      const newInput = document.getElementById(`subtasks[${values.subtasks.length}].text`);
+                                      newInput?.focus()
+                                    })
                                   }}
                                 />
                               )}
