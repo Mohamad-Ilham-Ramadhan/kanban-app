@@ -713,15 +713,17 @@ export default function Home() {
                       )}
                     </div>
                   ))}
-                <div className="rounded-lg h-full shrink-0 w-[280px]">
-                  <div className="h-10"></div>
-                  <div
-                    className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
-                    onClick={() => setModalCreateNewColumnOpen(true)}
-                  >
-                    + New Column
+                {columns && columns.length < 6 && (
+                  <div className="rounded-lg h-full shrink-0 w-[280px]">
+                    <div className="h-10"></div>
+                    <div
+                      className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
+                      onClick={() => setModalCreateNewColumnOpen(true)}
+                    >
+                      + New Column
+                    </div>
                   </div>
-                </div>
+                )}
                 {/* Modal add new Column */}
                 <Modal
                   isOpen={modalCreateNewColumnOpen}
