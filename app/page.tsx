@@ -503,6 +503,7 @@ export default function Home() {
                                   onClick={() => {
                                     push("");
                                   }}
+                                  type="button"
                                 />
                               )}
                             </>
@@ -514,6 +515,7 @@ export default function Home() {
                           size="small"
                           className="w-full"
                           onClick={submitForm}
+                          type="submit"
                         />
                       </form>
                     );
