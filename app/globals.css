@@ -180,6 +180,24 @@ textarea::-webkit-scrollbar-thumb, .main-section::-webkit-scrollbar-thumb {
   opacity: 0;
 }
 
+.show-sidebar-enter {
+  opacity: 0;
+  /* transform: scale(0.92); */
+}
+.show-sidebar-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 200ms;
+}
+.show-sidebar-exit {
+  opacity: 1;
+}
+.show-sidebar-exit-active {
+  opacity: 0;
+  /* transform: scale(0.99); */
+  transition: opacity 200ms, transform 200ms;
+}
+
 .select-enter {
   opacity: 0;
   /* transform: scale(0.92); */
