@@ -149,16 +149,16 @@ textarea::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-.main-section::-webkit-scrollbar {
+.beauty-scroll::-webkit-scrollbar {
   width: 12px;    
   height: 12px;           
 }
 
-textarea::-webkit-scrollbar-track, .main-section::-webkit-scrollbar-track {
+textarea::-webkit-scrollbar-track, .beauty-scroll::-webkit-scrollbar-track {
   background: transparent;        
 }
 
-textarea::-webkit-scrollbar-thumb, .main-section::-webkit-scrollbar-thumb {
+textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
   background-color: theme('colors.zinc.700');    
   border-radius: 20px;       
 }
@@ -214,4 +214,17 @@ textarea::-webkit-scrollbar-thumb, .main-section::-webkit-scrollbar-thumb {
   opacity: 0;
   /* transform: scale(0.99); */
   transition: opacity 200ms, transform 200ms;
+}
+
+.popup-open {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition: opacity 0.2s ease-out;
+}
+
+.popup-close {
+  opacity: 0;
+  filter: blur(3px);
+  transition: opacity 0.4s ease-out, filter 0.2s ease-out;
 }

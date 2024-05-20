@@ -26,14 +26,16 @@ import KanbanLogoDark from './_assets/logo-dark.svg';
 import clsx from "clsx";
 import Modal from "@/app/_components/Modal";
 import Input from "@/app/_components/Input";
+import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
+import Select from '@/app/_components/Select';
 import { Formik, FieldArray } from "formik";
 import * as yup from "yup";
 import { Popper } from "@mui/base/Popper";
+import { CssTransition } from "@mui/base";
+import { Unstable_Popup as BasePopup, PopupProps } from '@mui/base/Unstable_Popup';
 // import { Select } from '@mui/base/Select';
 import { Option } from "@mui/base/Option";
-import Slider from "@/app/_components/Slider";
-import Select from '@/app/_components/Select';
 import { CSSTransition } from "react-transition-group";
 
 export default function Home() {
@@ -80,8 +82,8 @@ export default function Home() {
   const showSidebarTransitionRef = useRef(null);
   return (
     <>
-      <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-dark-light border-b border-gray-700">
-        <div className="flex items-center w-[300px] h-full px-8 border-r border-gray-700">
+      <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-white dark:bg-dark-light border-b border-slate-200 dark:border-gray-700">
+        <div className="flex items-center w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
           {state.board.theme ? (
             <KanbanLogoDark />
           ) : (
@@ -300,6 +302,38 @@ export default function Home() {
                   }}
                   className="text-gray-400 hover:bg-board transition-colors"
                 />
+                <BasePopup
+                  id={id}
+                  open={openPopper}
+                  anchor={anchorEl}
+                  placement="bottom-end"
+                  className="z-[10000] py-[14px]"
+                >
+                  <CssTransition
+                    enterClassName="popup-open"
+                    exitClassName="popup-close"
+                    lastTransitionedPropertyOnExit="transform"
+                  >
+                    <div className="z-[10000] w-[192px] bg-white dark:bg-board shadow-[0_0_8px_rgb(54_78_126_/_10%)] rounded-lg px-6 py-4 flex flex-col items-start">
+                      <button 
+                        className="text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
+                        onClick={() => setModalEditActiveBoardOpen(true)}
+                      >
+                        Edit Board
+                      </button>
+                      <button
+                        className="text-red-500 hover:opacity-50 transition-opacity"
+                        onClick={() => {
+                          setAnchorEl(null);
+                          setModalDeleteBoardOpen(true);
+                        }}
+                      >
+                        Delete Board
+                      </button>
+                    </div>
+                  </CssTransition>
+                </BasePopup>
+
                 <Modal /* Modal delete current active board */
                   isOpen={modalDeleteBoardOpen}
                   onRequestClose={(e: React.MouseEvent<Element>) => {
@@ -368,12 +402,11 @@ export default function Home() {
                           Edit board
                         </div>
                         <div className="mb-6">
-                          <label
+                          <Label
                             htmlFor="column-name"
-                            className="block font-semibold text-xs mb-2"
                           >
                             Name
-                          </label>
+                          </Label>
                           <Input
                             value={values.name}
                             id="name"
@@ -387,9 +420,9 @@ export default function Home() {
                           render={({ push, remove }) => (
                             <>
                               <div className="mb-4">
-                                <div className="block font-semibold text-xs mb-2">
+                                <Label>
                                   Columns
-                                </div>
+                                </Label>
                                 {values.columns.map((val, index) => (
                                   <div className="flex mb-2" key={index}>
                                     <div className="relative w-full">
@@ -425,8 +458,8 @@ export default function Home() {
                                         <XIcon
                                           className={
                                             values.columns[index].tasks.length > 0
-                                              ? "text-gray-700"
-                                              : "text-gray-500"
+                                              ? "text-gray-200 dark:text-gray-700"
+                                              : "text-gray-500 dark:text-gray-500"
                                           }
                                         />
                                       </button>
@@ -469,34 +502,7 @@ export default function Home() {
                   </Formik>
                 </Modal>
                 {/* modal edit board [end] */}
-                <Popper
-                  id={id}
-                  open={openPopper}
-                  anchorEl={anchorEl}
-                  placement="bottom-end"
-                  className="z-[10000] py-[14px]"
-                >
-                  <div className="z-[10000] w-[192px] bg-board rounded-lg px-6 py-4 flex flex-col items-start">
-                    <button 
-                      className="text-gray-400 hover:opacity-50 font-semibold mb-2"
-                      onClick={() => setModalEditActiveBoardOpen(true)}
-                    >
-                      Edit Board
-                    </button>
-                    
-                    
-
-                    <button
-                      className="text-red-600 hover:opacity-50 font-semibold"
-                      onClick={() => {
-                        setAnchorEl(null);
-                        setModalDeleteBoardOpen(true);
-                      }}
-                    >
-                      Delete Board
-                    </button>
-                  </div>
-                </Popper>
+                
                 {createPortal(
                   <>
                     {openPopper && (
@@ -529,9 +535,9 @@ export default function Home() {
         </button>
       </CSSTransition>
 
-      <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-dark">
+      <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark">
         <aside 
-          className={clsx("flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-[#2b2c37] border-r border-gray-700 transition-transform", !sidebar && 'translate-x-[-300px]')}
+          className={clsx("flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-all", sidebar ? 'left-0' : 'left-[-300px]')}
         >
           {/* #828fa3 */}
           <div className="pt-4 pr-4">
@@ -601,12 +607,7 @@ export default function Home() {
                           Add New Board
                         </div>
                         <div className="mb-4">
-                          <label
-                            htmlFor="name"
-                            className="block font-semibold text-xs mb-2"
-                          >
-                            Name
-                          </label>
+                          <Label htmlFor="name">Name</Label>
                           <div className="relative">
                             <Input
                               id="name"
@@ -627,9 +628,7 @@ export default function Home() {
                           render={({ push, remove }) => (
                             <>
                               <div className="mb-4">
-                                <div className="block font-semibold text-xs mb-2">
-                                  Columns
-                                </div>
+                                <Label>Columns</Label>
                                 {values.columns.map((val, index) => (
                                   <div className="flex mb-2" key={index}>
                                     <div className="relative w-full">
@@ -670,7 +669,7 @@ export default function Home() {
                                   size="small"
                                   className="w-full mb-4"
                                   color="text-primary"
-                                  backgroundColor="bg-white hover:bg-gray-200"
+                                  backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
                                   onClick={() => {
                                     push("");
                                   }}
@@ -684,7 +683,7 @@ export default function Home() {
                         <ButtonPill
                           text="Create New Board"
                           size="small"
-                          className="w-full"
+                          className="w-full mb-4"
                           onClick={submitForm}
                           type="submit"
                         />
@@ -700,7 +699,7 @@ export default function Home() {
 
           <div className="bottom-nav flex flex-col">
 
-            <div className="flex justify-center items-center h-[48px] w-[80%] mx-auto rounded-md bg-dark mb-4">
+            <div className="flex justify-center items-center h-[48px] w-[80%] mx-auto rounded-md bg-slate-100 dark:bg-dark mb-4">
               <MoonIcon className="text-slate-400" />
               <button 
                 onClick={theme}
@@ -722,224 +721,225 @@ export default function Home() {
 
           </div>
         </aside>
-
-        <section className={clsx("main-section grow py-6 px-8 overflow-auto absolute transition-all", !sidebar ? 'left-0' : 'left-[300px]')}>
-          {board !== null ? (
-            <>
-              <div className="flex flex-row h-full">
-                {/* bg-column[] is defined in tailwind.config.ts */}
-                {columns !== null &&
-                  columns.map((c, index) => (
-                    <div
-                      key={c.id}
-                      className="shrink-0 w-[280px] rounded-lg mr-8"
-                    >
+        <section className={clsx("flex w-[100vw] transition-all", sidebar ? 'pl-[300px]' : 'pl-0')}>
+          <div className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all">
+            {board !== null ? (
+              <>
+                <div className="flex flex-row h-full">
+                  {/* bg-column[] is defined in tailwind.config.ts */}
+                  {columns !== null &&
+                    columns.map((c, index) => (
                       <div
-                        className="flex flex-row items-center mb-6"
                         key={c.id}
+                        className="shrink-0 w-[280px] rounded-lg mr-8"
                       >
                         <div
-                          className={`w-4 h-4 rounded-full bg-column${index} mr-3`}
-                        ></div>
-                        <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400">
-                          <span>{c.name}</span>
-                          <span>({c.tasks.length})</span>
-                        </div>
-                      </div>
-
-                      {c.tasks.length > 0 ? (
-                        c.tasks.map((task, index) => (
+                          className="flex flex-row items-center mb-6"
+                          key={c.id}
+                        >
                           <div
-                            key={task.id}
-                            className="px-4 py-6 mb-6 rounded-md transition-opacity bg-[#2b2c37] hover:opacity-50 hover:cursor-pointer border border-gray-700"
-                          >
-                            <div className="font-semibold text-[.95rem] mb-3">
-                              {task.title}
-                            </div>
-                            {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
-                            <div className="text-xs text-slate-400 font-semibold">
-                              0 of {task.subtasks.length} subtasks
-                            </div>
+                            className={`w-4 h-4 rounded-full bg-column${index} mr-3`}
+                          ></div>
+                          <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400">
+                            <span>{c.name}</span>
+                            <span>({c.tasks.length})</span>
                           </div>
-                        ))
-                      ) : (
-                        <div className="border-2 border-dashed border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
-                      )}
+                        </div>
+
+                        {c.tasks.length > 0 ? (
+                          c.tasks.map((task, index) => (
+                            <div
+                              key={task.id}
+                              className="card-task px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
+                            >
+                              <div className="font-semibold text-[.95rem] mb-2">
+                                {task.title}
+                              </div>
+                              {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
+                              <div className="text-xs text-slate-400 font-semibold">
+                                0 of {task.subtasks.length} subtasks
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="border-2 border-dashed border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
+                        )}
+                      </div>
+                    ))}
+                  {columns && columns.length < 6 && (
+                    <div className="rounded-lg h-full shrink-0 w-[280px]">
+                      <div className="h-10"></div>
+                      <div
+                        className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
+                        onClick={() => setModalCreateNewColumnOpen(true)}
+                      >
+                        + New Column
+                      </div>
                     </div>
-                  ))}
-                {columns && columns.length < 6 && (
-                  <div className="rounded-lg h-full shrink-0 w-[280px]">
-                    <div className="h-10"></div>
-                    <div
-                      className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
-                      onClick={() => setModalCreateNewColumnOpen(true)}
-                    >
-                      + New Column
-                    </div>
-                  </div>
-                )}
-                {/* Modal add new Column */}
-                <Modal
-                  isOpen={modalCreateNewColumnOpen}
-                  onRequestClose={() => {
-                    setModalCreateNewColumnOpen(false);
-                  }}
-                >
-                  <Formik
-                    initialValues={{
-                      columns: columns === null ? [] : columns,
-                    }}
-                    validationSchema={yup.object().shape({
-                      columns: yup.array().of(yup.object({
-                        name: yup.string().required()
-                      })),
-                      // status: yup.array().of(yup.string().required()),
-                    })}
-                    onSubmit={(values) => {
-                      console.log('form add new column')
-                      dispatch(addNewColumns(values.columns));
+                  )}
+                  {/* Modal add new Column */}
+                  <Modal
+                    isOpen={modalCreateNewColumnOpen}
+                    onRequestClose={() => {
                       setModalCreateNewColumnOpen(false);
                     }}
                   >
-                    {({ values, handleChange, handleSubmit, errors, submitForm }) => (
-                      <form onSubmit={handleSubmit} className="asdf">
-                        <div className="font-bold text-lg mb-4">
-                          Add New Column
-                        </div>
-                        <div className="mb-6">
-                          <label
-                            htmlFor="column-name"
-                            className="block font-semibold text-xs mb-2"
-                          >
-                            Name
-                          </label>
-                          <Input
-                            value={board !== null ? board.name : ""}
-                            disabled
-                            id="column-name"
-                          />
-                        </div>
+                    <Formik
+                      initialValues={{
+                        columns: columns === null ? [] : columns,
+                      }}
+                      validationSchema={yup.object().shape({
+                        columns: yup.array().of(yup.object({
+                          name: yup.string().required()
+                        })),
+                        // status: yup.array().of(yup.string().required()),
+                      })}
+                      onSubmit={(values) => {
+                        console.log('form add new column')
+                        dispatch(addNewColumns(values.columns));
+                        setModalCreateNewColumnOpen(false);
+                      }}
+                    >
+                      {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+                        <form onSubmit={handleSubmit} className="asdf">
+                          <div className="font-bold text-lg mb-4">
+                            Add New Column
+                          </div>
+                          <div className="mb-6">
+                            <label
+                              htmlFor="column-name"
+                              className="block font-semibold text-xs mb-2"
+                            >
+                              Name
+                            </label>
+                            <Input
+                              value={board !== null ? board.name : ""}
+                              disabled
+                              id="column-name"
+                            />
+                          </div>
 
-                        <FieldArray
-                          name="columns"
-                          render={({ push, remove }) => (
-                            <>
-                              <div className="mb-4">
-                                <div className="block font-semibold text-xs mb-2">
-                                  Columns
-                                </div>
-                                {values.columns.map((val, index) => (
-                                  <div className="flex mb-2" key={index}>
-                                    <div className="relative w-full">
-                                      <Input
-                                        value={values.columns[index].name}
-                                        id={`columns[${index}].name`}
-                                        onChange={handleChange}
-                                        error={
-                                          errors.columns !== undefined &&
-                                          errors.columns[index]
-                                            ? true
-                                            : false
-                                        }
-                                      />
-                                      {errors.columns &&
-                                      errors.columns[index] ? (
-                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                                          Required
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                    {values.columns.length === 1 ? null : (
-                                      <button
-                                        className="w-[50px] flex justify-center items-center"
-                                        disabled={
-                                          values.columns[index].tasks.length > 0
-                                        }
-                                        onClick={() => {
-                                          remove(index);
-                                        }}
-                                        type="button"
-                                      >
-                                        <XIcon
-                                          className={
-                                            values.columns[index].tasks.length > 0
-                                              ? "text-gray-700"
-                                              : "text-gray-500"
+                          <FieldArray
+                            name="columns"
+                            render={({ push, remove }) => (
+                              <>
+                                <div className="mb-4">
+                                  <div className="block font-semibold text-xs mb-2">
+                                    Columns
+                                  </div>
+                                  {values.columns.map((val, index) => (
+                                    <div className="flex mb-2" key={index}>
+                                      <div className="relative w-full">
+                                        <Input
+                                          value={values.columns[index].name}
+                                          id={`columns[${index}].name`}
+                                          onChange={handleChange}
+                                          error={
+                                            errors.columns !== undefined &&
+                                            errors.columns[index]
+                                              ? true
+                                              : false
                                           }
                                         />
-                                      </button>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                              {values.columns.length === 6 ? null : (
-                                <ButtonPill
-                                  text="+ Add New Column"
-                                  size="small"
-                                  className="w-full mb-4"
-                                  color="text-primary"
-                                  backgroundColor="bg-white hover:bg-gray-200"
-                                  onClick={() => {
-                                    push({ name: "", tasks: [] });
-                                    setTimeout(() => {
-                                      document
-                                        .getElementById(
-                                          `columns[${values.columns.length}].name`
-                                        )
-                                        ?.focus();
-                                    }, 1);
-                                  }}
-                                  type="button"
-                                />
-                              )}
-                            </>
-                          )}
-                        />
-                        <ButtonPill
-                          text="Save Changes"
-                          size="small"
-                          className="w-full"
-                          onClick={submitForm}
-                          type="submit"
-                        />
-                      </form>
-                    )}
-                  </Formik>
-                </Modal>
-                {/* Modal add new Column [end] */}
-              </div>
-            </>
-          ) : (
-            <>
-              {/* When there is no single board in the store. */}
-              <div className="flex flex-col items-center justify-center h-full">
-                <div className="mb-4">
-                  There is no single board. Create a new one to get started.
+                                        {errors.columns &&
+                                        errors.columns[index] ? (
+                                          <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
+                                            Required
+                                          </div>
+                                        ) : null}
+                                      </div>
+                                      {values.columns.length === 1 ? null : (
+                                        <button
+                                          className="w-[50px] flex justify-center items-center"
+                                          disabled={
+                                            values.columns[index].tasks.length > 0
+                                          }
+                                          onClick={() => {
+                                            remove(index);
+                                          }}
+                                          type="button"
+                                        >
+                                          <XIcon
+                                            className={
+                                              values.columns[index].tasks.length > 0
+                                                ? "text-gray-700"
+                                                : "text-gray-500"
+                                            }
+                                          />
+                                        </button>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                                {values.columns.length === 6 ? null : (
+                                  <ButtonPill
+                                    text="+ Add New Column"
+                                    size="small"
+                                    className="w-full mb-4"
+                                    color="text-primary"
+                                    backgroundColor="bg-white hover:bg-gray-200"
+                                    onClick={() => {
+                                      push({ name: "", tasks: [] });
+                                      setTimeout(() => {
+                                        document
+                                          .getElementById(
+                                            `columns[${values.columns.length}].name`
+                                          )
+                                          ?.focus();
+                                      }, 1);
+                                    }}
+                                    type="button"
+                                  />
+                                )}
+                              </>
+                            )}
+                          />
+                          <ButtonPill
+                            text="Save Changes"
+                            size="small"
+                            className="w-full"
+                            onClick={submitForm}
+                            type="submit"
+                          />
+                        </form>
+                      )}
+                    </Formik>
+                  </Modal>
+                  {/* Modal add new Column [end] */}
                 </div>
-                <ButtonPill
-                  text="+ Create New Board"
-                  className="w-fit"
-                  onClick={() => {
-                    setModalCreateNewBoardOpen(true);
-                  }}
-                />
-              </div>
-            </>
-          )}
-          {/* 
-          <div className="relative">
-            <Select defaultValue={10}>
-              <Option value={10} className="text-red-300 bg-gray-700">Ten</Option>
-              <Option value={20} className="text-red-300 bg-gray-700">Twenty</Option>
-              <Option value={30} className="text-red-300 bg-gray-700">Thirty</Option>
-            </Select>
-            <Slider />
+              </>
+            ) : (
+              <>
+                {/* When there is no single board in the store. */}
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="mb-4">
+                    There is no single board. Create a new one to get started.
+                  </div>
+                  <ButtonPill
+                    text="+ Create New Board"
+                    className="w-fit"
+                    onClick={() => {
+                      setModalCreateNewBoardOpen(true);
+                    }}
+                  />
+                </div>
+              </>
+            )}
+            {/* 
+            <div className="relative">
+              <Select defaultValue={10}>
+                <Option value={10} className="text-red-300 bg-gray-700">Ten</Option>
+                <Option value={20} className="text-red-300 bg-gray-700">Twenty</Option>
+                <Option value={30} className="text-red-300 bg-gray-700">Thirty</Option>
+              </Select>
+              <Slider />
+            </div>
+            <div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis repellat nulla nam quibusdam id corporis nostrum suscipit provident molestias, sint dolorem modi? Quod pariatur eligendi totam dolor ullam aliquam perspiciatis.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio natus porro excepturi voluptatem debitis et amet dignissimos nesciunt, culpa laudantium, consequuntur provident odit suscipit? Eveniet est quasi excepturi voluptate quidem.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, sit. Eum minus eveniet nostrum. Tempore sapiente totam exercitationem inventore earum dolore architecto nisi quis, hic dolor incidunt. Accusantium, omnis earum.
+            </div> */}
           </div>
-          <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis repellat nulla nam quibusdam id corporis nostrum suscipit provident molestias, sint dolorem modi? Quod pariatur eligendi totam dolor ullam aliquam perspiciatis.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio natus porro excepturi voluptatem debitis et amet dignissimos nesciunt, culpa laudantium, consequuntur provident odit suscipit? Eveniet est quasi excepturi voluptate quidem.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, sit. Eum minus eveniet nostrum. Tempore sapiente totam exercitationem inventore earum dolore architecto nisi quis, hic dolor incidunt. Accusantium, omnis earum.
-          </div> */}
         </section>
       </main>
     </>
