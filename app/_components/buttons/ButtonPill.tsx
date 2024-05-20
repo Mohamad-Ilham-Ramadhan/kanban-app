@@ -15,11 +15,11 @@ export default function ButtonPill({text, className, onClick, size = 'medium', c
    if (size == 'medium') {
       sizeClass = 'py-3 px-5  text-[0.95rem]'
    } else if (size == 'small') {
-      sizeClass = 'py-2.5 px-3 text-[0.8rem]'
+      sizeClass = 'py-2 px-3 text-[0.815rem]'
    }
 
    return (
-      <button className={clsx("transition-all rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick} type={type}>
+      <button className={clsx("transition-colors rounded-full font-bold", color, backgroundColor, sizeClass, className)} onClick={onClick} type={type}>
          {text}
       </button>
    )
