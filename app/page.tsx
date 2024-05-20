@@ -21,7 +21,8 @@ import XIcon from "./_assets/icons/x.svg";
 import MoonIcon from "./_assets/icons/moon.svg";
 import SunIcon from "./_assets/icons/sun.svg";
 import EyeSlashIcon from './_assets/icons/eye-slash.svg'
-import EyeIcon from './_assets/icons/eye.svg'
+import EyeIcon from './_assets/icons/eye.svg';
+import KanbanLogoDark from './_assets/logo-dark.svg';
 import clsx from "clsx";
 import Modal from "@/app/_components/Modal";
 import Input from "@/app/_components/Input";
@@ -81,7 +82,11 @@ export default function Home() {
     <>
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-dark-light border-b border-gray-700">
         <div className="flex items-center w-[300px] h-full px-8 border-r border-gray-700">
-          <KanbanLogo />
+          {state.board.theme ? (
+            <KanbanLogoDark />
+          ) : (
+            <KanbanLogo />
+          )}
         </div>
 
         <div className="px-8 flex grow justify-between items-center">
