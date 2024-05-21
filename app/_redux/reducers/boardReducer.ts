@@ -236,6 +236,8 @@ export const boardSlice = createSlice({
    initialState: {
       boards,
       activeBoard: 0,
+      activeColumn: 0, // column index
+      activeTask: 0, // task index
       theme: 0, // 0 = dark, 1 = light
    },
    reducers: {
@@ -278,6 +280,12 @@ export const boardSlice = createSlice({
       setActiveBoard: (state, action) => {
          state.activeBoard = action.payload
       },
+      setActiveTask(state, {payload}) {
+         state.activeTask = payload;
+      },
+      setActiveColumn(state, {payload}) {
+         state.activeColumn = payload;
+      },
       deleteActiveBoard: (state) => {
          state.boards.splice(state.activeBoard, 1)
          state.activeBoard = 0
@@ -288,9 +296,12 @@ export const boardSlice = createSlice({
             if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
             else return {id: uuidv4(), name: c.name, tasks: []}
          })
-      }
+      },
+      toggleSubtask(state, {payload: p}) {
+         state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask].subtasks[p.subtaskIndex].isDone = !p.isDone;
+      },
    }
 })
 
-export const { createNewBoard, addNewTask, setActiveBoard, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer

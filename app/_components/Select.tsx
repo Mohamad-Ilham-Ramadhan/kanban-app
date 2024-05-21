@@ -52,7 +52,7 @@ export default function Select({
       <button
         onClick={onClick}
         className={clsx(
-          "block relative w-full bg-transparent border-2 border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-left text-xs font-semibold",
+          "block relative w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-left text-xs font-semibold",
           className
         )}
         type="button"

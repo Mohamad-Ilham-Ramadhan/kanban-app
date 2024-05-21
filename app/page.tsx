@@ -12,7 +12,12 @@ import {
   deleteActiveBoard,
   editActiveBoard,
   addNewColumns,
-  addNewTask
+  addNewTask,
+  toggleSubtask,
+  setActiveTask,
+  setActiveColumn,
+  Task,
+  SubTask
 } from "./_redux/reducers/boardReducer";
 import ButtonPill from "./_components/buttons/ButtonPill";
 import ButtonIcon from "./_components/buttons/ButtonIcon";
@@ -20,23 +25,24 @@ import BoardIcon from "./_assets/icons/board.svg";
 import XIcon from "./_assets/icons/x.svg";
 import MoonIcon from "./_assets/icons/moon.svg";
 import SunIcon from "./_assets/icons/sun.svg";
-import EyeSlashIcon from './_assets/icons/eye-slash.svg'
-import EyeIcon from './_assets/icons/eye.svg';
-import KanbanLogoDark from './_assets/logo-dark.svg';
+import EyeSlashIcon from "./_assets/icons/eye-slash.svg";
+import EyeIcon from "./_assets/icons/eye.svg";
+import KanbanLogoDark from "./_assets/logo-dark.svg";
 import clsx from "clsx";
 import Modal from "@/app/_components/Modal";
 import Input from "@/app/_components/Input";
 import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
-import Select from '@/app/_components/Select';
+import Select from "@/app/_components/Select";
+import Checkbox from '@/app/_components/Checkbox';
 import { Formik, FieldArray } from "formik";
 import * as yup from "yup";
-import { Popper } from "@mui/base/Popper";
 import { CssTransition } from "@mui/base";
-import { Unstable_Popup as BasePopup, PopupProps } from '@mui/base/Unstable_Popup';
+import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
 // import { Select } from '@mui/base/Select';
 import { Option } from "@mui/base/Option";
 import { CSSTransition } from "react-transition-group";
+import { current } from "@reduxjs/toolkit";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -50,15 +56,19 @@ export default function Home() {
       ? state.board.boards[state.board.activeBoard]
       : null;
   const columns = board !== null ? board.columns : null;
-
+  console.log('state.board.activeColumn', state.board.activeColumn);
+  let currentTask = (board !== null && board.columns[0].tasks.length > 0) ? board.columns[state.board.activeColumn].tasks[state.board.activeTask] : null;
   const [sidebar, setSidebar] = useState(true);
 
   const [modalCreateNewBoardOpen, setModalCreateNewBoardOpen] = useState(false);
   const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
-  const [modalEditActiveBoardOpen, setModalEditActiveBoardOpen] = useState(false);
+  const [modalEditActiveBoardOpen, setModalEditActiveBoardOpen] =
+    useState(false);
   const [modalCreateNewColumnOpen, setModalCreateNewColumnOpen] =
     useState(false);
   const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
+  const [modalTaskOpen, setModalTaskOpen] = useState(false);
+  const [taskData, setTaskData] = useState<any>({id: '', title: '', description: '', subtasks: [], columnIndex: 0, taskIndex: 0, subtaskIndex: 0});
 
   // Popper
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -71,24 +81,20 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log('state.board.theme', state.board.theme);
+    console.log("state.board.theme", state.board.theme);
     if (state.board.theme) {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove("dark");
     } else {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     }
-  }, [state.board.theme])
+  }, [state.board.theme]);
 
   const showSidebarTransitionRef = useRef(null);
   return (
     <>
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-white dark:bg-dark-light border-b border-slate-200 dark:border-gray-700">
         <div className="flex items-center w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
-          {state.board.theme ? (
-            <KanbanLogoDark />
-          ) : (
-            <KanbanLogo />
-          )}
+          {state.board.theme ? <KanbanLogoDark /> : <KanbanLogo />}
         </div>
 
         <div className="px-8 flex grow justify-between items-center">
@@ -115,8 +121,8 @@ export default function Home() {
                   initialValues={{
                     title: "",
                     description: "",
-                    subtasks: [{id: uuidv4(), text: '', isDone: false}],
-                    status: {...board.columns[0], index: 0},
+                    subtasks: [{ id: uuidv4(), text: "", isDone: false }],
+                    status: { ...board.columns[0], index: 0 },
                   }}
                   validationSchema={yup.object().shape({
                     title: yup.string().required(),
@@ -125,7 +131,7 @@ export default function Home() {
                       yup.object().shape({
                         id: yup.string().required(),
                         text: yup.string().required(),
-                        isDone: yup.boolean().required()
+                        isDone: yup.boolean().required(),
                       })
                     ),
                     // status: yup.array().of(yup.string().required()),
@@ -135,7 +141,13 @@ export default function Home() {
                     setModalAddNewTaskOpen(false);
                   }}
                 >
-                  {({ values, errors, handleChange, handleSubmit, submitForm }) => {
+                  {({
+                    values,
+                    errors,
+                    handleChange,
+                    handleSubmit,
+                    submitForm,
+                  }) => {
                     return (
                       <form onSubmit={handleSubmit}>
                         <div className="text-lg dark:text-white font-bold mb-4">
@@ -177,7 +189,7 @@ export default function Home() {
                               value={values.description}
                               onChange={handleChange}
                               error={errors.description ? true : false}
-                              rows="4"
+                              rows={4}
                             />
                             {errors.description ? (
                               <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
@@ -234,13 +246,19 @@ export default function Home() {
                                   size="small"
                                   className="w-full mb-4"
                                   color="text-primary"
-                                  backgroundColor="bg-white hover:bg-gray-200"
+                                  backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
                                   onClick={() => {
-                                    push({id: uuidv4(), text: '', isDone: false});
+                                    push({
+                                      id: uuidv4(),
+                                      text: "",
+                                      isDone: false,
+                                    });
                                     setTimeout(() => {
-                                      const newInput = document.getElementById(`subtasks[${values.subtasks.length}].text`);
-                                      newInput?.focus()
-                                    })
+                                      const newInput = document.getElementById(
+                                        `subtasks[${values.subtasks.length}].text`
+                                      );
+                                      newInput?.focus();
+                                    });
                                   }}
                                   type="button"
                                 />
@@ -258,12 +276,17 @@ export default function Home() {
                           </label>
                           {/* <Select /> */}
 
-                          <Select 
-                            name="status" 
-                            open={open} 
-                            close={() => {setOpen(prev => !prev)}} 
-                            data={ board.columns.map((c, index) => ({index: index, name: c.name})) } 
-                            onClick={() => setOpen(prev => !prev)} 
+                          <Select
+                            name="status"
+                            open={open}
+                            close={() => {
+                              setOpen((prev) => !prev);
+                            }}
+                            data={board.columns.map((c, index) => ({
+                              index: index,
+                              name: c.name,
+                            }))}
+                            onClick={() => setOpen((prev) => !prev)}
                           />
                         </div>
 
@@ -280,7 +303,7 @@ export default function Home() {
                 </Formik>
               </Modal>
               {/* Modal Add New Task [end] */}
-              
+
               <div>
                 <ButtonIcon
                   icon={
@@ -315,9 +338,12 @@ export default function Home() {
                     lastTransitionedPropertyOnExit="transform"
                   >
                     <div className="z-[10000] w-[192px] bg-white dark:bg-board shadow-[0_0_8px_rgb(54_78_126_/_10%)] rounded-lg px-6 py-4 flex flex-col items-start">
-                      <button 
+                      <button
                         className="text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
-                        onClick={() => setModalEditActiveBoardOpen(true)}
+                        onClick={() => {
+                          setModalEditActiveBoardOpen(true);
+                          setAnchorEl(null);
+                        }}
                       >
                         Edit Board
                       </button>
@@ -355,7 +381,7 @@ export default function Home() {
                         backgroundColor="bg-red-500 hover:bg-red-500"
                         text="Delete"
                         size="small"
-                        className="w-full hover:opacity-70 mr-4"
+                        className="w-full transition-opacity hover:opacity-70 mr-4"
                         onClick={() => {
                           dispatch(deleteActiveBoard());
                           setModalDeleteBoardOpen(false);
@@ -366,7 +392,7 @@ export default function Home() {
                         backgroundColor="bg-gray-100 hover:bg-gray-100"
                         text="Cancel"
                         size="small"
-                        className="w-full hover:opacity-70"
+                        className="w-full transition-opacity hover:opacity-70"
                         onClick={() => setModalDeleteBoardOpen(false)}
                       />
                     </div>
@@ -386,9 +412,11 @@ export default function Home() {
                     }}
                     validationSchema={yup.object().shape({
                       name: yup.string(),
-                      columns: yup.array().of(yup.object({
-                        name: yup.string().required()
-                      })),
+                      columns: yup.array().of(
+                        yup.object({
+                          name: yup.string().required(),
+                        })
+                      ),
                       // status: yup.array().of(yup.string().required()),
                     })}
                     onSubmit={(values) => {
@@ -396,22 +424,21 @@ export default function Home() {
                       setModalEditActiveBoardOpen(false);
                     }}
                   >
-                    {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+                    {({
+                      values,
+                      handleChange,
+                      handleSubmit,
+                      errors,
+                      submitForm,
+                    }) => (
                       <form onSubmit={handleSubmit} className="asdf">
-                        <div className="font-bold text-lg mb-4">
-                          Edit board
-                        </div>
+                        <div className="font-bold text-lg mb-4">Edit board</div>
                         <div className="mb-6">
-                          <Label
-                            htmlFor="column-name"
-                          >
-                            Name
-                          </Label>
+                          <Label htmlFor="column-name">Name</Label>
                           <Input
                             value={values.name}
                             id="name"
                             onChange={handleChange}
-                            
                           />
                         </div>
 
@@ -420,9 +447,7 @@ export default function Home() {
                           render={({ push, remove }) => (
                             <>
                               <div className="mb-4">
-                                <Label>
-                                  Columns
-                                </Label>
+                                <Label>Columns</Label>
                                 {values.columns.map((val, index) => (
                                   <div className="flex mb-2" key={index}>
                                     <div className="relative w-full">
@@ -457,9 +482,10 @@ export default function Home() {
                                       >
                                         <XIcon
                                           className={
-                                            values.columns[index].tasks.length > 0
+                                            values.columns[index].tasks.length >
+                                            0
                                               ? "text-gray-200 dark:text-gray-700"
-                                              : "text-gray-500 dark:text-gray-500"
+                                              : "text-gray-500"
                                           }
                                         />
                                       </button>
@@ -473,7 +499,7 @@ export default function Home() {
                                   size="small"
                                   className="w-full mb-4"
                                   color="text-primary"
-                                  backgroundColor="bg-white hover:bg-gray-200"
+                                  backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
                                   onClick={() => {
                                     push({ name: "", tasks: [] });
                                     setTimeout(() => {
@@ -502,7 +528,7 @@ export default function Home() {
                   </Formik>
                 </Modal>
                 {/* modal edit board [end] */}
-                
+
                 {createPortal(
                   <>
                     {openPopper && (
@@ -522,12 +548,12 @@ export default function Home() {
 
       <CSSTransition
         in={!sidebar}
-        classNames={'show-sidebar'}
+        classNames={"show-sidebar"}
         ref={showSidebarTransitionRef}
         timeout={200}
         unmountOnExit
       >
-        <button 
+        <button
           className="flex justify-center items-center w-[56px] h-[48px] bg-primary rounded-r-full fixed left-0 bottom-[32px] z-50"
           onClick={() => setSidebar(true)}
         >
@@ -536,8 +562,11 @@ export default function Home() {
       </CSSTransition>
 
       <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark">
-        <aside 
-          className={clsx("flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-all", sidebar ? 'left-0' : 'left-[-300px]')}
+        <aside
+          className={clsx(
+            "flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-all",
+            sidebar ? "left-0" : "left-[-300px]"
+          )}
         >
           {/* #828fa3 */}
           <div className="pt-4 pr-4">
@@ -571,7 +600,7 @@ export default function Home() {
                 <BoardIcon className="mr-4" />
                 <span>+ Create New Board</span>
               </li>
-              
+
               {/* modal create new board [start] */}
               <Modal
                 isOpen={modalCreateNewBoardOpen}
@@ -600,7 +629,13 @@ export default function Home() {
                     dispatch(setActiveBoard(boards.length));
                   }}
                 >
-                  {({ values, errors, handleChange, submitForm, handleSubmit }) => {
+                  {({
+                    values,
+                    errors,
+                    handleChange,
+                    submitForm,
+                    handleSubmit,
+                  }) => {
                     return (
                       <form onSubmit={handleSubmit}>
                         <div className="text-lg font-bold mb-4">
@@ -693,42 +728,51 @@ export default function Home() {
                 </Formik>
               </Modal>
               {/* modal create new board [end] */}
-
             </nav>
           </div>
 
           <div className="bottom-nav flex flex-col">
-
             <div className="flex justify-center items-center h-[48px] w-[80%] mx-auto rounded-md bg-slate-100 dark:bg-dark mb-4">
               <MoonIcon className="text-slate-400" />
-              <button 
+              <button
                 onClick={theme}
                 className="flex items-center h-[20px] w-[40px] bg-primary rounded-full px-1 mx-6"
               >
                 <div className="relative h-full w-full flex items-center">
-                  <div className={clsx("bg-white h-[15px] w-[15px] rounded-full absolute transition-all", state.board.theme ? 'left-[50%]' : 'left-0')}></div>
+                  <div
+                    className={clsx(
+                      "bg-white h-[15px] w-[15px] rounded-full absolute transition-all",
+                      state.board.theme ? "left-[50%]" : "left-0"
+                    )}
+                  ></div>
                 </div>
               </button>
               <SunIcon className="text-slate-400" />
             </div>
-            <button 
+            <button
               className="hide-n-show flex items-center transition-colors text-slate-400 hover:text-gray-600 text-[15px] font-bold pl-8 mb-8"
-              onClick={() => {setSidebar(false)}}
+              onClick={() => {
+                setSidebar(false);
+              }}
             >
               <EyeSlashIcon />
               Hide Sidebar
             </button>
-
           </div>
         </aside>
-        <section className={clsx("flex w-[100vw] transition-all", sidebar ? 'pl-[300px]' : 'pl-0')}>
+        <section
+          className={clsx(
+            "flex w-[100vw] transition-all",
+            sidebar ? "pl-[300px]" : "pl-0"
+          )}
+        >
           <div className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all">
             {board !== null ? (
               <>
                 <div className="flex flex-row h-full">
                   {/* bg-column[] is defined in tailwind.config.ts */}
                   {columns !== null &&
-                    columns.map((c, index) => (
+                    columns.map((c, columnIndex) => (
                       <div
                         key={c.id}
                         className="shrink-0 w-[280px] rounded-lg mr-8"
@@ -738,7 +782,7 @@ export default function Home() {
                           key={c.id}
                         >
                           <div
-                            className={`w-4 h-4 rounded-full bg-column${index} mr-3`}
+                            className={`w-4 h-4 rounded-full bg-column${columnIndex} mr-3`}
                           ></div>
                           <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400">
                             <span>{c.name}</span>
@@ -747,22 +791,28 @@ export default function Home() {
                         </div>
 
                         {c.tasks.length > 0 ? (
-                          c.tasks.map((task, index) => (
+                          c.tasks.map((task, taskIndex: number) => (
                             <div
                               key={task.id}
                               className="card-task px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
+                              onClick={() => {
+                                setModalTaskOpen(true); 
+                                setTaskData({...task, columnIndex, taskIndex});
+                                dispatch(setActiveTask(taskIndex));
+                                dispatch(setActiveColumn(columnIndex));
+                              }}
                             >
                               <div className="font-semibold text-[.95rem] mb-2">
                                 {task.title}
                               </div>
                               {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
                               <div className="text-xs text-slate-400 font-semibold">
-                                0 of {task.subtasks.length} subtasks
+                                {task.subtasks.reduce((t, st) => st.isDone ? t + 1 : t ,0)} of {task.subtasks.length} subtasks
                               </div>
                             </div>
                           ))
                         ) : (
-                          <div className="border-2 border-dashed border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
+                          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
                         )}
                       </div>
                     ))}
@@ -770,7 +820,7 @@ export default function Home() {
                     <div className="rounded-lg h-full shrink-0 w-[280px]">
                       <div className="h-10"></div>
                       <div
-                        className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-[#2b2c37] to-board hover:cursor-pointer hover:text-primary"
+                        className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
                         onClick={() => setModalCreateNewColumnOpen(true)}
                       >
                         + New Column
@@ -789,18 +839,26 @@ export default function Home() {
                         columns: columns === null ? [] : columns,
                       }}
                       validationSchema={yup.object().shape({
-                        columns: yup.array().of(yup.object({
-                          name: yup.string().required()
-                        })),
+                        columns: yup.array().of(
+                          yup.object({
+                            name: yup.string().required(),
+                          })
+                        ),
                         // status: yup.array().of(yup.string().required()),
                       })}
                       onSubmit={(values) => {
-                        console.log('form add new column')
+                        console.log("form add new column");
                         dispatch(addNewColumns(values.columns));
                         setModalCreateNewColumnOpen(false);
                       }}
                     >
-                      {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+                      {({
+                        values,
+                        handleChange,
+                        handleSubmit,
+                        errors,
+                        submitForm,
+                      }) => (
                         <form onSubmit={handleSubmit} className="asdf">
                           <div className="font-bold text-lg mb-4">
                             Add New Column
@@ -852,7 +910,8 @@ export default function Home() {
                                         <button
                                           className="w-[50px] flex justify-center items-center"
                                           disabled={
-                                            values.columns[index].tasks.length > 0
+                                            values.columns[index].tasks.length >
+                                            0
                                           }
                                           onClick={() => {
                                             remove(index);
@@ -861,8 +920,9 @@ export default function Home() {
                                         >
                                           <XIcon
                                             className={
-                                              values.columns[index].tasks.length > 0
-                                                ? "text-gray-700"
+                                              values.columns[index].tasks
+                                                .length > 0
+                                                ? "text-gray-200 dark:text-gray-700"
                                                 : "text-gray-500"
                                             }
                                           />
@@ -877,7 +937,7 @@ export default function Home() {
                                     size="small"
                                     className="w-full mb-4"
                                     color="text-primary"
-                                    backgroundColor="bg-white hover:bg-gray-200"
+                                    backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
                                     onClick={() => {
                                       push({ name: "", tasks: [] });
                                       setTimeout(() => {
@@ -925,21 +985,31 @@ export default function Home() {
                 </div>
               </>
             )}
-            {/* 
-            <div className="relative">
-              <Select defaultValue={10}>
-                <Option value={10} className="text-red-300 bg-gray-700">Ten</Option>
-                <Option value={20} className="text-red-300 bg-gray-700">Twenty</Option>
-                <Option value={30} className="text-red-300 bg-gray-700">Thirty</Option>
-              </Select>
-              <Slider />
-            </div>
-            <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis repellat nulla nam quibusdam id corporis nostrum suscipit provident molestias, sint dolorem modi? Quod pariatur eligendi totam dolor ullam aliquam perspiciatis.
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio natus porro excepturi voluptatem debitis et amet dignissimos nesciunt, culpa laudantium, consequuntur provident odit suscipit? Eveniet est quasi excepturi voluptate quidem.
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, sit. Eum minus eveniet nostrum. Tempore sapiente totam exercitationem inventore earum dolore architecto nisi quis, hic dolor incidunt. Accusantium, omnis earum.
-            </div> */}
           </div>
+          {/* Modal task [start] */}
+          <Modal
+            isOpen={modalTaskOpen}
+            onRequestClose={() => setModalTaskOpen(false)}
+          >
+            <>
+              <div className="text-lg font-bold mb-4">{currentTask?.title}</div>
+              <div className="text-[.8rem] text-gray-500 mb-4">{currentTask?.description}</div>
+              <Label>{`Subtasks (${String(currentTask?.subtasks.reduce((t : number, st : SubTask) => st.isDone ? t + 1 : t ,0))} of ${String(currentTask?.subtasks.length)})`}</Label>
+              {board?.columns[state.board.activeColumn].tasks[state.board.activeTask]?.subtasks.map((s: SubTask, subtaskIndex: number) => (
+                <Checkbox 
+                  key={s.id} 
+                  data={s} 
+                  className="mb-2"
+                  onClick={(e) => {
+                    // alert('vow to me');
+                    e.preventDefault()
+                    dispatch(toggleSubtask({subtaskIndex, isDone: s.isDone}))
+                  }}
+                />
+              ))}
+            </>
+          </Modal>
+          {/* Modal task [end] */}
         </section>
       </main>
     </>
