@@ -13,18 +13,24 @@ export default function Select({
   close,
   data,
   className,
-  onClick,
+  onButtonClick,
+  onOptionClick,
+  value,
+  children,
 }: {
   name: string;
   open: boolean;
   close: Function;
   data: { index: number; name: string }[];
   className?: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  value: string;
+  children: React.ReactElement[];
+  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
+  onOptionClick: React.MouseEventHandler<HTMLLIElement>;
 }) {
   const listboxRef = useRef<HTMLUListElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [field, meta, helpers] = useField(name);
+  // const [field, meta, helpers] = useField(name);
   const transitionRef = useRef(null);
 
   useEffect(() => {
@@ -50,7 +56,7 @@ export default function Select({
   return (
     <>
       <button
-        onClick={onClick}
+        onClick={onButtonClick}
         className={clsx(
           "block relative w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-left text-xs font-semibold",
           className
@@ -58,7 +64,7 @@ export default function Select({
         type="button"
         ref={buttonRef}
       >
-        {field.value.name}
+        {value}
         <Arrow
           className={clsx(
             "text-primary w-[18px] h-[18px] absolute right-[12px] top-[10px] transition-transform",
@@ -85,7 +91,7 @@ export default function Select({
                 ref={listboxRef}
                 className="listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow"
               >
-                {data.map((value) => (
+                {/* {data.map((value) => (
                   <li
                     key={value.name}
                     data-value={value.index}
@@ -93,11 +99,13 @@ export default function Select({
                       helpers.setValue({ index: value.index, name: value.name });
                       close();
                     }}
+                    onClick={onOptionClick}
                     className="px-4 mb-2 last:mb-0 text-[13px] hover:font-semibold text-slate-400 hover:text-black dark:hover:text-white hover:cursor-pointer"
                   >
                     {value.name}
                   </li>
-                ))}
+                ))} */}
+                {children}
               </ul>
             </div>
           </div>

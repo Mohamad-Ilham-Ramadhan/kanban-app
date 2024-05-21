@@ -34,18 +34,17 @@ import Input from "@/app/_components/Input";
 import Label from "@/app/_components/Label";
 import Textarea from "@/app/_components/Textarea";
 import Select from "@/app/_components/Select";
+import Option from "@/app/_components/Option";
 import Checkbox from '@/app/_components/Checkbox';
 import { Formik, FieldArray } from "formik";
 import * as yup from "yup";
 import { CssTransition } from "@mui/base";
 import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
-// import { Select } from '@mui/base/Select';
-import { Option } from "@mui/base/Option";
 import { CSSTransition } from "react-transition-group";
-import { current } from "@reduxjs/toolkit";
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
+  const [selectStatusOpen, setSelectStatusOpen] = useState(false); // modal add new task
+  const [selectCurrentStatusOpen, setSelectCurrentStatusOpen] = useState(false); // modal task
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
   const dispatch = useDispatch();
@@ -147,6 +146,7 @@ export default function Home() {
                     handleChange,
                     handleSubmit,
                     submitForm,
+                    setFieldValue,
                   }) => {
                     return (
                       <form onSubmit={handleSubmit}>
@@ -278,16 +278,33 @@ export default function Home() {
 
                           <Select
                             name="status"
-                            open={open}
+                            open={selectStatusOpen}
+                            value={values.status.name}
                             close={() => {
-                              setOpen((prev) => !prev);
+                              setSelectStatusOpen((prev) => !prev);
                             }}
                             data={board.columns.map((c, index) => ({
                               index: index,
                               name: c.name,
                             }))}
-                            onClick={() => setOpen((prev) => !prev)}
-                          />
+                            onButtonClick={() => setSelectStatusOpen((prev) => !prev)}
+                            onOptionClick={(e) => {
+                              console.log('event.currentTarget', e.currentTarget)
+                              setFieldValue('status', { index: 0, name: 'xxx' })
+                              setSelectStatusOpen((prev) => !prev);
+                            }}
+                          >
+                            {board.columns.map((c, index) => (
+                              <Option 
+                                key={c.id}
+                                label={c.name}
+                                onClick={() => {
+                                  setFieldValue('status', { index, name: c.name })
+                                  setSelectStatusOpen((prev) => !prev);
+                                }}
+                              />
+                            ))}
+                          </Select>
                         </div>
 
                         <ButtonPill
@@ -1007,6 +1024,20 @@ export default function Home() {
                   }}
                 />
               ))}
+
+              <Label>Current Status</Label>
+              <Select
+                name="status"
+                open={selectCurrentStatusOpen}
+                close={() => {
+                  setSelectCurrentStatusOpen((prev) => !prev);
+                }}
+                data={board?.columns.map((c, index) => ({
+                  index: index,
+                  name: c.name,
+                }))}
+                onClick={() => setSelectCurrentStatusOpen((prev) => !prev)}
+              />
             </>
           </Modal>
           {/* Modal task [end] */}
