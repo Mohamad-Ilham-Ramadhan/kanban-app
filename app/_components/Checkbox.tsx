@@ -17,15 +17,17 @@ export default function Checkbox({data, onClick, className} : CheckboxProps) {
    // const [check, setCheck] = useState(false);
    return (
       <label 
-         className={clsx('flex bg-[#f7f8ff] p-3 rounded-md cursor-pointer hover:bg-[#635fc740] transition-all', className)}
+         className={clsx('flex bg-[#f7f8ff] hover:bg-[#635fc740] dark:bg-dark dark:hover:bg-[#9b88fb33] p-3 rounded-md cursor-pointer transition-all', className)}
          onClick={onClick}
       >
          <div 
-            className={clsx('flex justify-center items-center h-[15px] w-[15px] rounded-sm mr-4 transition-all', data.isDone ? 'bg-primary' : 'bg-white border border-gray-300')}
+            className={clsx('flex justify-center items-center h-[15px] w-[15px] rounded-sm mr-4 transition-all', data.isDone ? 'bg-primary' : 'bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-600')}
          >
-            <img src={checkImg.src} className='w-[80%]' />
+            {data.isDone && (
+               <img src={checkImg.src} className='w-[80%]' />
+            )}
          </div>
-         <div className={clsx('text-xs font-semibold transition-all', data.isDone && 'line-through decoration-black text-slate-400')}>{data.text}</div>
+         <div className={clsx('text-xs font-semibold transition-all', data.isDone && 'line-through decoration-black text-zinc-400')}>{data.text}</div>
       </label>
    );
 }
