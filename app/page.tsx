@@ -71,9 +71,13 @@ export default function Home() {
   const [taskData, setTaskData] = useState<any>({id: '', title: '', description: '', subtasks: [], columnIndex: 0, taskIndex: 0, subtaskIndex: 0});
 
   // Popper
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openPopper = Boolean(anchorEl);
-  const id = openPopper ? "simple-popper" : undefined;
+  const [anchorBoard, setAnchorBoard] = useState<null | HTMLElement>(null);
+  const openPopperBoard = Boolean(anchorBoard);
+  const idBoard = openPopperBoard ? "simple-popper" : undefined;
+
+  const [anchorTask, setAnchorTask] = useState<null | HTMLElement>(null);
+  const openPopperTask = Boolean(anchorTask);
+  const idTask = openPopperTask ? "simple-popper" : undefined;
 
   function theme() {
     // document.documentElement.classList.toggle('dark');
@@ -278,22 +282,12 @@ export default function Home() {
                           {/* <Select /> */}
 
                           <Select
-                            name="status"
                             open={selectStatusOpen}
                             value={values.status.name}
                             close={() => {
                               setSelectStatusOpen((prev) => !prev);
                             }}
-                            data={board.columns.map((c, index) => ({
-                              index: index,
-                              name: c.name,
-                            }))}
                             onButtonClick={() => setSelectStatusOpen((prev) => !prev)}
-                            onOptionClick={(e) => {
-                              console.log('event.currentTarget', e.currentTarget)
-                              setFieldValue('status', { index: 0, name: 'xxx' })
-                              setSelectStatusOpen((prev) => !prev);
-                            }}
                           >
                             {board.columns.map((c, index) => (
                               <Option 
@@ -339,14 +333,14 @@ export default function Home() {
                     </svg>
                   }
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    setAnchorEl(anchorEl ? null : e.currentTarget);
+                    setAnchorBoard(anchorBoard ? null : e.currentTarget);
                   }}
                   className="text-gray-400 hover:bg-board transition-colors"
                 />
                 <BasePopup
-                  id={id}
-                  open={openPopper}
-                  anchor={anchorEl}
+                  id={idBoard}
+                  open={openPopperBoard}
+                  anchor={anchorBoard}
                   placement="bottom-end"
                   className="z-[10000] py-[14px]"
                 >
@@ -360,7 +354,7 @@ export default function Home() {
                         className="text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
                         onClick={() => {
                           setModalEditActiveBoardOpen(true);
-                          setAnchorEl(null);
+                          setAnchorBoard(null);
                         }}
                       >
                         Edit Board
@@ -368,7 +362,7 @@ export default function Home() {
                       <button
                         className="text-red-500 hover:opacity-50 transition-opacity"
                         onClick={() => {
-                          setAnchorEl(null);
+                          setAnchorBoard(null);
                           setModalDeleteBoardOpen(true);
                         }}
                       >
@@ -549,10 +543,10 @@ export default function Home() {
 
                 {createPortal(
                   <>
-                    {openPopper && (
+                    {openPopperBoard && (
                       <div
                         className="fixed inset-0 z-[10000]"
-                        onClick={() => setAnchorEl(null)}
+                        onClick={() => setAnchorBoard(null)}
                       ></div>
                     )}
                   </>,
@@ -1009,8 +1003,72 @@ export default function Home() {
             isOpen={modalTaskOpen}
             onRequestClose={() => setModalTaskOpen(false)}
           >
-            <>
+            <div className="relative">
               <div className="text-lg font-bold mb-4">{currentTask?.title}</div>
+              <ButtonIcon
+                  icon={
+                    <svg
+                      width="5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ pointerEvents: "none" }}
+                    >
+                      <g fill="currentColor" fillRule="evenodd">
+                        <circle cx="2.308" cy="2.308" r="2.308"></circle>
+                        <circle cx="2.308" cy="10" r="2.308"></circle>
+                        <circle cx="2.308" cy="17.692" r="2.308"></circle>
+                      </g>
+                    </svg>
+                  }
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
+                    setAnchorTask(anchorTask ? null : e.currentTarget);
+                  }}
+                  className="text-gray-400 hover:bg-board transition-colors absolute top-0 right-0"
+              />
+              <BasePopup
+                id={idTask}
+                open={openPopperTask}
+                anchor={anchorTask}
+                placement="bottom"
+                className="z-[10000] py-[14px]"
+              >
+                  <CssTransition
+                    enterClassName="popup-open"
+                    exitClassName="popup-close"
+                    lastTransitionedPropertyOnExit="transform"
+                  >
+                    <div className="z-[10000] w-[192px] bg-white dark:bg-board shadow-[0_0_8px_rgb(54_78_126_/_10%)] rounded-lg px-6 py-4 flex flex-col items-start">
+                      <button
+                        className="text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
+                        onClick={() => {
+                          setModalEditActiveBoardOpen(true);
+                          setAnchorBoard(null);
+                        }}
+                      >
+                        Edit Task
+                      </button>
+                      <button
+                        className="text-red-500 hover:opacity-50 transition-opacity"
+                        onClick={() => {
+                          setAnchorTask(null);
+                          setModalDeleteBoardOpen(true);
+                        }}
+                      >
+                        Delete Task
+                      </button>
+                    </div>
+                  </CssTransition>
+              </BasePopup>
+              
+              {createPortal(openPopperTask && (
+                      <div
+                        className="fixed inset-0 z-[10000]"
+                        onClick={() => setAnchorTask(null)}
+                      ></div>
+                    ),
+                  document.body
+                )}
+
               <div className="text-[.8rem] text-gray-500 mb-4">{currentTask?.description}</div>
               <Label>{`Subtasks (${String(currentTask?.subtasks.reduce((t : number, st : SubTask) => st.isDone ? t + 1 : t ,0))} of ${String(currentTask?.subtasks.length)})`}</Label>
               {board?.columns[state.board.activeColumn].tasks[state.board.activeTask]?.subtasks.map((s: SubTask, subtaskIndex: number) => (
@@ -1025,6 +1083,7 @@ export default function Home() {
                   }}
                 />
               ))}
+              <div className="mb-4"></div>
 
               <Label>Current Status</Label>
               <Select
@@ -1036,7 +1095,7 @@ export default function Home() {
                 }}
                 onButtonClick={() => setSelectCurrentStatusOpen((prev) => !prev)}
               >
-                {board.columns.map((c, index) => (
+                {board?.columns.map((c, index) => (
                   <Option 
                     key={c.id}
                     label={c.name}
@@ -1048,7 +1107,7 @@ export default function Home() {
                   />
                 ))}
               </Select>
-            </>
+            </div>
           </Modal>
           {/* Modal task [end] */}
         </section>

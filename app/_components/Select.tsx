@@ -19,7 +19,7 @@ export default function Select({
   close: Function;
   className?: string;
   value: string | undefined;
-  children: React.ReactElement[];
+  children: React.ReactElement[] | React.ReactElement | undefined;
   onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   const listboxRef = useRef<HTMLUListElement>(null);
