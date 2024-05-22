@@ -17,7 +17,7 @@ import {
   setActiveTask,
   setActiveColumn,
   moveTaskColumn,
-  Task,
+  deleteActiveTask,
   SubTask
 } from "./_redux/reducers/boardReducer";
 import ButtonPill from "./_components/buttons/ButtonPill";
@@ -68,8 +68,8 @@ export default function Home() {
     useState(false);
   const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
   const [modalTaskOpen, setModalTaskOpen] = useState(false);
-  const [taskData, setTaskData] = useState<any>({id: '', title: '', description: '', subtasks: [], columnIndex: 0, taskIndex: 0, subtaskIndex: 0});
-
+  const [modalEditTaskOpen, setModalEditTaskOpen] = useState(false);
+  const [modalDeleteTaskOpen, setModalDeleteTaskOpen] = useState(false);
   // Popper
   const [anchorBoard, setAnchorBoard] = useState<null | HTMLElement>(null);
   const openPopperBoard = Boolean(anchorBoard);
@@ -410,6 +410,7 @@ export default function Home() {
                     </div>
                   </>
                 </Modal>
+
                 {/* modal edit board [start] */}
                 <Modal
                   isOpen={modalEditActiveBoardOpen}
@@ -809,7 +810,6 @@ export default function Home() {
                               className="card-task px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
                               onClick={() => {
                                 setModalTaskOpen(true); 
-                                setTaskData({...task, columnIndex, taskIndex});
                                 dispatch(setActiveTask(taskIndex));
                                 dispatch(setActiveColumn(columnIndex));
                               }}
@@ -1041,8 +1041,9 @@ export default function Home() {
                       <button
                         className="text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
                         onClick={() => {
-                          setModalEditActiveBoardOpen(true);
+                          setModalEditTaskOpen(true);
                           setAnchorBoard(null);
+                          setModalTaskOpen(false);
                         }}
                       >
                         Edit Task
@@ -1051,7 +1052,8 @@ export default function Home() {
                         className="text-red-500 hover:opacity-50 transition-opacity"
                         onClick={() => {
                           setAnchorTask(null);
-                          setModalDeleteBoardOpen(true);
+                          setModalDeleteTaskOpen(true);
+                          setModalTaskOpen(false);
                         }}
                       >
                         Delete Task
@@ -1061,14 +1063,15 @@ export default function Home() {
               </BasePopup>
               
               {createPortal(openPopperTask && (
-                      <div
-                        className="fixed inset-0 z-[10000]"
-                        onClick={() => setAnchorTask(null)}
-                      ></div>
-                    ),
-                  document.body
-                )}
+                    <div
+                      className="fixed inset-0 z-[10000]"
+                      onClick={() => setAnchorTask(null)}
+                    ></div>
+                  ),
+                document.body
+              )}
 
+              
               <div className="text-[.8rem] text-gray-500 mb-4">{currentTask?.description}</div>
               <Label>{`Subtasks (${String(currentTask?.subtasks.reduce((t : number, st : SubTask) => st.isDone ? t + 1 : t ,0))} of ${String(currentTask?.subtasks.length)})`}</Label>
               {board?.columns[state.board.activeColumn].tasks[state.board.activeTask]?.subtasks.map((s: SubTask, subtaskIndex: number) => (
@@ -1110,6 +1113,44 @@ export default function Home() {
             </div>
           </Modal>
           {/* Modal task [end] */}
+
+          <Modal
+                isOpen={modalDeleteTaskOpen}
+                onRequestClose={(e: React.MouseEvent<Element>) => {
+                  setModalDeleteTaskOpen(false);
+                }}
+              >
+              <>
+                <div className="font-bold text-red-500 text-lg mb-4">
+                  Delete this Task?
+                </div>
+                <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">
+                  Are you sure you want to delete the &apos;{board?.columns[state.board.activeColumn].tasks[state.board.activeTask].title}
+                  &apos; task? This action cannot be reversed.
+                </div>
+                <div className="flex flex-row justify-center items-center">
+                  <ButtonPill
+                    color="text-white"
+                    backgroundColor="bg-red-500 hover:bg-red-500"
+                    text="Delete"
+                    size="small"
+                    className="w-full transition-opacity hover:opacity-70 mr-4"
+                    onClick={() => {
+                      dispatch(deleteActiveTask());
+                      setModalDeleteTaskOpen(false);
+                    }}
+                  />
+                  <ButtonPill
+                    color="text-gray-500"
+                    backgroundColor="bg-gray-100 hover:bg-gray-100 text-primary"
+                    text="Cancel"
+                    size="small"
+                    className="w-full transition-opacity hover:opacity-70"
+                    onClick={() => setModalDeleteTaskOpen(false)}
+                  />
+                </div>
+              </>
+            </Modal>
         </section>
       </main>
     </>
