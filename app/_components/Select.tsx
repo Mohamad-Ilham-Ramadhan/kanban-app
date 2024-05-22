@@ -8,25 +8,19 @@ import { CSSTransition } from "react-transition-group";
 import Arrow from "../_assets/icons/arrow-down.svg";
 
 export default function Select({
-  name,
   open,
   close,
-  data,
   className,
   onButtonClick,
-  onOptionClick,
   value,
   children,
 }: {
-  name: string;
   open: boolean;
   close: Function;
-  data: { index: number; name: string }[];
   className?: string;
-  value: string;
+  value: string | undefined;
   children: React.ReactElement[];
   onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
-  onOptionClick: React.MouseEventHandler<HTMLLIElement>;
 }) {
   const listboxRef = useRef<HTMLUListElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);

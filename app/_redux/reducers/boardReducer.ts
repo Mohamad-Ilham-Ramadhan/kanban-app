@@ -291,7 +291,6 @@ export const boardSlice = createSlice({
          state.activeBoard = 0
       },
       addNewColumns: (state, action) => {
-         console.log('addNewColumns action.payload', action.payload)
          state.boards[state.activeBoard].columns = action.payload.map((c: any) => {
             if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
             else return {id: uuidv4(), name: c.name, tasks: []}
@@ -300,8 +299,21 @@ export const boardSlice = createSlice({
       toggleSubtask(state, {payload: p}) {
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask].subtasks[p.subtaskIndex].isDone = !p.isDone;
       },
+      moveTaskColumn(state, {payload: toColumnIndex}) {
+         
+         const task = state.boards[state.activeBoard].columns[state.activeColumn].tasks.find((t, index) => index === state.activeTask)
+         state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
+
+         // new column
+         if (task !== undefined) {
+            state.boards[state.activeBoard].columns[toColumnIndex].tasks.push(task);
+            
+            state.activeTask = state.boards[state.activeBoard].columns[0].tasks.length - 1;
+            state.activeColumn = toColumnIndex;
+         }
+      },
    }
 })
 
-export const { toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer

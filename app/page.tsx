@@ -16,6 +16,7 @@ import {
   toggleSubtask,
   setActiveTask,
   setActiveColumn,
+  moveTaskColumn,
   Task,
   SubTask
 } from "./_redux/reducers/boardReducer";
@@ -1027,17 +1028,26 @@ export default function Home() {
 
               <Label>Current Status</Label>
               <Select
-                name="status"
+                // name="current status"
                 open={selectCurrentStatusOpen}
+                value={board?.columns[state.board.activeColumn].name}
                 close={() => {
                   setSelectCurrentStatusOpen((prev) => !prev);
                 }}
-                data={board?.columns.map((c, index) => ({
-                  index: index,
-                  name: c.name,
-                }))}
-                onClick={() => setSelectCurrentStatusOpen((prev) => !prev)}
-              />
+                onButtonClick={() => setSelectCurrentStatusOpen((prev) => !prev)}
+              >
+                {board.columns.map((c, index) => (
+                  <Option 
+                    key={c.id}
+                    label={c.name}
+                    onClick={() => {
+                      // setFieldValue('status', { index, name: c.name })
+                      dispatch(moveTaskColumn(index))
+                      setSelectCurrentStatusOpen((prev) => !prev);
+                    }}
+                  />
+                ))}
+              </Select>
             </>
           </Modal>
           {/* Modal task [end] */}
