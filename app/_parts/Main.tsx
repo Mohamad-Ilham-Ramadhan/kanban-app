@@ -28,6 +28,7 @@ import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
 
 import Aside from './Aside';
 import ModalAddNewColumn from "./modals/ModalAddNewColumn";
+import ModalDeleteTask from "./modals/ModalDeleteTask";
 
 export default function Main() {
    // @ts-ignore
@@ -288,48 +289,10 @@ export default function Main() {
         </Modal>
         {/* Modal task [end] */}
 
-        <Modal
-          isOpen={modalDeleteTaskOpen}
-          onRequestClose={(e: React.MouseEvent<Element>) => {
-            setModalDeleteTaskOpen(false);
-          }}
-        >
-          <>
-            <div className="font-bold text-red-500 text-lg mb-4">
-              Delete this Task?
-            </div>
-            <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">
-              Are you sure you want to delete the &apos;
-              {
-                board?.columns[state.board.activeColumn].tasks[
-                  state.board.activeTask
-                ]?.title
-              }
-              &apos; task? This action cannot be reversed.
-            </div>
-            <div className="flex flex-row justify-center items-center">
-              <ButtonPill
-                color="text-white"
-                backgroundColor="bg-red-500 hover:bg-red-500"
-                text="Delete"
-                size="small"
-                className="w-full transition-opacity hover:opacity-70 mr-4"
-                onClick={() => {
-                  dispatch(deleteActiveTask());
-                  setModalDeleteTaskOpen(false);
-                }}
-              />
-              <ButtonPill
-                color="text-gray-500"
-                backgroundColor="bg-gray-100 hover:bg-gray-100 text-primary"
-                text="Cancel"
-                size="small"
-                className="w-full transition-opacity hover:opacity-70"
-                onClick={() => setModalDeleteTaskOpen(false)}
-              />
-            </div>
-          </>
-        </Modal>
+        <ModalDeleteTask
+            isOpen={modalDeleteTaskOpen}
+            onRequestClose={() => setModalDeleteTaskOpen(false)}
+        />
       </section>
     </main>
   );
