@@ -320,7 +320,20 @@ export const boardSlice = createSlice({
          state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
       },
       editActiveTask(state, {payload}) {
-
+         console.log('editActiveTask', payload);
+         // no change column
+         state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask] = {
+            id: payload.id,
+            title: payload.title,
+            description: payload.description,
+            subtasks: payload.subtasks
+         }
+         if (payload.status.index !== state.activeColumn) {
+            const task = state.boards[state.activeBoard].columns[state.activeColumn].tasks.splice(state.activeTask, 1)[0];
+            state.boards[state.activeBoard].columns[payload.status.index].tasks.push(task);
+            state.activeTask = state.boards[state.activeBoard].columns[payload.status.index].tasks.length -1;
+            state.activeColumn = payload.status.index;
+         } 
       },
    }
 })

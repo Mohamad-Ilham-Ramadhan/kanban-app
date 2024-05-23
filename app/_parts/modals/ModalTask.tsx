@@ -21,6 +21,7 @@ import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { CssTransition } from "@mui/base";
 
 import ModalDeleteTask from "./ModalDeleteTask";
+import ModalEditTask from "./ModalEditTask";
 
 export default function ModalTask({ isOpen, onRequestClose }: any) {
   // @ts-ignore
@@ -171,6 +172,11 @@ export default function ModalTask({ isOpen, onRequestClose }: any) {
       <ModalDeleteTask
         isOpen={modalDeleteTaskOpen}
         onRequestClose={() => setModalDeleteTaskOpen(false)}
+      />
+
+      <ModalEditTask 
+        isOpen={modalEditTaskOpen}
+        onRequestClose={() => setModalEditTaskOpen(false)}
       />
     </>
   );
