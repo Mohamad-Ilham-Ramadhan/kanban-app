@@ -27,6 +27,7 @@ import { CssTransition } from "@mui/base";
 import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
 
 import Aside from './Aside';
+import ModalAddNewColumn from "./modals/ModalAddNewColumn";
 
 export default function Main() {
    // @ts-ignore
@@ -138,144 +139,10 @@ export default function Main() {
                     </div>
                   </div>
                 )}
-                {/* Modal add new Column */}
-                <Modal
+                <ModalAddNewColumn
                   isOpen={modalCreateNewColumnOpen}
-                  onRequestClose={() => {
-                    setModalCreateNewColumnOpen(false);
-                  }}
-                >
-                  <Formik
-                    initialValues={{
-                      columns: columns === null ? [] : columns,
-                    }}
-                    validationSchema={yup.object().shape({
-                      columns: yup.array().of(
-                        yup.object({
-                          name: yup.string().required(),
-                        })
-                      ),
-                      // status: yup.array().of(yup.string().required()),
-                    })}
-                    onSubmit={(values) => {
-                      console.log("form add new column");
-                      dispatch(addNewColumns(values.columns));
-                      setModalCreateNewColumnOpen(false);
-                    }}
-                  >
-                    {({
-                      values,
-                      handleChange,
-                      handleSubmit,
-                      errors,
-                      submitForm,
-                    }) => (
-                      <form onSubmit={handleSubmit} className="asdf">
-                        <div className="font-bold text-lg mb-4">
-                          Add New Column
-                        </div>
-                        <div className="mb-6">
-                          <label
-                            htmlFor="column-name"
-                            className="block font-semibold text-xs mb-2"
-                          >
-                            Name
-                          </label>
-                          <Input
-                            value={board !== null ? board.name : ""}
-                            disabled
-                            id="column-name"
-                          />
-                        </div>
-
-                        <FieldArray
-                          name="columns"
-                          render={({ push, remove }) => (
-                            <>
-                              <div className="mb-4">
-                                <div className="block font-semibold text-xs mb-2">
-                                  Columns
-                                </div>
-                                {values.columns.map((val, index) => (
-                                  <div className="flex mb-2" key={index}>
-                                    <div className="relative w-full">
-                                      <Input
-                                        value={values.columns[index].name}
-                                        id={`columns[${index}].name`}
-                                        onChange={handleChange}
-                                        error={
-                                          errors.columns !== undefined &&
-                                          errors.columns[index]
-                                            ? true
-                                            : false
-                                        }
-                                      />
-                                      {errors.columns &&
-                                      errors.columns[index] ? (
-                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                                          Required
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                    {values.columns.length === 1 ? null : (
-                                      <button
-                                        className="w-[50px] flex justify-center items-center"
-                                        disabled={
-                                          values.columns[index].tasks.length > 0
-                                        }
-                                        onClick={() => {
-                                          remove(index);
-                                        }}
-                                        type="button"
-                                      >
-                                        <XIcon
-                                          className={
-                                            values.columns[index].tasks.length >
-                                            0
-                                              ? "text-gray-200 dark:text-gray-700"
-                                              : "text-gray-500"
-                                          }
-                                        />
-                                      </button>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                              {values.columns.length === 6 ? null : (
-                                <ButtonPill
-                                  text="+ Add New Column"
-                                  size="small"
-                                  className="w-full mb-4"
-                                  color="text-primary"
-                                  backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
-                                  onClick={() => {
-                                    push({ name: "", tasks: [] });
-                                    setTimeout(() => {
-                                      document
-                                        .getElementById(
-                                          `columns[${values.columns.length}].name`
-                                        )
-                                        ?.focus();
-                                    }, 1);
-                                  }}
-                                  type="button"
-                                />
-                              )}
-                            </>
-                          )}
-                        />
-                        <ButtonPill
-                          text="Save Changes"
-                          size="small"
-                          className="w-full"
-                          onClick={submitForm}
-                          type="submit"
-                        />
-                      </form>
-                    )}
-                  </Formik>
-                </Modal>
-                {/* Modal add new Column [end] */}
+                  onRequestClose={() => setModalCreateNewColumnOpen(false)}
+                />
               </div>
             </>
           ) : (
