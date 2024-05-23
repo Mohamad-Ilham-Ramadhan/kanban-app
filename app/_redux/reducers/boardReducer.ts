@@ -304,6 +304,7 @@ export const boardSlice = createSlice({
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask].subtasks[p.subtaskIndex].isDone = !p.isDone;
       },
       moveTaskColumn(state, {payload: toColumnIndex}) {
+         console.log('move task column', toColumnIndex);
          const task = state.boards[state.activeBoard].columns[state.activeColumn].tasks.find((t, index) => index === state.activeTask)
          state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
 
@@ -311,7 +312,7 @@ export const boardSlice = createSlice({
          if (task !== undefined) {
             state.boards[state.activeBoard].columns[toColumnIndex].tasks.push(task);
             
-            state.activeTask = state.boards[state.activeBoard].columns[0].tasks.length - 1;
+            state.activeTask = state.boards[state.activeBoard].columns[toColumnIndex].tasks.length - 1;
             state.activeColumn = toColumnIndex;
          }
       },

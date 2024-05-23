@@ -1,0 +1,3 @@
+[BUG]
+   - move task to another column: 
+      - on new created task 
