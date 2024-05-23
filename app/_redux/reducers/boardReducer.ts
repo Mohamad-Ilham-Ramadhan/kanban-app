@@ -239,6 +239,7 @@ export const boardSlice = createSlice({
       activeColumn: 0, // column index
       activeTask: 0, // task index
       theme: 0, // 0 = dark, 1 = light
+      sidebar: true, // show/hide sidebar
    },
    reducers: {
       toggleTheme: (state) => {
@@ -247,6 +248,9 @@ export const boardSlice = createSlice({
          } else {
             state.theme = 1;
          }
+      },
+      setSidebar(state, {payload})  {
+         state.sidebar = payload;
       },
       createNewBoard(state, action)  {
          state.boards.push({
@@ -320,5 +324,5 @@ export const boardSlice = createSlice({
    }
 })
 
-export const { editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer
