@@ -32,7 +32,7 @@ export default function Aside() {
   return (
     <aside
       className={clsx(
-        "flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-all",
+        "flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-[left]",
         state.board.sidebar ? "left-0" : "left-[-300px]"
       )}
     >

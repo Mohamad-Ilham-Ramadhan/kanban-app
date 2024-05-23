@@ -73,74 +73,73 @@ export default function Main() {
       >
         <div className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all">
           {board !== null ? (
-            <>
-              <div className="flex flex-row h-full">
-                {/* bg-column[] is defined in tailwind.config.ts */}
-                {columns !== null &&
-                  columns.map((c, columnIndex) => (
+            <div className="flex flex-row h-full">
+              {/* bg-column[] is defined in tailwind.config.ts */}
+              {columns !== null &&
+                columns.map((c, columnIndex) => (
+                  <div
+                    key={c.id}
+                    className="shrink-0 w-[280px] rounded-lg mr-8"
+                  >
                     <div
+                      className="flex flex-row items-center mb-6"
                       key={c.id}
-                      className="shrink-0 w-[280px] rounded-lg mr-8"
                     >
                       <div
-                        className="flex flex-row items-center mb-6"
-                        key={c.id}
-                      >
-                        <div
-                          className={`w-4 h-4 rounded-full bg-column${columnIndex} mr-3`}
-                        ></div>
-                        <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400">
-                          <span>{c.name}</span>
-                          <span>({c.tasks.length})</span>
-                        </div>
+                        className={`w-4 h-4 rounded-full bg-column${columnIndex} mr-3`}
+                      ></div>
+                      <div className="uppercase text-[.7rem] font-semibold tracking-[3px] text-slate-400">
+                        <span>{c.name}</span>
+                        <span>({c.tasks.length})</span>
                       </div>
+                    </div>
 
-                      {c.tasks.length > 0 ? (
-                        c.tasks.map((task, taskIndex: number) => (
-                          <div
-                            key={task.id}
-                            className="card-task px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
-                            onClick={() => {
-                              setModalTaskOpen(true);
-                              dispatch(setActiveTask(taskIndex));
-                              dispatch(setActiveColumn(columnIndex));
-                            }}
-                          >
-                            <div className="font-semibold text-[.95rem] mb-2">
-                              {task.title}
-                            </div>
-                            {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
-                            <div className="text-xs text-slate-400 font-semibold">
-                              {task.subtasks.reduce(
-                                (t, st) => (st.isDone ? t + 1 : t),
-                                0
-                              )}{" "}
-                              of {task.subtasks.length} subtasks
-                            </div>
+                    {c.tasks.length > 0 ? (
+                      c.tasks.map((task, taskIndex: number) => (
+                        <div
+                          key={task.id}
+                          className="card-task px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
+                          onClick={() => {
+                            setModalTaskOpen(true);
+                            dispatch(setActiveTask(taskIndex));
+                            dispatch(setActiveColumn(columnIndex));
+                          }}
+                        >
+                          <div className="font-semibold text-[.95rem] mb-2">
+                            {task.title}
                           </div>
-                        ))
-                      ) : (
-                        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
-                      )}
-                    </div>
-                  ))}
-                {columns && columns.length < 6 && (
-                  <div className="rounded-lg h-full shrink-0 w-[280px]">
-                    <div className="h-10"></div>
-                    <div
-                      className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
-                      onClick={() => setModalCreateNewColumnOpen(true)}
-                    >
-                      + New Column
-                    </div>
+                          {/* <div className="font-semibold text-[.95rem] mb-3">QA and test all major user journeys</div> */}
+                          <div className="text-xs text-slate-400 font-semibold">
+                            {task.subtasks.reduce(
+                              (t, st) => (st.isDone ? t + 1 : t),
+                              0
+                            )}{" "}
+                            of {task.subtasks.length} subtasks
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
+                    )}
                   </div>
-                )}
-                <ModalAddNewColumn
-                  isOpen={modalCreateNewColumnOpen}
-                  onRequestClose={() => setModalCreateNewColumnOpen(false)}
-                />
-              </div>
-            </>
+                ))}
+              {columns && columns.length < 6 && (
+                <div className="rounded-lg h-full shrink-0 w-[280px] mr-10">
+                  <div className="h-10"></div>
+                  <div
+                    className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
+                    onClick={() => setModalCreateNewColumnOpen(true)}
+                  >
+                    + New Column
+                  </div>
+                </div>
+              )}
+              <div className="h-full shrink-0 w-[32px]"></div> 
+              <ModalAddNewColumn
+                isOpen={modalCreateNewColumnOpen}
+                onRequestClose={() => setModalCreateNewColumnOpen(false)}
+              />
+            </div>
           ) : (
             <>
               {/* When there is no single board in the store. */}
