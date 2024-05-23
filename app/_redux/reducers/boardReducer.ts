@@ -311,11 +311,14 @@ export const boardSlice = createSlice({
             state.activeColumn = toColumnIndex;
          }
       },
-      deleteActiveTask(state, {payload}) {
+      deleteActiveTask(state) {
          state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
+      },
+      editActiveTask(state, {payload}) {
+
       },
    }
 })
 
-export const { deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer
