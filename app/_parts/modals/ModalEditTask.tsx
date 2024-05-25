@@ -139,6 +139,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
                           {values.subtasks.length === 1 ? null : (
                             <button
                               className="w-[50px] flex justify-center items-center"
+                              type="button"
                               onClick={() => {
                                 remove(index);
                               }}
