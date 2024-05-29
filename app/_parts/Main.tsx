@@ -72,6 +72,9 @@ export default function Main() {
 
     if (preventDrag) return;
 
+    // disable text selection/highlight on document
+    document.documentElement.style.userSelect = 'none';
+    
     const $this = e.currentTarget as HTMLElement;
     console.log("$this", $this);
     const marginBottom = window.parseInt(
@@ -368,7 +371,7 @@ export default function Main() {
 
     function cancelDrag() {
       console.log("cancleDrag");
-
+      document.documentElement.style.userSelect = '';
       setPreventDrag(true);
       window.setTimeout(() => {
         setPreventDrag(false);
@@ -454,6 +457,8 @@ export default function Main() {
   e.stopPropagation();
   }
 
+  const [overlay, setOverlay] = useState(false);
+  
   return (
     <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark">
       <Aside />
@@ -463,7 +468,28 @@ export default function Main() {
           state.board.sidebar ? "pl-[300px]" : "pl-0"
         )}
       >
-        <div className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all">
+        {overlay && createPortal(
+          <div className="absolute z-50 inset-0"></div>
+        , document.body)}
+        <div 
+          className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all"
+          onMouseDown={(e) => {
+            const $this = e.currentTarget;
+            document.documentElement.style.userSelect = 'none';
+            setOverlay(true);
+            function onDrag(e: any) {
+              $this.scrollLeft = $this.scrollLeft - e.movementX;
+            }
+            function onRelease(e: any) {
+              setOverlay(false);
+              document.removeEventListener('mousemove', onDrag)
+              document.removeEventListener('mouseup', onRelease) 
+              document.documentElement.style.userSelect = '';
+            }
+            document.addEventListener('mousemove', onDrag)
+            document.addEventListener('mouseup', onRelease)
+          }}
+        >
           {board !== null ? (
             <div className="flex flex-row h-full">
               {/* bg-column[] is defined in tailwind.config.ts */}
