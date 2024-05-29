@@ -228,3 +228,7 @@ textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
   filter: blur(3px);
   transition: opacity 0.4s ease-out, filter 0.2s ease-out;
 }
+
+.card-task-transition {
+  transition: transform cubic-bezier(0.32, 0.82, 0.4, 0.99) 200ms;
+}

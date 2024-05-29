@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 import { staticGenerationAsyncStorage } from 'next/dist/client/components/static-generation-async-storage.external';
@@ -35,6 +35,7 @@ export type Board = {
 interface TaskState {
    tasks: Task[]
 }
+
 const boards: Board[] = [
    {
       id: uuidv4(),
@@ -229,12 +230,25 @@ const boards: Board[] = [
    },
 ]
 
-
+type SwapTask = {
+   fromColumnIndex: number;
+   toColumnIndex: number;
+   fromIndex: number;
+   toIndex: number;
+}
+export const swapTask = createAsyncThunk<SwapTask, SwapTask>(
+   'board/swapTask',
+   async (argu, thunkAPI) => {
+      console.log('SwapTask arg in createAsyncThunk', argu)
+     return argu;
+   },
+ )
 
 export const boardSlice = createSlice({
    name: 'board',
    initialState: {
       boards,
+      swapTask: false,
       activeBoard: 0,
       activeColumn: 0, // column index
       activeTask: 0, // task index
@@ -335,7 +349,50 @@ export const boardSlice = createSlice({
             state.activeColumn = payload.status.index;
          } 
       },
-   }
+   },
+   extraReducers(builder) {
+      builder.addCase(swapTask.fulfilled, (state, {payload}) => {
+
+         const board = state.boards[state.activeBoard];
+         const {fromColumnIndex, toColumnIndex, fromIndex, toIndex} = payload;
+         // this.board.columns[colIndex].tasks
+         console.log('SWAP TASK (store)', fromColumnIndex, toColumnIndex, fromIndex, toIndex)
+         if (toColumnIndex === null && fromIndex === toIndex) {
+            console.log('store.swapTask() not doing anything')
+            
+         } else if (fromColumnIndex === toColumnIndex || toColumnIndex === null) {
+            console.log('store.swapTask() SAME COLUMN')
+
+            if (toIndex > fromIndex) { // drag ke bawah
+               const newTasks = board.columns[fromColumnIndex].tasks.map((t, index) => {
+                  if (index > toIndex || index < fromIndex) return t
+                  if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex] 
+                  if (index >= fromIndex) return board.columns[fromColumnIndex].tasks[index + 1]
+                  return t;
+               })
+               // console.log('newTasks', newTasks)
+               if (newTasks !== undefined) {
+                  state.boards[state.activeBoard].columns[fromColumnIndex].tasks = newTasks;
+               }
+            } else if (toIndex < fromIndex) { // drag ke atas
+               // console.log('swap task atas')
+               const newTasks = board.columns[fromColumnIndex].tasks.map((t, index) => {
+                  if (index < toIndex || index > fromIndex) return t
+                  if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex] 
+                  if (index <= fromIndex) return board.columns[fromColumnIndex].tasks[index - 1]
+                  return t;
+               })
+               state.boards[state.activeBoard].columns[fromColumnIndex].tasks = newTasks
+            }
+         } else {
+            console.log('store.swapTask() DIFFERENT COLUMN')
+            // oldColumn
+            const theTask = board.columns[fromColumnIndex].tasks.splice(fromIndex, 1)[0];
+            board.columns[toColumnIndex].tasks.splice(toIndex, 0, theTask)
+         }
+      })
+   },
+
 })
 
 export const { setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions

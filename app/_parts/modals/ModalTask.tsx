@@ -32,9 +32,6 @@ export default function ModalTask({ isOpen, onRequestClose }: any) {
       ? board.columns[state.board.activeColumn].tasks[state.board.activeTask]
       : null;
 
-  console.log('activeColumn', state.board.activeColumn, 'activeTask', state.board.activeTask);
-  console.log('currentTask', currentTask);
-  console.log('currentTask robust', )
 
   const dispatch = useDispatch();
 

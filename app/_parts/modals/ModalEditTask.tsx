@@ -20,7 +20,6 @@ import { CssTransition } from "@mui/base";
 export default function ModalEditTask({ isOpen, onRequestClose }: any) {
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
-  console.log('ModalEditTask state', state);
   const board = state.board.boards[state.board.activeBoard];
   const currentColumn = board.columns[state.board.activeColumn]
   const currentTask = currentColumn.tasks[state.board.activeTask];
