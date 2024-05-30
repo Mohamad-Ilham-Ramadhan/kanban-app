@@ -150,16 +150,24 @@ textarea::-webkit-scrollbar {
   height: 8px;
 }
 .beauty-scroll::-webkit-scrollbar {
-  width: 12px;    
-  height: 12px;           
+  width: 11px;    
+  height: 11px;           
 }
 
 textarea::-webkit-scrollbar-track, .beauty-scroll::-webkit-scrollbar-track {
   background: transparent;        
 }
 
-textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
+html.dark {
+  background-color: red;
+}
+
+html.dark  textarea::-webkit-scrollbar-thumb, html.dark  .beauty-scroll::-webkit-scrollbar-thumb {
   background-color: theme('colors.zinc.700');    
+  border-radius: 20px;       
+}
+textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
+  background-color: theme('colors.slate.400');  
   border-radius: 20px;       
 }
 
@@ -230,5 +238,7 @@ textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
 }
 
 .card-task-transition {
-  transition: transform cubic-bezier(0.32, 0.82, 0.4, 0.99) 200ms;
+  transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(0.32, 0.82, 0.4, 0.99);
+  transition-duration: 200ms;
 }
