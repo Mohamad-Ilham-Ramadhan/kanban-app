@@ -86,12 +86,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="title"
-                  className="block font-semibold text-xs mb-2"
-                >
-                  Description
-                </label>
+                <Label htmlFor="title">Description</Label>
                 <div className="relative">
                   <Textarea
                     id="description"
@@ -112,9 +107,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
                 render={({ push, remove }) => (
                   <>
                     <div className="mb-4">
-                      <div className="block font-semibold text-xs mb-2">
-                        Subtasks
-                      </div>
+                      <Label>Subtasks</Label>
                       {values.subtasks.map((val, index) => (
                         <div className="flex mb-2" key={index}>
                           <div className="relative w-full">
@@ -143,7 +136,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
                                 remove(index);
                               }}
                             >
-                              <XIcon />
+                              <XIcon className="text-gray-400" />
                             </button>
                           )}
                         </div>
@@ -177,12 +170,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
               />
 
               <div className="mb-4">
-                <label
-                  htmlFor="status"
-                  className="block font-semibold text-xs mb-2"
-                >
-                  Status
-                </label>
+                <Label htmlFor="status">Status</Label>
                 {/* <Select /> */}
 
                 <Select
