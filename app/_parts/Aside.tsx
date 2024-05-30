@@ -137,6 +137,7 @@ export default function Aside() {
                                         ? true
                                         : false
                                     }
+                                    className="input-column"
                                   />
                                   {errors.columns && errors.columns[index] ? (
                                     <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
@@ -166,6 +167,9 @@ export default function Aside() {
                               backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
                               onClick={() => {
                                 push("");
+                                setTimeout(() => {
+                                 document.getElementById(`columns[${values.columns.length}]`)?.focus()
+                                })
                               }}
                               type="button"
                             />
