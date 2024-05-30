@@ -152,7 +152,7 @@ export default function Aside() {
                                       remove(index);
                                     }}
                                   >
-                                    <XIcon />
+                                    <XIcon className="text-slate-400" />
                                   </button>
                                 )}
                               </div>
