@@ -441,7 +441,7 @@ export default function Main() {
           <div className="absolute z-50 inset-0"></div>
         , document.body)}
         <div 
-          className="beauty-scroll  py-6 px-8 overflow-auto relative transition-all"
+          className="beauty-scroll py-6 px-8 overflow-auto relative hover:cursor-move transition-all"
           onMouseDown={(e) => {
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
@@ -488,7 +488,7 @@ export default function Main() {
                         c.tasks.map((task, taskIndex: number) => (
                           <div
                             key={task.id}
-                            className="card-task card-task-transition px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-pointer shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
+                            className="card-task card-task-transition px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-grab shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
                             // onClick={() => {
                             //   setModalTaskOpen(true);
                             //   dispatch(setActiveTask(taskIndex));
