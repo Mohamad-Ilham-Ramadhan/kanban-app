@@ -22,10 +22,8 @@ export default function Home() {
       ? state.board.boards[state.board.activeBoard]
       : null;
   const columns = board !== null ? board.columns : null;
-  console.log('state.board.activeColumn', state.board.activeColumn);
 
   useEffect(() => {
-    console.log("state.board.theme", state.board.theme);
     if (state.board.theme) {
       document.documentElement.classList.remove("dark");
     } else {
@@ -46,7 +44,7 @@ export default function Home() {
         unmountOnExit
       >
         <button
-          className="flex justify-center items-center w-[56px] h-[48px] bg-primary rounded-r-full fixed left-0 bottom-[32px] z-50"
+          className="flex justify-center items-center w-[56px] h-[48px] bg-primary hover:bg-primary-light transition-colors rounded-r-full fixed left-0 bottom-[32px] z-50"
           onClick={() => dispatch(setSidebar(true))}
         >
           <EyeIcon />
