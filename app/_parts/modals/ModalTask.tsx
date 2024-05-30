@@ -48,7 +48,7 @@ export default function ModalTask({ isOpen, onRequestClose }: any) {
     <>
       <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
         <div className="relative">
-          <div className="text-lg font-bold mb-4">{currentTask?.title}</div>
+          <div className="text-lg font-bold pr-6 mb-4">{currentTask?.title}</div>
           <ButtonIcon
             icon={
               <svg
