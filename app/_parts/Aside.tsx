@@ -213,7 +213,7 @@ export default function Aside() {
           <SunIcon className="text-slate-400" />
         </div>
         <button
-          className="hide-n-show flex items-center transition-colors text-slate-400 hover:text-gray-600 text-[15px] font-bold pl-8 mb-8"
+          className="hide-n-show flex items-center transition-colors text-slate-400 hover:text-gray-300 dark:hover:text-gray-600 text-[15px] font-bold pl-8 mb-8"
           onClick={() => dispatch(setSidebar(false))}
         >
           <EyeSlashIcon />
