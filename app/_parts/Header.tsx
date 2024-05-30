@@ -450,7 +450,7 @@ export default function Header() {
                                             values.columns[index].tasks.length >
                                             0
                                               ? "text-gray-200 dark:text-gray-700"
-                                              : "text-gray-500"
+                                              : "text-gray-400"
                                           }
                                         />
                                       </button>
