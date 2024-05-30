@@ -37,7 +37,7 @@ export default function Aside() {
       )}
     >
       {/* #828fa3 */}
-      <div className="pt-4 pr-4">
+      <div className="pt-4 pr-6">
         <div className="text-slate-400 text-xs font-semibold uppercase tracking-[2px] pl-8 mb-5">
           all boards <span>({boards.length})</span>
         </div>
@@ -45,7 +45,7 @@ export default function Aside() {
           {boards.map((b, index) => (
             <li
               className={clsx(
-                "text-slate-400 font-bold mb-2 py-3 pl-8 hover:cursor-pointer rounded-r-full flex items-center",
+                "text-slate-400 font-bold mb-1 py-2.5 pl-8 hover:cursor-pointer rounded-r-full flex items-center",
                 state.board.activeBoard === index
                   ? "bg-primary text-white"
                   : "hover:bg-primary-light hover:text-white"
