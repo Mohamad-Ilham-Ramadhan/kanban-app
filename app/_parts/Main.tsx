@@ -345,6 +345,8 @@ export default function Main() {
 
     function cancelDrag() {
       document.documentElement.style.userSelect = '';
+      $this.style.opacity = "";
+
       setPreventDrag(true);
       window.setTimeout(() => {
         setPreventDrag(false);
@@ -369,7 +371,7 @@ export default function Main() {
         // if outside of wrapper when cancelDrag
         movedCards.forEach(($el) => {
           if ($this === $el) return
-          $el.style.transform = 'translate(0px, 0px)'
+          $el.style.transform = ''
         })
   
         // reset cards.dataset.index
@@ -488,12 +490,7 @@ export default function Main() {
                         c.tasks.map((task, taskIndex: number) => (
                           <div
                             key={task.id}
-                            className="card-task card-task-transition px-4 py-6 mb-6 rounded-md transition-opacity bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-grab shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
-                            // onClick={() => {
-                            //   setModalTaskOpen(true);
-                            //   dispatch(setActiveTask(taskIndex));
-                            //   dispatch(setActiveColumn(columnIndex));
-                            // }}
+                            className="card-task card-task-transition px-4 py-6 mb-6 rounded-md bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-grab shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
                             data-moveable="0"
                             data-index={taskIndex}
                             data-y="0"
