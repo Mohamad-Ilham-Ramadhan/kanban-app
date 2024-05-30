@@ -348,7 +348,7 @@ export default function Header() {
                         }}
                       />
                       <ButtonPill
-                        color="text-gray-500"
+                        color="text-primary"
                         backgroundColor="bg-gray-100 hover:bg-gray-100"
                         text="Cancel"
                         size="small"
