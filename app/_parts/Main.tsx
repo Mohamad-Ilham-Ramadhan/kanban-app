@@ -76,7 +76,6 @@ export default function Main() {
     document.documentElement.style.userSelect = 'none';
     
     const $this = e.currentTarget as HTMLElement;
-    console.log("$this", $this);
     const marginBottom = window.parseInt(
       window.getComputedStyle($this).marginBottom
     );
@@ -92,7 +91,6 @@ export default function Main() {
 
     // create shadowRect
     const $thisRect = $this.getBoundingClientRect();
-    // console.log('$thisRect', $thisRect);
     const $shadowRect = document.createElement("div");
 
     $shadowRect.classList.add("shadow-rect");
@@ -112,7 +110,6 @@ export default function Main() {
     // let $prevSwap = { card: null, direction: null } // direction { null | 1 = swap bottom, -1 = swap top}
 
     function dragCard(e: MouseEvent) {
-      // console.log("dragCard");
       $this.style.opacity = "1";
       isDragged = true;
 
@@ -122,7 +119,6 @@ export default function Main() {
       }px)`;
 
       if (isOut == false && $wrapper !== null) {
-        // console.log('INSIDE')
         const $wrapperRect = $wrapper.getBoundingClientRect();
 
         if (
@@ -131,7 +127,6 @@ export default function Main() {
           e.clientY < $wrapperRect.top ||
           e.clientY > $wrapperRect.bottom
         ) {
-          // console.log('OUT OF WRAPPER')
           Array.from($wrapper.children).forEach(($el) => {
             if ($el instanceof HTMLElement) {
               if (Number($el.dataset.index) <= Number($this.dataset.index))
@@ -167,21 +162,16 @@ export default function Main() {
             if ($el === $this) return false;
             return $el.classList.contains("card-task");
           }); 
-        // console.log('$swapCard', $swapCards);
         if (
           !!$swapCards.length &&
           !!$swapCards[0].getAnimations().length == false
         ) {
-          // console.log('SWAP', $prevSwap);
           const $swapCard = $swapCards[0] as HTMLElement;
-          console.log('$this', $this.dataset, '$swapCard', $swapCard.dataset)
-          console.log('Swap bottom req: ', Number($this.dataset.index) , Number($swapCard.dataset.index), e.movementY, $wrapper)
           if (
             Number($this.dataset.index) < Number($swapCard.dataset.index) &&
             e.movementY > 0 && 
             $wrapper !== null
           ) {
-            console.log('SWAP BOTTOM')
 
             const min = Math.min(
               Number($this.dataset.index),
@@ -192,7 +182,6 @@ export default function Main() {
               Number($swapCard.dataset.index)
             );
             Array.from($wrapper.children).forEach(($el) => {
-              // console.log('min', min, 'max', max);
               if ($el instanceof HTMLElement) {
                 if (
                   $el === $this ||
@@ -222,7 +211,6 @@ export default function Main() {
             e.movementY < 0 &&
             $wrapper !== null
           ) {
-            // console.log('SWAP TOP');
 
             const min = Math.min(
               Number($this.dataset.index),
@@ -233,10 +221,7 @@ export default function Main() {
               Number($swapCard.dataset.index)
             );
             let isFirst = false;
-            // console.log('$this.index', $this.dataset.index);
-            // console.log('$swapCard.index', $swapCard.dataset.index);
             Array.from($wrapper.children).forEach(($el) => {
-              // console.log('min', min, 'max', max);
               if ($el instanceof HTMLElement) {
 
                 if (
@@ -275,7 +260,6 @@ export default function Main() {
 
       if (isOut) {
         // and
-        console.log("OUTSIDE");
         const $neoWrapper = document
           .elementsFromPoint(e.clientX, e.clientY)
           .find(($el) => {
@@ -283,7 +267,6 @@ export default function Main() {
           }) as HTMLElement | undefined;
 
         if (!!$neoWrapper && $neoWrapper.childElementCount === 0) {
-          // console.log('EMPTY $wrapper');
           $wrapper = $neoWrapper;
           isOut = false;
           $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`;
@@ -295,11 +278,8 @@ export default function Main() {
           return;
         }
 
-        console.log('$neoWrapper', $neoWrapper)
 
         if (!!$neoWrapper && Number($neoWrapper.dataset.isAnimating) == 0) {
-          console.log("INTO NEW WRAPPER");
-          // console.log('$neoWrapper', $neoWrapper);
 
           toColumnIndex = Number($neoWrapper.dataset.columnIndex);
           $wrapper = $neoWrapper;
@@ -308,8 +288,6 @@ export default function Main() {
           let $lastEl : HTMLElement | null = null;
 
           Array.from($wrapper.children).forEach(($el) => {
-            // console.log('$neoWrapper.chidren.forEach')
-            // console.log('$el loco', $el)
             if ($el === $this) return;
 
             const $elRect = $el.getBoundingClientRect();
@@ -317,7 +295,6 @@ export default function Main() {
             if (e.clientY <= $elRect.bottom && $el instanceof HTMLElement) {
               isOut = false;
               isMoved = true;
-              // console.log('isOut = false');
               if (isFirst == false ) {
                 isFirst = true;
                 const diff =
@@ -344,11 +321,9 @@ export default function Main() {
             $lastEl = $el as HTMLElement;
           });
 
-          console.log("$lastEl", $lastEl);
 
           if (isMoved == false) {
             // insert into last position in a new wrapper or when wrapper is empty of any card (new wrapper is initial wrapper)
-            // console.log('LAST POSITION', $lastEl);
             // $lastEl === null ? empty wrapper : last position;
             isOut = false;
             isMoved = true;
@@ -360,7 +335,6 @@ export default function Main() {
             $shadowRect.style.left = `${$wrapperRect.left}px`;
             // @ts-ignore
             const top = $lastEl === null ? $wrapperRect.top - marginBottom : $lastEl.getBoundingClientRect().bottom + Number($lastEl.dataset.destinationY) - new DOMMatrix(window.getComputedStyle($lastEl).transform).f;
-            console.log("top", top);
             $shadowRect.style.top = `${top + marginBottom}px`;
             document.body.appendChild($shadowRect);
           }
@@ -370,7 +344,6 @@ export default function Main() {
     }
 
     function cancelDrag() {
-      console.log("cancleDrag");
       document.documentElement.style.userSelect = '';
       setPreventDrag(true);
       window.setTimeout(() => {
@@ -394,9 +367,7 @@ export default function Main() {
 
       if ($wrapper == null && $initialWrapper !== null) {
         // if outside of wrapper when cancelDrag
-        console.log('CANCEL DRAG OUTSIDE WRAPPER')
         movedCards.forEach(($el) => {
-          // console.log('moved $el', $el)
           if ($this === $el) return
           $el.style.transform = 'translate(0px, 0px)'
         })
@@ -429,7 +400,6 @@ export default function Main() {
       // update store
      window.setTimeout(() => {
         // set translateY 0 to all moved cards
-        // console.log('UPDATE STORE & TYDING MOVED CARDS')
 
         // @ts-ignore
         dispatch(swapTask({
@@ -439,7 +409,6 @@ export default function Main() {
           toIndex: isOut ? fromIndex : Number($this.dataset.index)
         })).then(() => {
           movedCards.forEach(($c) => {
-            // console.log('movedCards.forEach', $c)
             $c.classList.remove('card-task-transition')
             $c.style.transform = 'translate(0px, 0px)'
             $c.dataset.destinationY = '0'
@@ -560,26 +529,19 @@ export default function Main() {
                   <div className="h-10"></div>
                   <div
                     className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
-                    onClick={() => setModalCreateNewColumnOpen(true)}
+                    onClick={(e) => {
+                      setModalCreateNewColumnOpen(true);
+                    }}
+                    onMouseDown={(e) => {
+                      // stop event bubbling supaya modal create new column open muncul dan tidak malah dragging main board yang ke trigger
+                      e.stopPropagation();
+                    }}
                   >
                     + New Column
                   </div>
                 </div>
               )}
-              <div className="rounded-lg h-full shrink-0 w-[280px] mr-10">
-                  <div className="h-10"></div>
-                  <div
-                    className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
-                    onClick={() => {
-                      // @ts-ignore (bug katanya jadi ignore aja)
-                      dispatch(swapTask({fromColumnIndex: 1, toColumnIndex: 1, fromIndex: 1, toIndex: 1})).then((x) => {
-                        console.log('after', x)
-                      })
-                    }}
-                  >
-                    Coba thunk {state.board.swapTask ? 'true' : 'false'}
-                  </div>
-                </div>
+              
               <div className="h-full shrink-0 w-[32px]"></div>
               <ModalAddNewColumn
                 isOpen={modalCreateNewColumnOpen}
@@ -596,7 +558,7 @@ export default function Main() {
                 <ButtonPill
                   text="+ Create New Board"
                   className="w-fit"
-                  onClick={() => {
+                  onClick={(e) => {
                     setModalCreateNewBoardOpen(true);
                   }}
                 />
