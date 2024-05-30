@@ -111,17 +111,15 @@ export default function Header() {
                           Add New Task
                         </div>
                         <div className="mb-4">
-                          <label
+                          <Label
                             htmlFor="title"
-                            className="block font-semibold text-xs mb-2"
                           >
                             Title
-                          </label>
+                          </Label>
                           <div className="relative">
                             <Input
                               id="title"
                               value={values.title}
-                              // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)}
                               onChange={handleChange}
                               error={errors.title ? true : false}
                             />
@@ -134,12 +132,11 @@ export default function Header() {
                         </div>
 
                         <div className="mb-4">
-                          <label
+                          <Label
                             htmlFor="title"
-                            className="block font-semibold text-xs mb-2"
                           >
                             Description
-                          </label>
+                          </Label>
                           <div className="relative">
                             <Textarea
                               id="description"
@@ -160,9 +157,9 @@ export default function Header() {
                           render={({ push, remove }) => (
                             <>
                               <div className="mb-4">
-                                <div className="block font-semibold text-xs mb-2">
+                                <Label>
                                   Subtasks
-                                </div>
+                                </Label>
                                 {values.subtasks.map((val, index) => (
                                   <div className="flex mb-2" key={index}>
                                     <div className="relative w-full">
@@ -191,7 +188,7 @@ export default function Header() {
                                           remove(index);
                                         }}
                                       >
-                                        <XIcon />
+                                        <XIcon className="text-gray-400" />
                                       </button>
                                     )}
                                   </div>
@@ -225,12 +222,11 @@ export default function Header() {
                         />
 
                         <div className="mb-4">
-                          <label
+                          <Label
                             htmlFor="status"
-                            className="block font-semibold text-xs mb-2"
                           >
                             Status
-                          </label>
+                          </Label>
                           {/* <Select /> */}
 
                           <Select
@@ -382,7 +378,6 @@ export default function Header() {
                           name: yup.string().required(),
                         })
                       ),
-                      // status: yup.array().of(yup.string().required()),
                     })}
                     onSubmit={(values) => {
                       dispatch(editActiveBoard(values));
