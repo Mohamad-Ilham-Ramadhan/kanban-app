@@ -166,6 +166,9 @@ html.dark  textarea::-webkit-scrollbar-thumb, html.dark  .beauty-scroll::-webkit
   background-color: theme('colors.zinc.700');    
   border-radius: 20px;       
 }
+textarea::-webkit-scrollbar-corner, .beauty-scroll::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
 textarea::-webkit-scrollbar-thumb, .beauty-scroll::-webkit-scrollbar-thumb {
   background-color: theme('colors.slate.400');  
   border-radius: 20px;       
