@@ -64,6 +64,12 @@ export default function Main() {
   // drag card-task feature
   const [preventDrag, setPreventDrag] = useState(false);
 
+  // css cursor drag scrollbar 
+  const [scrolling, setScrolling] = useState(false);
+  useEffect(() => {
+    document.documentElement.style.cursor = scrolling ? 'grabbing' : '';
+  }, [scrolling]);
+
   function dragDesktop(
     { taskIndex, columnIndex }: { taskIndex: number; columnIndex: number },
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -443,15 +449,17 @@ export default function Main() {
           <div className="absolute z-50 inset-0"></div>
         , document.body)}
         <div 
-          className="beauty-scroll py-6 px-8 overflow-auto relative hover:cursor-move transition-all"
+          className="beauty-scroll py-6 px-8 overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
+            setScrolling(true)
             setOverlay(true);
             function onDrag(e: any) {
               $this.scrollLeft = $this.scrollLeft - e.movementX;
             }
             function onRelease(e: any) {
+              setScrolling(false);
               setOverlay(false);
               document.removeEventListener('mousemove', onDrag)
               document.removeEventListener('mouseup', onRelease) 
