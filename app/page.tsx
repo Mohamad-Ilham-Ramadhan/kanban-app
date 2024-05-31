@@ -47,7 +47,7 @@ export default function Home() {
           className="flex justify-center items-center w-[56px] h-[48px] bg-primary hover:bg-primary-light transition-colors rounded-r-full fixed left-0 bottom-[32px] z-50"
           onClick={() => dispatch(setSidebar(true))}
         >
-          <EyeIcon />
+          <EyeIcon className="text-white"/>
         </button>
       </CSSTransition>
 
