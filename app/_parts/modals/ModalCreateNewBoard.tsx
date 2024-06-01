@@ -13,22 +13,22 @@ import { RootState } from "@/app/_redux/store";
 import {
   createNewBoard,
   setActiveBoard,
+  setModalCreateNewBoardOpen
 } from "@/app/_redux/reducers/boardReducer";
 import { CustomModalProps } from "@/app/_components/Modal";
 
-export default function ModalCreateNewBoardOpen({
-  isOpen,
-  onRequestClose,
-}: {
-  isOpen: CustomModalProps["isOpen"];
-  onRequestClose: React.MouseEventHandler;
-}) {
-  const boards = useSelector<RootState>(
-    (state) => state.board.boards
-  ) as Board[];
+export default function ModalCreateNewBoardOpen() {
+  console.log('ModalCreateNewBOardOpen')
+  const state = useSelector<RootState>(
+    (state) => state
+  ) as RootState;
+
+  const boards = state.board.boards;
+  const modalCreateNewBoardOpen = state.board.modalCreateNewBoardOpen;
+  
   const dispatch = useDispatch();
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <Modal isOpen={modalCreateNewBoardOpen} onRequestClose={() => dispatch(setModalCreateNewBoardOpen(false))}>
       <Formik
         initialValues={{
           name: "",
@@ -46,6 +46,7 @@ export default function ModalCreateNewBoardOpen({
             })
           );
           dispatch(setActiveBoard(boards.length));
+          dispatch(setModalCreateNewBoardOpen(false));
         }}
       >
         {({ values, errors, handleChange, submitForm, handleSubmit }) => {
@@ -137,10 +138,7 @@ export default function ModalCreateNewBoardOpen({
                 text="Create New Board"
                 size="small"
                 className="w-full mb-4"
-                onClick={(event) => {
-                  submitForm();
-                  onRequestClose(event);
-                }}
+                onClick={submitForm}
                 type="submit"
               />
             </form>

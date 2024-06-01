@@ -239,7 +239,6 @@ type SwapTask = {
 export const swapTask = createAsyncThunk<SwapTask, SwapTask>(
    'board/swapTask',
    async (argu, thunkAPI) => {
-      console.log('SwapTask arg in createAsyncThunk', argu)
      return argu;
    },
  )
@@ -248,14 +247,17 @@ export const boardSlice = createSlice({
    name: 'board',
    initialState: {
       boards,
-      swapTask: false,
       activeBoard: 0,
       activeColumn: 0, // column index
       activeTask: 0, // task index
       theme: 0, // 0 = dark, 1 = light
       sidebar: true, // show/hide sidebar
+      modalCreateNewBoardOpen: false,
    },
    reducers: {
+      setModalCreateNewBoardOpen(state, {payload}) {
+         state.modalCreateNewBoardOpen = payload
+      },
       toggleTheme: (state) => {
          if (state.theme) {
             state.theme = 0;
@@ -296,7 +298,9 @@ export const boardSlice = createSlice({
          })
       },
       setActiveBoard: (state, action) => {
-         state.activeBoard = action.payload
+         state.activeBoard = action.payload;
+         state.activeColumn = 0;
+         state.activeTask = 0;
       },
       setActiveTask(state, {payload}) {
          state.activeTask = payload;
@@ -318,7 +322,6 @@ export const boardSlice = createSlice({
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask].subtasks[p.subtaskIndex].isDone = !p.isDone;
       },
       moveTaskColumn(state, {payload: toColumnIndex}) {
-         console.log('move task column', toColumnIndex);
          const task = state.boards[state.activeBoard].columns[state.activeColumn].tasks.find((t, index) => index === state.activeTask)
          state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
 
@@ -334,7 +337,6 @@ export const boardSlice = createSlice({
          state.boards[state.activeBoard].columns[state.activeColumn].tasks = state.boards[state.activeBoard].columns[state.activeColumn].tasks.filter((t, index) => index !== state.activeTask)
       },
       editActiveTask(state, {payload}) {
-         console.log('editActiveTask', payload);
          // no change column
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask] = {
             id: payload.id,
@@ -356,12 +358,9 @@ export const boardSlice = createSlice({
          const board = state.boards[state.activeBoard];
          const {fromColumnIndex, toColumnIndex, fromIndex, toIndex} = payload;
          // this.board.columns[colIndex].tasks
-         console.log('SWAP TASK (store)', fromColumnIndex, toColumnIndex, fromIndex, toIndex)
          if (toColumnIndex === null && fromIndex === toIndex) {
-            console.log('store.swapTask() not doing anything')
             
          } else if (fromColumnIndex === toColumnIndex || toColumnIndex === null) {
-            console.log('store.swapTask() SAME COLUMN')
 
             if (toIndex > fromIndex) { // drag ke bawah
                const newTasks = board.columns[fromColumnIndex].tasks.map((t, index) => {
@@ -370,12 +369,10 @@ export const boardSlice = createSlice({
                   if (index >= fromIndex) return board.columns[fromColumnIndex].tasks[index + 1]
                   return t;
                })
-               // console.log('newTasks', newTasks)
                if (newTasks !== undefined) {
                   state.boards[state.activeBoard].columns[fromColumnIndex].tasks = newTasks;
                }
             } else if (toIndex < fromIndex) { // drag ke atas
-               // console.log('swap task atas')
                const newTasks = board.columns[fromColumnIndex].tasks.map((t, index) => {
                   if (index < toIndex || index > fromIndex) return t
                   if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex] 
@@ -385,7 +382,6 @@ export const boardSlice = createSlice({
                state.boards[state.activeBoard].columns[fromColumnIndex].tasks = newTasks
             }
          } else {
-            console.log('store.swapTask() DIFFERENT COLUMN')
             // oldColumn
             const theTask = board.columns[fromColumnIndex].tasks.splice(fromIndex, 1)[0];
             board.columns[toColumnIndex].tasks.splice(toIndex, 0, theTask)
@@ -395,5 +391,5 @@ export const boardSlice = createSlice({
 
 })
 
-export const { setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { setModalCreateNewBoardOpen, setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
 export default boardSlice.reducer
