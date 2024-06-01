@@ -10,6 +10,7 @@ import { CSSTransition } from "react-transition-group";
 
 import Header from "./_parts/Header";
 import Main from "./_parts/Main";
+import ModalCreateNewBoardOpen from "./_parts/modals/ModalCreateNewBoard";
 
 export default function Home() {
   const [selectCurrentStatusOpen, setSelectCurrentStatusOpen] = useState(false); // modal task
@@ -36,6 +37,8 @@ export default function Home() {
     <>
       <Header />
 
+      <ModalCreateNewBoardOpen />
+
       <CSSTransition
         in={!state.board.sidebar}
         classNames={"show-sidebar"}
@@ -44,7 +47,7 @@ export default function Home() {
         unmountOnExit
       >
         <button
-          className="flex justify-center items-center w-[56px] h-[48px] bg-primary hover:bg-primary-light transition-colors rounded-r-full fixed left-0 bottom-[32px] z-50"
+          className="mobile:hidden flex justify-center items-center w-[56px] h-[48px] bg-primary hover:bg-primary-light transition-colors rounded-r-full fixed left-0 bottom-[32px] z-50"
           onClick={() => dispatch(setSidebar(true))}
         >
           <EyeIcon className="text-white"/>
