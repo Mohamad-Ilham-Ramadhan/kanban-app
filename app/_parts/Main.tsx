@@ -853,13 +853,13 @@ export default function Main() {
 
   const [overlay, setOverlay] = useState(false);
   const {isMobile} = useIsMobile()
-  
+
   return (
-    <main className="flex fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark">
+    <main className="flex flex-row fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark"> 
       <Aside />
       <section
         className={clsx(
-          "flex w-[100vw] transition-all",
+          "flex w-full transition-all",
           state.board.sidebar && !isMobile ? "pl-[300px]" : "pl-0"
         )}
       >
@@ -867,7 +867,7 @@ export default function Main() {
           <div className="absolute z-50 inset-0"></div>
         , document.body)}
         <div 
-          className="beauty-scroll py-6 px-8 overflow-auto relative cursor-move transition-all"
+          className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
@@ -888,13 +888,13 @@ export default function Main() {
           }}
         >
           {board !== null ? (
-            <div className="flex flex-row h-full">
+            <div className="flex flex-row min-h-full pt-6 px-8 mobile:min-w-[770px] md:min-w-[80vw]">
               {/* bg-column[] is defined in tailwind.config.ts */}
               {columns !== null &&
                 columns.map((c, columnIndex) => (
                   <div
                     key={c.id}
-                    className="shrink-0 w-[280px] rounded-lg mr-8"
+                    className="flex flex-col shrink-0 w-[280px] rounded-lg mr-8"
                   >
                     <div className="flex flex-row items-center mb-6" key={c.id}>
                       <div
@@ -949,10 +949,10 @@ export default function Main() {
                   </div>
                 ))}
               {columns && columns.length < 6 && (
-                <div className="rounded-lg h-full shrink-0 w-[280px] mr-10">
+                <div className="rounded-lg flex flex-col shrink-0 w-[280px] mr-10">
                   <div className="h-10"></div>
                   <div
-                    className="rounded-lg bg-red-700 h-[calc(100%-40px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
+                    className="rounded-lg bg-red-700 h-full flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
                     onClick={(e) => {
                       setModalCreateNewColumnOpen(true);
                     }}
