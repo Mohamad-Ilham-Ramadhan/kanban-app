@@ -1,36 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../_redux/store";
 import {
-  addNewColumns,
-  toggleSubtask,
   setActiveTask,
   setActiveColumn,
-  moveTaskColumn,
-  deleteActiveTask,
-  SubTask,
   swapTask,
 } from "../_redux/reducers/boardReducer";
 import ButtonPill from "../_components/buttons/ButtonPill";
-import ButtonIcon from "../_components/buttons/ButtonIcon";
-import XIcon from "../_assets/icons/x.svg";
 import clsx from "clsx";
-import Modal from "@/app/_components/Modal";
-import Input from "@/app/_components/Input";
-import Label from "@/app/_components/Label";
-import Select from "@/app/_components/Select";
-import Option from "@/app/_components/Option";
-import Checkbox from "@/app/_components/Checkbox";
-import { Formik, FieldArray } from "formik";
-import * as yup from "yup";
-import { CssTransition } from "@mui/base";
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 
 import Aside from "./Aside";
 import ModalAddNewColumn from "./modals/ModalAddNewColumn";
 import ModalTask from "./modals/ModalTask";
-import { isAsyncThunkAction } from "@reduxjs/toolkit";
 import useIsMobile from "../_hooks/useIsMobile";
 
 export default function Main() {
@@ -484,27 +466,38 @@ export default function Main() {
     const $mainScroll = document.getElementById(`main-scroll`);
     const mainScrollMaxScrollRight = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
     const mainScrollMaxScrollBottom = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
-  
+    
+    let lastThisRectLeft = $this.getBoundingClientRect().left;
+    let lastThisRectRight = $this.getBoundingClientRect().right;
+    
     const setScrollIntervalId = window.setInterval(() => {
+      // console.log('isDragged', isDragged);
+      if (!isDragged) return;
       // scroll when dragging out of frame
       // console.log('check scroll');
       const $thisRect = $this.getBoundingClientRect()
       const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
+
+      if ($thisRect.left >= 0) lastThisRectLeft = 0;
+      if ($thisRect.right <= window.innerWidth) lastThisRectRight = window.innerWidth;
+      
       if ($thisRect.left < 0 && $mainScroll.scrollLeft > 0) {
         // scroll left
-        console.log('scroll to left')
+        if ($thisRect.left >= lastThisRectLeft) {
+          lastThisRectLeft = $thisRect.left;
+          return;
+        };
         $this.style.transform = `translate(${Math.ceil($thisMatrix.e - 3)}px, ${$thisMatrix.f}px)`
         $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft - 3)
       }
+
       if ($thisRect.right > window.innerWidth && $mainScroll.scrollLeft < mainScrollMaxScrollRight) {
         // scroll right
-        console.log('scroll to right')
-        // console.log(
-        //   'window.innerWidth',
-        //   window.innerWidth,
-        //   'document.clientWidh',
-        //   document.documentElement.clientWidth
-        // )
+        if ($thisRect.right <= lastThisRectRight) {
+          lastThisRectRight = $thisRect.right;
+          return;
+        };
+        // console.log('scroll to right')
         $this.style.transform = `translate(${Math.floor($thisMatrix.e + 3)}px, ${$thisMatrix.f}px)`
         $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 3)
       }
@@ -520,7 +513,6 @@ export default function Main() {
         $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop - 3)
       }
     }, 5)
-
     // mobile drag feature
     const touchMove = (e: any) => {
       e.preventDefault();
