@@ -6,7 +6,6 @@
 [BUG]
    - [drag mobile]
       - drag mobile on release/cancel  when open modal context option is openend, should be not open.
-      - ketika dragging kedua, scroll bar ikut ketarik
    - [mobile menu]
       - always open in mobile view port, not saved in storage.
 [STRUCTURE]

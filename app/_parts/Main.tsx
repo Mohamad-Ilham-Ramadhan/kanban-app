@@ -438,8 +438,6 @@ export default function Main() {
   function dragMobile({ taskIndex, columnIndex }: { taskIndex: number; columnIndex: number },
     e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation()
-    // e.preventDefault()
-    console.log('touchstart', e)
     let isDragged = false
   
     const $this = e.currentTarget
@@ -447,9 +445,10 @@ export default function Main() {
     let $wrapper = $this.parentElement
     const $wrappers = Array.from(document.querySelectorAll('.tasks-wrapper'))
     const $initialWrapper = $this.parentElement
-    // console.log('tasksWrapperRefs', tasksWrapperRefs.length)
     const transitionDuration = parseFloat(window.getComputedStyle($this).transitionDuration) * 1000 // in ms
     let isOut = false // when the dragged card doesn't belong in any position
+
+    $this.style.opacity = '1';
   
     $this.classList.remove('card-task-transition')
     $this.classList.remove('z-50')
@@ -879,10 +878,6 @@ export default function Main() {
         <div 
           id="main-scroll"
           className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
-          onTouchStart={(e) => {
-            console.log('beauty-scroll on touch start');
-            e.preventDefault();
-          }}
           onMouseDown={(e) => {
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
