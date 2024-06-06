@@ -64,7 +64,7 @@ export default function Main() {
 
   // drag card-task feature
   const [preventDrag, setPreventDrag] = useState(false);
-  const [preventMainScroll, setPreventMainScroll] = useState(false) // prevent main scrollbar to scroll when draggin on mobile view
+  // const [preventMainScroll, setPreventMainScroll] = useState(false) // prevent main scrollbar to scroll when draggin on mobile view
 
 
   // css cursor drag scrollbar 
@@ -438,6 +438,7 @@ export default function Main() {
   function dragMobile({ taskIndex, columnIndex }: { taskIndex: number; columnIndex: number },
     e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation()
+    // e.preventDefault()
     console.log('touchstart', e)
     let isDragged = false
   
@@ -478,7 +479,7 @@ export default function Main() {
     const setBgTimeoutId = window.setTimeout(() => {
       // theme ==> 0 = dark, 1 = light
       $this.style.backgroundColor = state.board?.theme === 0 ? '#23242c' : '#e2e8f0'
-      setPreventMainScroll(true)
+      // setPreventMainScroll(true)
     }, holdToDrag)
   
     const $mainScroll = document.getElementById(`main-scroll`);
@@ -492,17 +493,19 @@ export default function Main() {
       const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
       if ($thisRect.left < 0 && $mainScroll.scrollLeft > 0) {
         // scroll left
+        console.log('scroll to left')
         $this.style.transform = `translate(${Math.ceil($thisMatrix.e - 3)}px, ${$thisMatrix.f}px)`
         $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft - 3)
       }
       if ($thisRect.right > window.innerWidth && $mainScroll.scrollLeft < mainScrollMaxScrollRight) {
         // scroll right
-        console.log(
-          'window.innerWidth',
-          window.innerWidth,
-          'document.clientWidh',
-          document.documentElement.clientWidth
-        )
+        console.log('scroll to right')
+        // console.log(
+        //   'window.innerWidth',
+        //   window.innerWidth,
+        //   'document.clientWidh',
+        //   document.documentElement.clientWidth
+        // )
         $this.style.transform = `translate(${Math.floor($thisMatrix.e + 3)}px, ${$thisMatrix.f}px)`
         $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 3)
       }
@@ -518,9 +521,11 @@ export default function Main() {
         $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop - 3)
       }
     }, 5)
-  
+
     // mobile drag feature
     const touchMove = (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
       e.stopImmediatePropagation()
       // e.preventDefault();
   
@@ -555,11 +560,11 @@ export default function Main() {
         e.clientX = touch.clientX;
         e.clientY = touch.clientY;
 
-        console.log('isOut', isOut);
+        // console.log('isOut', isOut);
 
         // Drag and sort/swap lies here!! [START]
         if (isOut == false) {
-          console.log('INSIDE')
+          // console.log('INSIDE')
           const $wrapperRect = $wrapper.getBoundingClientRect()
   
           if (
@@ -671,12 +676,12 @@ export default function Main() {
         } // INSIDE
   
         if (isOut) {
-          console.log('OUTSIDE');
+          // console.log('OUTSIDE');
           const $neoWrapper = document.elementsFromPoint(e.clientX, e.clientY).find(($el) => {
             return $el.classList.contains('tasks-wrapper')
           })
 
-          console.log('$neoWrapper', $neoWrapper);
+          // console.log('$neoWrapper', $neoWrapper);
   
           if (!!$neoWrapper && $neoWrapper.childElementCount === 0) {
             console.log('EMPTY $wrapper');
@@ -765,7 +770,7 @@ export default function Main() {
   
     const touchEnd = () => {
       console.log('touchend')
-  
+
       $this.style.backgroundColor = ''
       window.clearTimeout(setBgTimeoutId)
       window.clearInterval(setScrollIntervalId)
@@ -777,7 +782,7 @@ export default function Main() {
   
       document.removeEventListener('touchmove', touchMove)
       document.removeEventListener('touchend', touchEnd)
-      setPreventMainScroll(false)
+      // setPreventMainScroll(false)
   
       // open modal task automatically handled by @click handler
       console.log('isDragged', isDragged)
@@ -852,7 +857,7 @@ export default function Main() {
         })
       }, transitionDuration) // this setTimeout needs for dragged card get back to the position using transition
     }
-    document.addEventListener('touchmove', touchMove)
+    document.addEventListener('touchmove', touchMove, {passive: false})
     document.addEventListener('touchend', touchEnd)
   }
 
@@ -874,6 +879,10 @@ export default function Main() {
         <div 
           id="main-scroll"
           className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
+          onTouchStart={(e) => {
+            console.log('beauty-scroll on touch start');
+            e.preventDefault();
+          }}
           onMouseDown={(e) => {
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
@@ -882,6 +891,7 @@ export default function Main() {
             function onDrag(e: any) {
               $this.scrollLeft = $this.scrollLeft - e.movementX;
             }
+
             function onRelease(e: any) {
               setScrolling(false);
               setOverlay(false);
@@ -889,6 +899,7 @@ export default function Main() {
               document.removeEventListener('mouseup', onRelease) 
               document.documentElement.style.userSelect = '';
             }
+
             document.addEventListener('mousemove', onDrag)
             document.addEventListener('mouseup', onRelease)
           }}
@@ -900,7 +911,7 @@ export default function Main() {
                 columns.map((c, columnIndex) => (
                   <div
                     key={c.id}
-                    className="flex flex-col shrink-0 w-[280px] rounded-lg mr-8"
+                    className="flex flex-col shrink-0 w-[280px] rounded-lg mr-24"
                   >
                     <div className="flex flex-row items-center mb-6" key={c.id}>
                       <div
