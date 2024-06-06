@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { useSelector } from 'react-redux';
 import { RootState } from '../_redux/store';
 // (event: MouseEvent<Element, MouseEvent> | KeyboardEvent<Element>): void
-type CustomModalProps = {
+export type CustomModalProps = {
    isOpen: boolean,
    onRequestClose: React.MouseEventHandler<Element> | React.KeyboardEventHandler<Element>,
    children: React.ReactElement,

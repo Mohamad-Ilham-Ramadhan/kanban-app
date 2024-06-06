@@ -24,8 +24,13 @@ import {
    editActiveBoard,
    addNewTask,
  } from "../_redux/reducers/boardReducer";
+import useIsMobile from '../_hooks/useIsMobile';
+import LogoMobile from '../_assets/logo-mobile.svg';
+import IconArrowDown from '../_assets/icons/arrow-down.svg';
+import ModalMenu from './modals/ModalMenu';
 
 export default function Header() {
+    const {isMobile} = useIsMobile();
    // @ts-ignore
    const state: RootState = useSelector<RootState>((state) => state);
    const dispatch = useDispatch();
@@ -40,6 +45,7 @@ export default function Header() {
    const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
    const [modalEditActiveBoardOpen, setModalEditActiveBoardOpen] = useState(false);
    const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
+   const [modalMenuOpen, setModalMenuOpen] = useState(true);
    // Popup board
    const [anchorBoard, setAnchorBoard] = useState<null | HTMLElement>(null);
    const openPopperBoard = Boolean(anchorBoard);
@@ -49,14 +55,40 @@ export default function Header() {
    
    return (
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-white dark:bg-dark-light border-b border-slate-200 dark:border-gray-700">
-        <div className="flex items-center w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
+        
+        <div className="mobile:hidden flex items-center w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
           {state.board.theme ? <KanbanLogoDark /> : <KanbanLogo />}
         </div>
 
+
+
         <div className="px-8 flex grow justify-between items-center">
-          <div className="text-2xl font-bold dark:text-white">
+          <div className="mobile:hidden text-2xl font-bold dark:text-white">
             {board !== null ? board.name : "No Board Found"}
           </div>
+
+          {isMobile && (
+            <>
+              <button 
+                className="flex items-center"
+                onClick={() => {console.log('open menu boy'); setModalMenuOpen(true)}}
+              >
+                <LogoMobile className="mr-2 shrink-0" />
+                <div className="font-bold text-lg mr-1">{board !== null ? board.name : "No Board Found"}</div>
+                <IconArrowDown className="text-primary shrink-0 w-[18px] pt-1"/>
+              </button>
+              <ModalMenu 
+                isOpen={modalMenuOpen} 
+                onRequestClose={(e) => {
+                  console.log('ModalMenu onRequestClose callback')
+                  e.stopPropagation();
+                  setModalMenuOpen(false);
+                }}
+               />
+            </>
+
+          )}
+
           {board !== null ? (
             <div className="flex items-center">
               <ButtonPill

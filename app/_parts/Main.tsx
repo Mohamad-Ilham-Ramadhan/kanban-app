@@ -444,7 +444,7 @@ export default function Main() {
     const $this = e.currentTarget
     const marginBottom = window.parseInt(window.getComputedStyle($this).marginBottom)
     let $wrapper = $this.parentElement
-    const $wrappers = Array.from(document.querySelectorAll('.task-wrapper'))
+    const $wrappers = Array.from(document.querySelectorAll('.tasks-wrapper'))
     const $initialWrapper = $this.parentElement
     // console.log('tasksWrapperRefs', tasksWrapperRefs.length)
     const transitionDuration = parseFloat(window.getComputedStyle($this).transitionDuration) * 1000 // in ms
@@ -470,7 +470,6 @@ export default function Main() {
     // let $thisIndex = Number($this.dataset.index)
     let fromColumnIndex = Number(columnIndex)
     let toColumnIndex = Number(columnIndex)
-    console.log('fromColumnIndex', fromColumnIndex, 'toColumnIndex', toColumnIndex)
     let movedCards = new Set([$this])
     let prevTouch: any;
     const startStamp = Date.now()
@@ -482,7 +481,7 @@ export default function Main() {
       setPreventMainScroll(true)
     }, holdToDrag)
   
-    const $mainScroll = document.getElementById(`main-scroll`)
+    const $mainScroll = document.getElementById(`main-scroll`);
     const mainScrollMaxScrollRight = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
     const mainScrollMaxScrollBottom = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
   
@@ -532,11 +531,12 @@ export default function Main() {
           console.log('touch remove')
           document.removeEventListener('touchmove', touchMove)
           document.removeEventListener('touchend', touchEnd)
-          window.clearTimeout(setBgTimeoutId)
-          window.clearInterval(setScrollIntervalId)
+          window.clearTimeout(setBgTimeoutId) // clear of card-task background and prevent main scroll
+          window.clearInterval(setScrollIntervalId) // clear interval of scroll when dragging
           $shadowRect.remove()
         }
       }
+
       if (isDragged) {
         // console.log('dragged', e)
         const touch = e.touches[0]
@@ -551,9 +551,12 @@ export default function Main() {
             matrix.f + e.movementY
           }px)`
         }
-        prevTouch = touch
-        e.clientX = touch.clientX
-        e.clientY = touch.clientY
+        prevTouch = touch;
+        e.clientX = touch.clientX;
+        e.clientY = touch.clientY;
+
+        console.log('isOut', isOut);
+
         // Drag and sort/swap lies here!! [START]
         if (isOut == false) {
           console.log('INSIDE')
@@ -668,13 +671,15 @@ export default function Main() {
         } // INSIDE
   
         if (isOut) {
-          // console.log('OUTSIDE');
+          console.log('OUTSIDE');
           const $neoWrapper = document.elementsFromPoint(e.clientX, e.clientY).find(($el) => {
-            return $el.classList.contains('task-wrapper')
+            return $el.classList.contains('tasks-wrapper')
           })
+
+          console.log('$neoWrapper', $neoWrapper);
   
           if (!!$neoWrapper && $neoWrapper.childElementCount === 0) {
-            // console.log('EMPTY $wrapper');
+            console.log('EMPTY $wrapper');
             $wrapper = $neoWrapper
             isOut = false
             $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`
@@ -687,7 +692,7 @@ export default function Main() {
           }
   
           if (!!$neoWrapper && Number($neoWrapper.dataset.isAnimating) == 0) {
-            // console.log('INTO NEW WRAPPER');
+            console.log('INTO NEW WRAPPER');
             // console.log('$neoWrapper', $neoWrapper);
   
             toColumnIndex = Number($neoWrapper.dataset.columnIndex)
@@ -867,6 +872,7 @@ export default function Main() {
           <div className="absolute z-50 inset-0"></div>
         , document.body)}
         <div 
+          id="main-scroll"
           className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
             const $this = e.currentTarget;

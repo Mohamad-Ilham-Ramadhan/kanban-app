@@ -1,3 +1,12 @@
+[WARNING]
+   - [<SVG>]: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
+[FEAT]   
+   - drag on mobile phone
+[STYLE]
 [BUG]
-   - move task to another column: 
-      - on new created task 
+   - [drag mobile]
+      - drag mobile on release/cancel  when open modal context option is openend, should be not open.
+      - ketika dragging kedua, scroll bar ikut ketarik
+   - [mobile menu]
+      - always open in mobile view port, not saved in storage.
+[STRUCTURE]

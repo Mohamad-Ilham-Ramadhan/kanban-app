@@ -17,6 +17,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'mobile': {'max': '767px'},
+        'md': '767px',
+      },
       colors: {
         'board': '#20212c',
         'primary': '#635FC7',

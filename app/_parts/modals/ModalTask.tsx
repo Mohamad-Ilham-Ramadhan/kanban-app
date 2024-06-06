@@ -26,6 +26,7 @@ import ModalEditTask from "./ModalEditTask";
 export default function ModalTask({ isOpen, onRequestClose }: any) {
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
+  console.log('state.board', state.board);
   const board = state.board.boards[state.board.activeBoard];
   let currentTask =
     board !== null && board.columns[state.board.activeColumn].tasks.length > 0

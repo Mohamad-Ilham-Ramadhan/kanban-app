@@ -158,9 +158,6 @@ textarea::-webkit-scrollbar-track, .beauty-scroll::-webkit-scrollbar-track {
   background: transparent;        
 }
 
-html.dark {
-  background-color: red;
-}
 
 html.dark  textarea::-webkit-scrollbar-thumb, html.dark  .beauty-scroll::-webkit-scrollbar-thumb {
   background-color: theme('colors.zinc.700');    
