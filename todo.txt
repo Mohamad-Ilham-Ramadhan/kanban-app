@@ -3,6 +3,7 @@
 [FEAT]   
    - drag on mobile phone
 [STYLE]
+   - on mobile view: modal task size must be appropriate
 [BUG]
    - [drag mobile]
       - drag mobile on release/cancel  when open modal context option is openend, should be not open.
