@@ -58,14 +58,17 @@ export default function Header() {
    return (
       <header className="flex items-center fixed top-0 left-0 z-20 w-full h-[96px] bg-white dark:bg-dark-light border-b border-slate-200 dark:border-gray-700">
         
-        <div className="mobile:hidden flex items-center w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
+        <div className="mobile:hidden flex items-center shrink-0 w-[300px] h-full px-8 border-r border-slate-200 dark:border-gray-700">
           {state.board.theme ? <KanbanLogoDark /> : <KanbanLogo />}
         </div>
 
 
 
         <div className="px-8 mobile:px-4 flex grow justify-between items-center">
-          <div className="mobile:hidden text-2xl font-bold dark:text-white">
+          <div 
+            className="mobile:hidden text-2xl font-bold dark:text-white w-full overflow-hidden text-ellipsis whitespace-nowrap md:max-w-[200px] lg:max-w-[400px] xl:max-w-[600px]"
+            title={board !== null ? board.name : "No Board Found"}
+          >
             {board !== null ? board.name : "No Board Found"}
           </div>
 
@@ -76,7 +79,7 @@ export default function Header() {
                 onClick={() => {console.log('open menu boy'); setModalMenuOpen(true)}}
               >
                 <LogoMobile className="mr-2 shrink-0" />
-                <div className="font-bold text-lg mr-1">{board !== null ? board.name : "No Board Found"}</div>
+                <div className="font-bold text-lg mr-1 max-w-[150px] overflow-hidden whitespace-nowrap">{board !== null ? board.name : "No Board Found"}</div>
                 <IconArrowDown className="text-primary shrink-0 w-[18px] pt-1"/>
               </button>
               <ModalMenu 
@@ -92,7 +95,7 @@ export default function Header() {
           )}
 
           {board !== null ? (
-            <div className="flex items-center">
+            <div className="flex items-center shrink-0">
               <ButtonPill
                 text={isMobile ? <IconPlus /> : '+ Add New Task'}
                 onClick={() => {

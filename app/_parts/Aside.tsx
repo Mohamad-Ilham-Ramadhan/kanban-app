@@ -50,7 +50,7 @@ export default function Aside() {
               }}
               key={b.id}
             >
-              <BoardIcon className="mr-4" />
+              <BoardIcon className="mr-4 shrink-0" />
               <span>{b.name}</span>
             </li>
           ))}
