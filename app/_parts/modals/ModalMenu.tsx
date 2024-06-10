@@ -33,6 +33,7 @@ function M({
           zIndex: "1000",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           display: "flex",
+          overflow: 'auto'
         },
       }}
       shouldCloseOnOverlayClick={true}
@@ -67,7 +68,7 @@ export default function ModalMenu({
       onRequestClose={onRequestClose}
     >
       <div
-        className="w-[300px] py-6 absolute z-[1100] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-dark-light rounded-lg"
+        className="w-[300px] py-6 absolute z-[1100] top-20 left-1/2 -translate-x-1/2 bg-white dark:bg-dark-light rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="uppercase text-[.725rem] text-slate-500 dark:text-slate-400 font-bold tracking-[.175rem] pl-8 mb-4">

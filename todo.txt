@@ -3,7 +3,9 @@
 [FEAT]   
    - drag on mobile phone
 [STYLE]
-   - on mobile view: modal task size must be appropriate
+   - on mobile view: header, board title must be truncated when it's too long
+   - overflow auto: scroll on sidebar when overflow
+
 [BUG]
    - [drag mobile]
       - drag mobile on release/cancel  when open modal context option is openend, should be not open.
