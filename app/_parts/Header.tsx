@@ -99,7 +99,7 @@ export default function Header() {
                   setModalAddNewTaskOpen(true);
                 }}
                 className='mr-4 mobile:mr-2 mobile:px-4'
-                size='small'
+                size={isMobile ? 'small' : 'medium'}
               />
 
 
