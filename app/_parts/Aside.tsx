@@ -32,7 +32,7 @@ export default function Aside() {
       )}
     >
       {/* #828fa3 */}
-      <div className="pt-4 pr-6">
+      <div className="beauty-scroll overflow-auto pt-4 pr-6">
         <div className="text-slate-400 text-xs font-semibold uppercase tracking-[2px] pl-8 mb-5">
           all boards <span>({boards.length})</span>
         </div>
