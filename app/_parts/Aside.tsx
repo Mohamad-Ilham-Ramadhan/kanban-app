@@ -40,7 +40,7 @@ export default function Aside() {
           {boards.map((b, index) => (
             <li
               className={clsx(
-                "text-slate-400 font-bold mb-1 py-2.5 pl-8 hover:cursor-pointer rounded-r-full flex items-center",
+                "text-slate-400 font-bold mb-1 py-2.5 pl-8 hover:cursor-pointer rounded-r-[26px] flex items-center",
                 state.board.activeBoard === index
                   ? "bg-primary text-white"
                   : "hover:bg-primary-light hover:text-white"

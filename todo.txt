@@ -4,7 +4,7 @@
    - drag on mobile phone
 [STYLE]
    - on mobile view: header, board title must be truncated when it's too long
-
+   - modal width
 [BUG]
    - [drag mobile]
       - drag mobile on release/cancel  when open modal context option is openend, should be not open.
