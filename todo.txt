@@ -4,7 +4,6 @@
    - drag on mobile phone
 [STYLE]
    - on mobile view: header, board title must be truncated when it's too long
-   - overflow auto: scroll on sidebar when overflow
 
 [BUG]
    - [drag mobile]

@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 
 type ButtonPillProps = {
-   text?: string;
+   text?: string | React.ReactNode;
    className?: string; 
    onClick?: React.MouseEventHandler<HTMLButtonElement>;
    size?: 'small' | 'medium';

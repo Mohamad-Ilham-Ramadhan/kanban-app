@@ -4,6 +4,7 @@ import { RootState } from "../_redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import KanbanLogoDark from "../_assets/logo-dark.svg";
 import KanbanLogo from "../_assets/kanban-logo.svg";
+import IconPlus from '../_assets/icons/plus.svg';
 import XIcon from "../_assets/icons/x.svg";
 import ButtonPill from "../_components/buttons/ButtonPill";
 import Modal from '../_components/Modal';
@@ -18,6 +19,7 @@ import {v4 as uuidv4} from 'uuid';
 import * as yup from "yup";
 import { CssTransition } from "@mui/base";
 import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
+import clsx from 'clsx';
 
 import {
    deleteActiveBoard,
@@ -45,7 +47,7 @@ export default function Header() {
    const [modalAddNewTaskOpen, setModalAddNewTaskOpen] = useState(false);
    const [modalEditActiveBoardOpen, setModalEditActiveBoardOpen] = useState(false);
    const [modalDeleteBoardOpen, setModalDeleteBoardOpen] = useState(false);
-   const [modalMenuOpen, setModalMenuOpen] = useState(true);
+   const [modalMenuOpen, setModalMenuOpen] = useState(false);
    // Popup board
    const [anchorBoard, setAnchorBoard] = useState<null | HTMLElement>(null);
    const openPopperBoard = Boolean(anchorBoard);
@@ -62,7 +64,7 @@ export default function Header() {
 
 
 
-        <div className="px-8 flex grow justify-between items-center">
+        <div className="px-8 mobile:px-4 flex grow justify-between items-center">
           <div className="mobile:hidden text-2xl font-bold dark:text-white">
             {board !== null ? board.name : "No Board Found"}
           </div>
@@ -92,12 +94,15 @@ export default function Header() {
           {board !== null ? (
             <div className="flex items-center">
               <ButtonPill
-                text={"+ Add New Task"}
+                text={isMobile ? <IconPlus /> : '+ Add New Task'}
                 onClick={() => {
                   setModalAddNewTaskOpen(true);
                 }}
-                className="mr-4"
+                className='mr-4 mobile:mr-2 mobile:px-4'
+                size='small'
               />
+
+
               {/* Modal Add New Task */}
               <Modal
                 isOpen={modalAddNewTaskOpen}
