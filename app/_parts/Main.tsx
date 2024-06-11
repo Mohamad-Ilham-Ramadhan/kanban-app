@@ -517,7 +517,7 @@ export default function Main() {
     const touchMove = (e: any) => {
       e.preventDefault();
       e.stopPropagation();
-      e.stopImmediatePropagation()
+      e.stopImmediatePropagation();
       // e.preventDefault();
   
       if (!isDragged) {
@@ -759,10 +759,12 @@ export default function Main() {
       }
     }
   
-    const touchEnd = () => {
+    const touchEnd = (e: any) => {
+      e.preventDefault()
       console.log('touchend')
 
-      $this.style.backgroundColor = ''
+      $this.style.backgroundColor = '';
+      $this.style.opacity = '';
       window.clearTimeout(setBgTimeoutId)
       window.clearInterval(setScrollIntervalId)
   
@@ -920,7 +922,7 @@ export default function Main() {
                         c.tasks.map((task, taskIndex: number) => (
                           <div
                             key={task.id}
-                            className="card-task card-task-transition px-4 py-6 mb-6 rounded-md bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-grab shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
+                            className="card-task card-task-transition select-none px-4 py-6 mb-6 rounded-md bg-white dark:bg-dark-light hover:opacity-50 hover:cursor-grab shadow-md dark:shadow-[0_4px_6px_rgb(54_78_126_/_10%)] shadow-slate-200 dark:border dark:border-[rgba(134,134,134,.1)]"
                             data-moveable="0"
                             data-index={taskIndex}
                             data-y="0"
