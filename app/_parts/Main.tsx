@@ -438,7 +438,6 @@ export default function Main() {
   
     // create shadowRect
     const $thisRect = $this.getBoundingClientRect()
-    // console.log('$thisRect', $thisRect);
     const $shadowRect = document.createElement('div')
     $shadowRect.style.height = `${$thisRect.height}px`
     $shadowRect.style.width = `${1}px`
@@ -471,10 +470,8 @@ export default function Main() {
     let lastThisRectRight = $this.getBoundingClientRect().right;
     
     const setScrollIntervalId = window.setInterval(() => {
-      // console.log('isDragged', isDragged);
       if (!isDragged) return;
       // scroll when dragging out of frame
-      // console.log('check scroll');
       const $thisRect = $this.getBoundingClientRect()
       const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
 
@@ -497,7 +494,6 @@ export default function Main() {
           lastThisRectRight = $thisRect.right;
           return;
         };
-        // console.log('scroll to right')
         $this.style.transform = `translate(${Math.floor($thisMatrix.e + 3)}px, ${$thisMatrix.f}px)`
         $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 3)
       }
@@ -524,7 +520,6 @@ export default function Main() {
         if (Date.now() - startStamp > holdToDrag) {
           isDragged = true
         } else {
-          console.log('touch remove')
           document.removeEventListener('touchmove', touchMove)
           document.removeEventListener('touchend', touchEnd)
           window.clearTimeout(setBgTimeoutId) // clear of card-task background and prevent main scroll
@@ -534,7 +529,6 @@ export default function Main() {
       }
 
       if (isDragged) {
-        // console.log('dragged', e)
         const touch = e.touches[0]
   
         if (prevTouch) {
@@ -551,11 +545,9 @@ export default function Main() {
         e.clientX = touch.clientX;
         e.clientY = touch.clientY;
 
-        // console.log('isOut', isOut);
 
         // Drag and sort/swap lies here!! [START]
         if (isOut == false) {
-          // console.log('INSIDE')
           const $wrapperRect = $wrapper.getBoundingClientRect()
   
           if (
@@ -564,7 +556,6 @@ export default function Main() {
             e.clientY < $wrapperRect.top ||
             e.clientY > $wrapperRect.bottom
           ) {
-            // console.log('OUT OF WRAPPER')
             Array.from($wrapper.children).forEach(($el) => {
               if (Number($el.dataset.index) <= Number($this.dataset.index)) return
   
@@ -593,17 +584,13 @@ export default function Main() {
             if ($el === $this) return false
             return $el.classList.contains('card-task')
           })
-          // console.log('$swapCard', $swapCard);
           if (!!$swapCards.length && !!$swapCards[0].getAnimations().length == false) {
-            // console.log('SWAP', $prevSwap);
             const $swapCard = $swapCards[0]
             if (Number($this.dataset.index) < Number($swapCard.dataset.index) && e.movementY > 0) {
-              // console.log('SWAP BOTTOM')
   
               const min = Math.min(Number($this.dataset.index), Number($swapCard.dataset.index))
               const max = Math.max(Number($this.dataset.index), Number($swapCard.dataset.index))
               Array.from($wrapper.children).forEach(($el) => {
-                // console.log('min', min, 'max', max);
                 if (
                   $el === $this ||
                   Number($el.dataset.index) > max ||
@@ -627,15 +614,11 @@ export default function Main() {
               Number($this.dataset.index) > Number($swapCard.dataset.index) &&
               e.movementY < 0
             ) {
-              // console.log('SWAP TOP');
   
               const min = Math.min(Number($this.dataset.index), Number($swapCard.dataset.index))
               const max = Math.max(Number($this.dataset.index), Number($swapCard.dataset.index))
               let isFirst = false
-              // console.log('$this.index', $this.dataset.index);
-              // console.log('$swapCard.index', $swapCard.dataset.index);
               Array.from($wrapper.children).forEach(($el) => {
-                // console.log('min', min, 'max', max);
                 if (
                   $el === $this ||
                   Number($el.dataset.index) > max ||
@@ -667,15 +650,12 @@ export default function Main() {
         } // INSIDE
   
         if (isOut) {
-          // console.log('OUTSIDE');
           const $neoWrapper = document.elementsFromPoint(e.clientX, e.clientY).find(($el) => {
             return $el.classList.contains('tasks-wrapper')
           })
 
-          // console.log('$neoWrapper', $neoWrapper);
   
           if (!!$neoWrapper && $neoWrapper.childElementCount === 0) {
-            console.log('EMPTY $wrapper');
             $wrapper = $neoWrapper
             isOut = false
             $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`
@@ -688,8 +668,6 @@ export default function Main() {
           }
   
           if (!!$neoWrapper && Number($neoWrapper.dataset.isAnimating) == 0) {
-            console.log('INTO NEW WRAPPER');
-            // console.log('$neoWrapper', $neoWrapper);
   
             toColumnIndex = Number($neoWrapper.dataset.columnIndex)
             $wrapper = $neoWrapper
@@ -698,15 +676,12 @@ export default function Main() {
             let $lastEl = null
   
             Array.from($wrapper.children).forEach(($el) => {
-              // console.log('$neoWrapper.chidren.forEach')
-              // console.log('$el loco', $el)
               if ($el === $this) return
               const $elRect = $el.getBoundingClientRect()
               // if (e.clientY <= $elRect.bottom && !!$el.getAnimations().length == false) {
               if (touch.clientY <= $elRect.bottom) {
                 isOut = false
                 isMoved = true
-                // console.log('isOut = false');
                 if (isFirst == false) {
                   isFirst = true
                   const diff =
@@ -731,7 +706,6 @@ export default function Main() {
               $lastEl = $el
             })
   
-            // console.log('$lastEl', $lastEl);
   
             if (isMoved == false) {
               // insert into last position in a new wrapper or when wrapper is empty of any card (new wrapper is initial wrapper)
@@ -761,7 +735,6 @@ export default function Main() {
   
     const touchEnd = (e: any) => {
       e.preventDefault()
-      console.log('touchend')
 
       $this.style.backgroundColor = '';
       $this.style.opacity = '';
@@ -778,7 +751,6 @@ export default function Main() {
       // setPreventMainScroll(false)
   
       // open modal task automatically handled by @click handler
-      console.log('isDragged', isDragged)
       if (isDragged == false) {
         // open modal card
         // boardStore.setColumnAndTaskIndex(columnIndex, index)
@@ -793,9 +765,7 @@ export default function Main() {
   
       if ($wrapper == null) {
         // if outside of wrapper when cancelDrag
-        console.log('CANCEL DRAG OUTSIDE WRAPPER')
         movedCards.forEach(($el) => {
-          // console.log('moved $el', $el)
           if ($this === $el) return
           $el.style.transform = 'translate(0px, 0px)'
         })

@@ -33,7 +33,6 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: any) {
           // status: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
-          console.log("form add new column");
           dispatch(addNewColumns(values.columns));
           onRequestClose();
         }}

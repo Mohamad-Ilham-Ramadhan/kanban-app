@@ -76,7 +76,7 @@ export default function Header() {
             <>
               <button 
                 className="flex items-center"
-                onClick={() => {console.log('open menu boy'); setModalMenuOpen(true)}}
+                onClick={() => { setModalMenuOpen(true)}}
               >
                 <LogoMobile className="mr-2 shrink-0" />
                 <div className="font-bold text-lg mr-1 max-w-[150px] overflow-hidden whitespace-nowrap">{board !== null ? board.name : "No Board Found"}</div>
@@ -85,7 +85,6 @@ export default function Header() {
               <ModalMenu 
                 isOpen={modalMenuOpen} 
                 onRequestClose={(e) => {
-                  console.log('ModalMenu onRequestClose callback')
                   e.stopPropagation();
                   setModalMenuOpen(false);
                 }}

@@ -15,7 +15,6 @@ export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text:
    const [height, setHeight] = useState(0)
    const ref = useRef(null)
    useEffect(() => {
-      console.log('didMount', ref.current)
       if (ref.current !== null) {
          // @ts-ignore
          const {top: topY, bottom: bottomY, height} = ref.current.getBoundingClientRect()
@@ -34,14 +33,12 @@ export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text:
          onStart={(e, data) => {
             // @ts-ignore
             e.target.style.zIndex = 100
-            console.log('onStart', e)
             // @ts-ignore
             setStartX(e.screenX)
             setTargetIndex(index)
          }}
          onDrag={(e, data) => {
 
-            // console.log('onDrag deltaY', data.deltaY)
             // @ts-ignore
             e.target.style.zIndex = '100'
             // @ts-ignore
@@ -53,29 +50,22 @@ export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text:
             if (!($self instanceof HTMLElement && $self !== null)) {
                return
             }
-            // console.log('dragged index', $self.dataset.index)
-            // console.log('els', els)
-            // console.log('$self', $self)
             const $target = els.find($el => {
                return $el.classList.contains('todo') && $el.id !== id
             })
-            console.log('$target', $target)
             if (!$target || !($target instanceof HTMLElement)) {
                // setTargetIndex(null)
-               // console.log('not $target')
                return
             }
             const $targetPageYBottom = Number($target.dataset.pageYBottom)
             const $targetIndex = Number($target.dataset.index)
             // if ($targetIndex == targetIndex) return
             // setTargetIndex($targetIndex)
-            console.log('Y', pageYTop - Number($target.dataset.pageYTop))
             // @ts-ignore
             const movementY = e.movementY
             let moveY;
             // $target move up one
             if (movementY > 0 && $target.dataset.moved !== 'up') {
-               console.log('move up')
 
                moveY = pageYTop - Number($target.dataset.pageYTop)
                $target.dataset.moved = 'up'
@@ -92,7 +82,6 @@ export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text:
             else if
             // $target move down one
             (movementY < 0 && $target.dataset.moved !== 'down') {
-               console.log('move down')
                // moveY = pageYTop - Number($target.dataset.pageYTop) - Math.abs(height - Number($target.dataset.height) )
                moveY = (pageYTop - Number($target.dataset.pageYTop)) + (height - Number($target.dataset.height))
                $target.dataset.moved = 'down'
@@ -119,7 +108,6 @@ export default function T({ text, y, id, index, pageYTop, pageYBottom }: { text:
             // 886
          }}
          onStop={(e, data) => {
-            console.log('startIndex', index, 'targetIndex', targetIndex)
             dispatch(swap([index, targetIndex]))
             setStartX(0)
             setTargetIndex(null)

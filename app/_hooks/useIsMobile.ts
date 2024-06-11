@@ -9,7 +9,6 @@ export default function useIsMobile() {
       } else {
          setIsMobile(false);
       }
-      console.log('isMobile size()')
    }
 
    useEffect(() => {

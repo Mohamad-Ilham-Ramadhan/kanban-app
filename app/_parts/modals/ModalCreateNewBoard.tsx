@@ -18,7 +18,6 @@ import {
 import { CustomModalProps } from "@/app/_components/Modal";
 
 export default function ModalCreateNewBoardOpen() {
-  console.log('ModalCreateNewBOardOpen')
   const state = useSelector<RootState>(
     (state) => state
   ) as RootState;
