@@ -870,7 +870,7 @@ export default function Main() {
                 columns.map((c, columnIndex) => (
                   <div
                     key={c.id}
-                    className="flex flex-col shrink-0 w-[280px] rounded-lg mr-24"
+                    className="flex flex-col shrink-0 w-[280px] rounded-lg mr-8"
                   >
                     <div className="flex flex-row items-center mb-6" key={c.id}>
                       <div
