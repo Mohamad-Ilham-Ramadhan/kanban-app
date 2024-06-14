@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import * as yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import Modal from "@/app/_components/Modal";
@@ -14,10 +13,9 @@ import XIcon from "../../_assets/icons/x.svg";
 import { RootState } from "@/app/_redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { editActiveTask } from "@/app/_redux/reducers/boardReducer";
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { CssTransition } from "@mui/base";
+import { CustomModalProps } from "@/app/_components/Modal";
 
-export default function ModalEditTask({ isOpen, onRequestClose }: any) {
+export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalProps) {
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
   const board = state.board.boards[state.board.activeBoard];
@@ -51,7 +49,6 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
         })}
         onSubmit={(values) => {
           dispatch(editActiveTask(values));
-          onRequestClose();
         }}
       >
         {({
@@ -198,7 +195,11 @@ export default function ModalEditTask({ isOpen, onRequestClose }: any) {
                 text="Create Task"
                 size="small"
                 className="w-full"
-                onClick={submitForm}
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  submitForm()
+                  onRequestClose(e);
+                }}
                 type="submit"
               />
             </form>
