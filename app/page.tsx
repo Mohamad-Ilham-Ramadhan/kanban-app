@@ -13,7 +13,6 @@ import Main from "./_parts/Main";
 import ModalCreateNewBoardOpen from "./_parts/modals/ModalCreateNewBoard";
 
 export default function Home() {
-  const [selectCurrentStatusOpen, setSelectCurrentStatusOpen] = useState(false); // modal task
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
   const dispatch = useDispatch();

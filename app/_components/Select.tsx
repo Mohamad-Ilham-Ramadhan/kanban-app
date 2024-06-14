@@ -24,7 +24,6 @@ export default function Select({
 }) {
   const listboxRef = useRef<HTMLUListElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  // const [field, meta, helpers] = useField(name);
   const transitionRef = useRef(null);
 
   useEffect(() => {
