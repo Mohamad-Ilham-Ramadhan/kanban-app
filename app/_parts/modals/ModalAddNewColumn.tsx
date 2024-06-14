@@ -30,7 +30,6 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: any) {
               name: yup.string().required(),
             })
           ),
-          // status: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
           dispatch(addNewColumns(values.columns));

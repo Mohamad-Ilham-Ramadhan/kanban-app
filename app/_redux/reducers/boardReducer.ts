@@ -14,11 +14,6 @@ export type Task = {
    title: string;
    description: string;
    subtasks: SubTask[];
-   // for drag n swap 
-   // y: number;
-   // pageYTop: number;
-   // pageYBottom: number;
-   // moved: string;
 }
 export type Column = {
    id: string;
@@ -281,7 +276,7 @@ export const boardSlice = createSlice({
       },
       editActiveBoard(state, {payload: {name, columns}}) {
          // column management
-         state.boards[state.activeBoard].columns = columns.map((c: any) => {
+         state.boards[state.activeBoard].columns = columns.map((c: Column) => {
             if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
             else return {id: uuidv4(), name: c.name, tasks: []}
          });
@@ -312,8 +307,8 @@ export const boardSlice = createSlice({
          state.boards.splice(state.activeBoard, 1)
          state.activeBoard = 0
       },
-      addNewColumns: (state, action) => {
-         state.boards[state.activeBoard].columns = action.payload.map((c: any) => {
+      addNewColumns: (state, {payload}: {payload: Column[]}) => {
+         state.boards[state.activeBoard].columns = payload.map((c: Column) => {
             if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
             else return {id: uuidv4(), name: c.name, tasks: []}
          })
