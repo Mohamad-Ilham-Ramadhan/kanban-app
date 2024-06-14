@@ -426,7 +426,10 @@ export default function Main() {
     const marginBottom = window.parseInt(window.getComputedStyle($this).marginBottom)
     let $wrapper = $this.parentElement
     const $wrappers = Array.from(document.querySelectorAll('.tasks-wrapper'))
-    const $initialWrapper = $this.parentElement
+    const $initialWrapper = $this.parentElement;
+
+    if (!!$initialWrapper === false) return
+    
     const transitionDuration = parseFloat(window.getComputedStyle($this).transitionDuration) * 1000 // in ms
     let isOut = false // when the dragged card doesn't belong in any position
 
@@ -454,7 +457,7 @@ export default function Main() {
     let fromColumnIndex = Number(columnIndex)
     let toColumnIndex = Number(columnIndex)
     let movedCards= new Set<HTMLElement>([$this])
-    let prevTouch: any;
+    let prevTouch: Touch;
     const startStamp = Date.now()
     const holdToDrag = 150 // milliseconds hold to drag card-task
   
@@ -514,7 +517,7 @@ export default function Main() {
       }
     }, 5)
     // mobile drag feature
-    const touchMove = (e: globalThis.TouchEvent): any => {
+    const touchMove = (e: globalThis.TouchEvent): void => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -551,7 +554,7 @@ export default function Main() {
 
 
         // Drag and sort/swap lies here!! [START]
-        if (isOut == false) {
+        if (isOut == false && $wrapper !== null) {
           const $wrapperRect = $wrapper.getBoundingClientRect()
   
           if (
@@ -574,10 +577,10 @@ export default function Main() {
               movedCards.add($el)
             })
   
-            const $temp = $wrapper
-            $temp.dataset.isAnimating = 1
+            const $temp = $wrapper;
+            $temp.dataset.isAnimating = '1';
             window.setTimeout(() => {
-              $temp.dataset.isAnimating = 0
+              $temp.dataset.isAnimating = '0'
             }, transitionDuration)
   
             $shadowRect.remove()
@@ -590,7 +593,7 @@ export default function Main() {
             return $el.classList.contains('card-task');
           }) as HTMLElement[];
 
-          if (!!$swapCards.length && !!$swapCards[0].getAnimations().length == false) {
+          if (!!$swapCards.length && !!$swapCards[0].getAnimations().length == false && $wrapper !== null) {
             const $swapCard = $swapCards[0]
             if (Number($this.dataset.index) < Number(($swapCard as HTMLElement).dataset.index) && movementY > 0) {
   
@@ -657,6 +660,7 @@ export default function Main() {
         } // INSIDE
   
         if (isOut) {
+          // console.log('isOut')
           const $neoWrapper = document.elementsFromPoint(touch.clientX, touch.clientY).find(($el) => {
             return $el.classList.contains('tasks-wrapper')
             }) as HTMLElement | undefined
@@ -682,13 +686,13 @@ export default function Main() {
             toColumnIndex = Number($neoWrapper.dataset.columnIndex);
             $wrapper = $neoWrapper;
             let isFirst = false;
-            let isMoved = false;
-            let $lastEl = null;
+            let isMoved = false; // isMoved === false it's mean that there is no cards that moved when dragged card enter the wrapper
+            let $lastEl: null | HTMLElement = null;
   
             (Array.from($wrapper.children) as HTMLElement[]).forEach(($el: HTMLElement) => {
               if ($el === $this) return
               const $elRect = $el.getBoundingClientRect()
-              // if (e.clientY <= $elRect.bottom && !!$el.getAnimations().length == false) {
+
               if (touch.clientY <= $elRect.bottom) {
                 isOut = false
                 isMoved = true
@@ -715,25 +719,28 @@ export default function Main() {
   
               $lastEl = $el
             })
-  
+            
+            // console.log('isMoved', isMoved);
   
             if (isMoved == false) {
               // insert into last position in a new wrapper or when wrapper is empty of any card (new wrapper is initial wrapper)
-  
+              // console.log('$lastEl', $lastEl)
               isOut = false
               isMoved = true
-              $this.dataset.index = $lastEl === null ? '0' : String(Number($lastEl.dataset.index) + 1)
+              $this.dataset.index = $lastEl === null ? '0' : String(Number(($lastEl as HTMLElement).dataset.index) + 1)
   
               const $wrapperRect = $wrapper.getBoundingClientRect()
               $shadowRect.style.left = `${$wrapper.getBoundingClientRect().left}px`
               const top =
                 $lastEl === null
                   ? $wrapperRect.top - marginBottom
-                  : $lastEl.getBoundingClientRect().bottom +
-                    Number($lastEl.dataset.destinationY) -
+                  : ($lastEl as HTMLElement).getBoundingClientRect().bottom +
+                    Number(($lastEl as HTMLElement).dataset.destinationY) -
                     new DOMMatrix(window.getComputedStyle($lastEl).transform).f
               $shadowRect.style.top = `${top + marginBottom}px`
               document.body.appendChild($shadowRect)
+            } else {
+              // console.log('else $lastEl', $lastEl)
             }
           }
           return
@@ -743,7 +750,7 @@ export default function Main() {
       }
     }
   
-    const touchEnd = (e: any) => {
+    const touchEnd = (e: globalThis.TouchEvent): void => {
       e.preventDefault()
 
       $this.style.backgroundColor = '';
@@ -777,8 +784,8 @@ export default function Main() {
         // if outside of wrapper when cancelDrag
         movedCards.forEach(($el) => {
           if ($this === $el) return
-          $el.style.transform = 'translate(0px, 0px)'
-        })
+          $el.style.transform = 'translate(0px, 0px)';
+        });
   
         // reset cards.dataset.index
         (Array.from($initialWrapper.children) as HTMLElement[]).reduce((curIndex: number, $el: HTMLElement) => {
@@ -857,11 +864,11 @@ export default function Main() {
             document.documentElement.style.userSelect = 'none';
             setScrolling(true)
             setOverlay(true);
-            function onDrag(e: any) {
+            function onDrag(e: MouseEvent) {
               $this.scrollLeft = $this.scrollLeft - e.movementX;
             }
 
-            function onRelease(e: any) {
+            function onRelease() {
               setScrolling(false);
               setOverlay(false);
               document.removeEventListener('mousemove', onDrag)
