@@ -19,11 +19,12 @@ import {
 } from "@/app/_redux/reducers/boardReducer";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { CssTransition } from "@mui/base";
-
 import ModalDeleteTask from "./ModalDeleteTask";
 import ModalEditTask from "./ModalEditTask";
+import { CustomModalProps } from "@/app/_components/Modal";
 
-export default function ModalTask({ isOpen, onRequestClose }: any) {
+
+export default function ModalTask({ isOpen, onRequestClose }: CustomModalProps) {
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
   const board = state.board.boards[state.board.activeBoard];
@@ -84,20 +85,20 @@ export default function ModalTask({ isOpen, onRequestClose }: any) {
               <div className="z-[10000] w-[192px] bg-white dark:bg-board shadow-[0_0_8px_rgb(54_78_126_/_10%)] rounded-lg px-6 py-4 flex flex-col items-start">
                 <button
                   className="w-full text-left text-gray-500 hover:opacity-50 transition-opacity mb-2.5"
-                  onClick={() => {
+                  onClick={(e: React.MouseEvent) => {
                     setModalEditTaskOpen(true);
                     setAnchorTask(null);
-                    onRequestClose();
+                    onRequestClose(e);
                   }}
                 >
                   Edit Task
                 </button>
                 <button
                   className="w-full text-left text-red-500 hover:opacity-50 transition-opacity"
-                  onClick={() => {
+                  onClick={(e: React.MouseEvent) => {
                     setAnchorTask(null);
                     setModalDeleteTaskOpen(true);
-                    onRequestClose();
+                    onRequestClose(e);
                   }}
                 >
                   Delete Task
