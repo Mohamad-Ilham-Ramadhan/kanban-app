@@ -7,8 +7,9 @@ import XIcon from '../../_assets/icons/x.svg';
 import { RootState } from '@/app/_redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewColumns } from '@/app/_redux/reducers/boardReducer';
+import { CustomModalProps } from '@/app/_components/Modal';
 
-export default function ModalAddNewColumn({isOpen, onRequestClose}: {isOpen: boolean; onRequestClose: React.MouseEventHandler<Element>}) {
+export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalProps) {
    // @ts-ignore
    const state: RootState = useSelector<RootState>((state) => state);
    const board = state.board.boards[state.board.activeBoard];

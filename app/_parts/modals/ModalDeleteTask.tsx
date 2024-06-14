@@ -2,8 +2,9 @@ import ButtonPill from "@/app/_components/buttons/ButtonPill";
 import Modal from '@/app/_components/Modal';
 import { useDispatch, useSelector } from "react-redux";
 import { deleteActiveTask } from "@/app/_redux/reducers/boardReducer";
+import {CustomModalProps} from "@/app/_components/Modal";
 
-export default function ModalDeleteTask({isOpen, onRequestClose}: any) {
+export default function ModalDeleteTask({isOpen, onRequestClose}: CustomModalProps) {
       // @ts-ignore
       const state: RootState = useSelector<RootState>((state) => state);
       const board = state.board.boards[state.board.activeBoard];
@@ -35,9 +36,9 @@ export default function ModalDeleteTask({isOpen, onRequestClose}: any) {
             text="Delete"
             size="small"
             className="w-full transition-opacity hover:opacity-70 mr-4"
-            onClick={() => {
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
               dispatch(deleteActiveTask());
-              onRequestClose();
+              onRequestClose(e);
             }}
           />
           <ButtonPill

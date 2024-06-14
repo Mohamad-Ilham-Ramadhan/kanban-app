@@ -5,12 +5,18 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../_redux/store';
 import XIcon from '../_assets/icons/x.svg';
 // (event: MouseEvent<Element, MouseEvent> | KeyboardEvent<Element>): void
-export type CustomModalProps = {
+export type ModalProps = {
    isOpen: boolean,
    onRequestClose: React.MouseEventHandler<Element>,
    children: React.ReactElement,
 }
-export default function CustomModal({isOpen, onRequestClose, children} : CustomModalProps) {
+
+export type CustomModalProps = {
+   isOpen: boolean,
+   onRequestClose: React.MouseEventHandler<Element>
+}; // for Modal Components from this component (CustomModal)
+
+export default function CustomModal({isOpen, onRequestClose, children} : ModalProps) {
   const theme = useSelector<RootState>((state) => state.board.theme);
    return (
       <Modal
