@@ -8,7 +8,7 @@ import { RootState } from '@/app/_redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewColumns } from '@/app/_redux/reducers/boardReducer';
 
-export default function ModalAddNewColumn({isOpen, onRequestClose}: any) {
+export default function ModalAddNewColumn({isOpen, onRequestClose}: {isOpen: boolean; onRequestClose: React.MouseEventHandler<Element>}) {
    // @ts-ignore
    const state: RootState = useSelector<RootState>((state) => state);
    const board = state.board.boards[state.board.activeBoard];
@@ -33,7 +33,7 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: any) {
         })}
         onSubmit={(values) => {
           dispatch(addNewColumns(values.columns));
-          onRequestClose();
+          // onRequestClose();
         }}
       >
         {({ values, handleChange, handleSubmit, errors, submitForm }) => (
@@ -129,7 +129,11 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: any) {
               text="Save Changes"
               size="small"
               className="w-full"
-              onClick={submitForm}
+              onClick={(e) => {
+                e.preventDefault();
+                submitForm(); 
+                onRequestClose(e);
+              }}
               type="submit"
             />
           </form>
