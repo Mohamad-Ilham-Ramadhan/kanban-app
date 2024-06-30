@@ -96,6 +96,50 @@ export default function Main() {
     let movedCards = new Set([$this]);
     // let $prevSwap = { card: null, direction: null } // direction { null | 1 = swap bottom, -1 = swap top}
 
+    const $mainScroll = document.getElementById(`main-scroll`);
+    if ($mainScroll === null) return;
+
+    const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
+    const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
+    
+    let lastThisRectLeft = $this.getBoundingClientRect().left;
+    let lastThisRectRight = $this.getBoundingClientRect().right;
+
+    const setScrollIntervalId = window.setInterval(() => {
+      if (!isDragged) return;
+      // scroll when dragging out of frame
+      const $thisRect = $this.getBoundingClientRect()
+      const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
+      const $mainScrollRect = $mainScroll.getBoundingClientRect();
+
+      if ($thisRect.left >= 300) lastThisRectLeft = 300;
+      if ($thisRect.right <= window.innerWidth) lastThisRectRight = window.innerWidth;
+      
+      if ($thisRect.left < $mainScrollRect.left && $mainScroll.scrollLeft > 0) {
+        // scroll left
+        $this.style.transform = `translate(${Math.ceil($thisMatrix.e - 2)}px, ${$thisMatrix.f}px)`
+        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft - 2)
+      }
+
+      if ($thisRect.right > $mainScrollRect.right && $mainScroll.scrollLeft < mainScrollMaxScrollRight) {
+        // scroll right
+        $this.style.transform = `translate(${Math.floor($thisMatrix.e + 2)}px, ${$thisMatrix.f}px)`
+        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 2)
+      }
+  
+      if ($thisRect.bottom > ($mainScrollRect.bottom - 50) && $mainScroll.scrollTop < mainScrollMaxScrollBottom) {
+        // Scroll bottom
+        $this.style.transform = `translate(${$thisMatrix.e}px, ${Math.ceil($thisMatrix.f + 2)}px)`;
+        $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop + 2);
+      }
+  
+      if ($thisRect.top < ($mainScrollRect.top + 50) && $mainScroll.scrollTop > 0) {
+        // scroll top
+        $this.style.transform = `translate(${$thisMatrix.e}px, ${Math.ceil($thisMatrix.f - 2)}px)`
+        $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop - 2)
+      }
+    }, 5)
+
     function dragCard(e: MouseEvent) {
       $this.style.opacity = "1";
       isDragged = true;
@@ -333,6 +377,7 @@ export default function Main() {
     function cancelDrag() {
       document.documentElement.style.userSelect = '';
       $this.style.opacity = "";
+      window.clearInterval(setScrollIntervalId)
 
       setPreventDrag(true);
       window.setTimeout(() => {
