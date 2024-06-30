@@ -81,7 +81,6 @@ export default function Main() {
     const $shadowRect = document.createElement("div");
 
     $shadowRect.classList.add("shadow-rect");
-    $shadowRect.style.color = "red";
     $shadowRect.style.height = `${$thisRect.height}px`;
     $shadowRect.style.width = `${$thisRect.width}px`;
     $shadowRect.style.position = "absolute";
@@ -102,8 +101,8 @@ export default function Main() {
     const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
     const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
     
-    let lastThisRectLeft = $this.getBoundingClientRect().left;
-    let lastThisRectRight = $this.getBoundingClientRect().right;
+    // let lastThisRectLeft = $this.getBoundingClientRect().left;
+    // let lastThisRectRight = $this.getBoundingClientRect().right;
 
     const setScrollIntervalId = window.setInterval(() => {
       if (!isDragged) return;
@@ -112,31 +111,35 @@ export default function Main() {
       const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
       const $mainScrollRect = $mainScroll.getBoundingClientRect();
 
-      if ($thisRect.left >= 300) lastThisRectLeft = 300;
-      if ($thisRect.right <= window.innerWidth) lastThisRectRight = window.innerWidth;
+      // if ($thisRect.left >= 300) lastThisRectLeft = 300;
+      // if ($thisRect.right <= window.innerWidth) lastThisRectRight = window.innerWidth;
       
       if ($thisRect.left < $mainScrollRect.left && $mainScroll.scrollLeft > 0) {
         // scroll left
         $this.style.transform = `translate(${Math.ceil($thisMatrix.e - 2)}px, ${$thisMatrix.f}px)`
-        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft - 2)
+        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft - 2);
+        $shadowRect.style.left = `${parseInt($shadowRect.style.left) + 2}px`;
       }
 
       if ($thisRect.right > $mainScrollRect.right && $mainScroll.scrollLeft < mainScrollMaxScrollRight) {
         // scroll right
         $this.style.transform = `translate(${Math.floor($thisMatrix.e + 2)}px, ${$thisMatrix.f}px)`
-        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 2)
+        $mainScroll.scrollLeft = Math.ceil($mainScroll.scrollLeft + 2);
+        $shadowRect.style.left = `${parseInt($shadowRect.style.left) - 2}px`;
       }
   
       if ($thisRect.bottom > ($mainScrollRect.bottom - 50) && $mainScroll.scrollTop < mainScrollMaxScrollBottom) {
         // Scroll bottom
         $this.style.transform = `translate(${$thisMatrix.e}px, ${Math.ceil($thisMatrix.f + 2)}px)`;
         $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop + 2);
+        $shadowRect.style.top = `${parseInt($shadowRect.style.top) - 2}px`;
       }
   
       if ($thisRect.top < ($mainScrollRect.top + 50) && $mainScroll.scrollTop > 0) {
         // scroll top
         $this.style.transform = `translate(${$thisMatrix.e}px, ${Math.ceil($thisMatrix.f - 2)}px)`
         $mainScroll.scrollTop = Math.ceil($mainScroll.scrollTop - 2)
+        $shadowRect.style.top = `${parseInt($shadowRect.style.top) + 2}px`;
       }
     }, 5)
 
@@ -380,9 +383,7 @@ export default function Main() {
       window.clearInterval(setScrollIntervalId)
 
       setPreventDrag(true);
-      window.setTimeout(() => {
-        setPreventDrag(false);
-      }, transitionDuration);
+      window.setTimeout(() => {setPreventDrag(false);}, transitionDuration);
 
       document.removeEventListener("mousemove", dragCard);
       document.removeEventListener("mouseup", cancelDrag);
@@ -415,7 +416,7 @@ export default function Main() {
   
         $shadowRect.style.top = `${$thisRect.top}px`
         $shadowRect.style.left = `${$thisRect.left}px`
-        document.body.appendChild($shadowRect)
+        // document.body.appendChild($shadowRect)
       }
   
       $this.classList.add('card-task-transition')

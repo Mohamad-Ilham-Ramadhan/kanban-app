@@ -1,10 +1,10 @@
 [WARNING]
    - [<SVG>]: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
 [FEAT]   
-   - drag desktop:
-      - drag over edge to scroll
 [STYLE]
 [BUG]
-   - mobile Drag:
+   - desktop drag: 
+      - release destination bug: 
+         ketika edge scrolling, $shadowRect ikut ke geser
       
 [STRUCTURE]
