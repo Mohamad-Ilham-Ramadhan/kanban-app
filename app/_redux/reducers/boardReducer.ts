@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 import { staticGenerationAsyncStorage } from 'next/dist/client/components/static-generation-async-storage.external';
@@ -349,19 +349,20 @@ export const boardSlice = createSlice({
    },
    extraReducers(builder) {
       builder.addCase(swapTask.fulfilled, (state, {payload}) => {
-
          const board = state.boards[state.activeBoard];
          const {fromColumnIndex, toColumnIndex, fromIndex, toIndex} = payload;
          // this.board.columns[colIndex].tasks
          if (toColumnIndex === null && fromIndex === toIndex) {
-            
+            return;
          } else if (fromColumnIndex === toColumnIndex || toColumnIndex === null) {
-
+            // same column
             if (toIndex > fromIndex) { // drag ke bawah
                const newTasks = board.columns[fromColumnIndex].tasks.map((t, index) => {
-                  if (index > toIndex || index < fromIndex) return t
-                  if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex] 
-                  if (index >= fromIndex) return board.columns[fromColumnIndex].tasks[index + 1]
+                  if (index > toIndex || index < fromIndex) return t; // stay in the place
+                  if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex]; // dragged card
+                  if (index >= fromIndex){ 
+                     console.log('index >= fromIndex');
+                     return board.columns[fromColumnIndex].tasks[index + 1]};
                   return t;
                })
                if (newTasks !== undefined) {
@@ -386,5 +387,6 @@ export const boardSlice = createSlice({
 
 })
 
-export const { setModalCreateNewBoardOpen, setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions
+export const { setModalCreateNewBoardOpen, setSidebar, editActiveTask, deleteActiveTask, moveTaskColumn, toggleSubtask, createNewBoard, addNewTask, setActiveBoard, setActiveTask, setActiveColumn, deleteActiveBoard, editActiveBoard, addNewColumns, toggleTheme } = boardSlice.actions;
+
 export default boardSlice.reducer

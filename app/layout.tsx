@@ -20,6 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="apple-touch-icon"
+          href="/apple-touch-icon.png"
+          type="image/png"
+        />
+      </head>
       <body>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>

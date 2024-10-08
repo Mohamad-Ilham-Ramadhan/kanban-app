@@ -68,8 +68,7 @@ export default function Main() {
     const marginBottom = window.parseInt(window.getComputedStyle($this).marginBottom);
     let $wrapper = $this.parentElement;
     const $initialWrapper = $this.parentElement;
-    const transitionDuration =
-      parseFloat(window.getComputedStyle($this).transitionDuration) * 1000; // in ms
+    const transitionDuration = parseFloat(window.getComputedStyle($this).transitionDuration) * 1000; // in ms
     let isOut = false; // when the dragged card doesn't belong in any position
 
     $this.classList.remove("card-task-transition");
@@ -80,33 +79,35 @@ export default function Main() {
     const $thisRect = $this.getBoundingClientRect();
     const $shadowRect = document.createElement("div");
 
-    $shadowRect.classList.add("shadow-rect");
+    // $shadowRect.style.backgroundColor = `tomato`;
     $shadowRect.style.height = `${$thisRect.height}px`;
     $shadowRect.style.width = `${$thisRect.width}px`;
     $shadowRect.style.position = "absolute";
     $shadowRect.style.top = `${$thisRect.top}px`;
     $shadowRect.style.left = `${$thisRect.left}px`;
+    $shadowRect.style.backgroundColor = 'red';
+    $shadowRect.style.zIndex = '10';
     document.body.appendChild($shadowRect);
 
     let fromIndex = Number($this.dataset.index);
-    // let $thisIndex = Number($this.dataset.index)
     let fromColumnIndex = Number(columnIndex);
     let toColumnIndex = Number(columnIndex);
     let movedCards = new Set([$this]);
+    // let $thisIndex = Number($this.dataset.index)
     // let $prevSwap = { card: null, direction: null } // direction { null | 1 = swap bottom, -1 = swap top}
 
     const $mainScroll = document.getElementById(`main-scroll`);
     if ($mainScroll === null) return;
 
-    const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
-    const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
+    const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth);
+    const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight);
     
     // let lastThisRectLeft = $this.getBoundingClientRect().left;
     // let lastThisRectRight = $this.getBoundingClientRect().right;
 
     const setScrollIntervalId = window.setInterval(() => {
       if (!isDragged) return;
-      // scroll when dragging out of frame
+      // scroll when dragging out of frame (overflow mainboard) to scroll
       const $thisRect = $this.getBoundingClientRect()
       const $thisMatrix = new DOMMatrix(window.getComputedStyle($this).transform)
       const $mainScrollRect = $mainScroll.getBoundingClientRect();
@@ -152,6 +153,7 @@ export default function Main() {
         matrix.f + e.movementY
       }px)`;
 
+      // inside wrapper
       if (isOut == false && $wrapper !== null) {
         const $wrapperRect = $wrapper.getBoundingClientRect();
 
@@ -161,6 +163,7 @@ export default function Main() {
           e.clientY < $wrapperRect.top ||
           e.clientY > $wrapperRect.bottom
         ) {
+          console.log('apa ini')
           Array.from($wrapper.children).forEach(($el) => {
             if ($el instanceof HTMLElement) {
               if (Number($el.dataset.index) <= Number($this.dataset.index))
@@ -185,7 +188,7 @@ export default function Main() {
             $temp.dataset.isAnimating = '0';
           }, transitionDuration);
 
-          $shadowRect.remove();
+          // $shadowRect.remove(); // <== ini memang harus dihapus
           isOut = true;
           $wrapper = null;
         }
@@ -300,7 +303,8 @@ export default function Main() {
             return $el.classList.contains("tasks-wrapper");
           }) as HTMLElement | undefined;
 
-        if (!!$neoWrapper && $neoWrapper.childElementCount === 0) {
+        if (!!$neoWrapper && $neoWrapper.childElementCount === 1) {
+          // console.log('into empty column');
           $wrapper = $neoWrapper;
           isOut = false;
           $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`;
@@ -380,7 +384,7 @@ export default function Main() {
     function cancelDrag() {
       document.documentElement.style.userSelect = '';
       $this.style.opacity = "";
-      window.clearInterval(setScrollIntervalId)
+      window.clearInterval(setScrollIntervalId);
 
       setPreventDrag(true);
       window.setTimeout(() => {setPreventDrag(false);}, transitionDuration);
@@ -396,11 +400,12 @@ export default function Main() {
         // openModalTask.value = true
         setModalTaskOpen(true);
         // boardStore.setColumnAndTaskIndex(fromColumnIndex, Number($this.dataset.index))
-        $shadowRect.remove();
+        // $shadowRect.remove();
         return;
       }
-
+      console.log('$wrapper', $wrapper, '$initialWrapper', $initialWrapper);
       if ($wrapper == null && $initialWrapper !== null) {
+        console.log('outcast!')
         // if outside of wrapper when cancelDrag
         movedCards.forEach(($el) => {
           if ($this === $el) return
@@ -413,13 +418,13 @@ export default function Main() {
           ($el as HTMLElement).dataset.index = String(curIndex + 1)
           return curIndex + 1
         }, fromIndex)
-  
-        $shadowRect.style.top = `${$thisRect.top}px`
-        $shadowRect.style.left = `${$thisRect.left}px`
+        
+        $shadowRect.style.top = `${$thisRect.top}px`;
+        $shadowRect.style.left = `${$thisRect.left}px`;
         // document.body.appendChild($shadowRect)
       }
   
-      $this.classList.add('card-task-transition')
+      $this.classList.add('card-task-transition');
   
       // back to $shadowRect or back to initial position
       const moveX = $this.getBoundingClientRect().x - $shadowRect.getBoundingClientRect().x
@@ -428,9 +433,10 @@ export default function Main() {
       $this.style.transform = `translate(${matrix.e - moveX}px, ${matrix.f - moveY}px)`
   
       $this.classList.remove('z-50')
-      $this.style.zIndex = ''
-  
-      $shadowRect.remove()
+      $this.style.zIndex = '';
+      window.setTimeout(() => {
+        $shadowRect.remove();
+      }, 500)
   
       // update store
      window.setTimeout(() => {
@@ -444,20 +450,21 @@ export default function Main() {
           toIndex: isOut ? fromIndex : Number($this.dataset.index)
         })).then(() => {
           movedCards.forEach(($c) => {
-            $c.classList.remove('card-task-transition')
+            $c.classList.remove('card-task-transition');
             $c.style.transform = 'translate(0px, 0px)'
             $c.dataset.destinationY = '0'
             window.setTimeout(() => {
             $c.classList.add('card-task-transition')
             }, 10) // needed so no transition
           })
-          if (isOut) $this.dataset.index = String(fromIndex)
+          if (isOut) $this.dataset.index = String(fromIndex);
         })
       }, transitionDuration) // this setTimeout needs for dragged card get back to the position using transition
   }
   
   document.addEventListener("mousemove", dragCard);
   document.addEventListener("mouseup", cancelDrag);
+
   e.stopPropagation();
   }
 
@@ -906,6 +913,7 @@ export default function Main() {
           id="main-scroll"
           className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
+            console.log('scrolling');
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
             setScrolling(true)
