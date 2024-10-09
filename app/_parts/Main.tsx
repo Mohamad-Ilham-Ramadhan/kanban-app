@@ -85,8 +85,7 @@ export default function Main() {
     $shadowRect.style.position = "absolute";
     $shadowRect.style.top = `${$thisRect.top}px`;
     $shadowRect.style.left = `${$thisRect.left}px`;
-    $shadowRect.style.backgroundColor = 'red';
-    $shadowRect.style.zIndex = '10';
+    // $shadowRect.style.zIndex = '10';
     document.body.appendChild($shadowRect);
 
     let fromIndex = Number($this.dataset.index);
@@ -303,7 +302,7 @@ export default function Main() {
             return $el.classList.contains("tasks-wrapper");
           }) as HTMLElement | undefined;
 
-        if (!!$neoWrapper && $neoWrapper.childElementCount === 1) {
+        if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('empty-column')) {
           // console.log('into empty column');
           $wrapper = $neoWrapper;
           isOut = false;
@@ -989,7 +988,7 @@ export default function Main() {
                           </div>
                         ))
                       ) : (
-                        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
+                        <div className="empty-column border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
                         // null
                       )}
                     </div>
