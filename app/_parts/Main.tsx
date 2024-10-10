@@ -302,7 +302,7 @@ export default function Main() {
             return $el.classList.contains("tasks-wrapper");
           }) as HTMLElement | undefined;
 
-        if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('empty-column')) {
+        if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('')) {
           // console.log('into empty column');
           $wrapper = $neoWrapper;
           isOut = false;
@@ -495,12 +495,13 @@ export default function Main() {
     const $thisRect = $this.getBoundingClientRect()
     const $shadowRect = document.createElement('div')
     $shadowRect.style.height = `${$thisRect.height}px`
-    $shadowRect.style.width = `${$thisRect.width}px`
+    // $shadowRect.style.width = `${$thisRect.width}px`;
+    $shadowRect.style.width = '10px';
     $shadowRect.style.position = 'absolute'
     $shadowRect.style.top = `${$thisRect.top}px`
     $shadowRect.style.left = `${$thisRect.left}px`
-    $shadowRect.style.border = '1px solid red';
     $shadowRect.style.zIndex = '100';
+    $shadowRect.style.backgroundColor = 'red';
     document.body.appendChild($shadowRect)
   
     // let isDragged = false
@@ -522,8 +523,8 @@ export default function Main() {
     const $mainScroll = document.getElementById(`main-scroll`);
     if ($mainScroll === null) return;
 
-    const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth)
-    const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight)
+    const mainScrollMaxScrollRight: number = Math.floor($mainScroll.scrollWidth - $mainScroll.clientWidth);
+    const mainScrollMaxScrollBottom: number = Math.floor($mainScroll.scrollHeight - $mainScroll.clientHeight);
     
     let lastThisRectLeft = $this.getBoundingClientRect().left;
     let lastThisRectRight = $this.getBoundingClientRect().right;
@@ -617,7 +618,7 @@ export default function Main() {
           ) {
             // out of wrapper
             (Array.from($wrapper.children) as HTMLElement[]).forEach(($el: HTMLElement) => {
-              if (Number($el.dataset.index) <= Number($this.dataset.index)) return
+              if (Number($el.dataset.index) <= Number($this.dataset.index) || $el.classList.contains('empty-column')) return
   
               $el.dataset.index = String(Number($el.dataset.index) - 1)
   
@@ -720,12 +721,12 @@ export default function Main() {
           // console.log('$neoWrapper', $neoWrapper, $neoWrapper !== undefined ? $neoWrapper.childElementCount : 0);
           // empty wrapper
           if ($neoWrapper !== undefined && $neoWrapper.classList.contains('empty')) {
-            // console.log('to empty new wrapper');
-            $wrapper = $neoWrapper
-            isOut = false
-            $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`
-            $shadowRect.style.left = `${$wrapper.getBoundingClientRect().left}px`
-            document.body.appendChild($shadowRect)
+            console.log('to empty new wrapper');
+            $wrapper = $neoWrapper;
+            isOut = false;
+            $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`;
+            $shadowRect.style.left = `${$wrapper.getBoundingClientRect().left}px`;
+            document.body.appendChild($shadowRect);
   
             $this.dataset.index = '0'
             toColumnIndex = Number($wrapper.dataset.columnIndex)

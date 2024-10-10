@@ -6,5 +6,8 @@
    - desktop drag: 
       - release destination bug: 
          ketika edge scrolling, $shadowRect ikut ke geser
+   
+   - mobile drag: 
+      - empty column ke geser ke atas ketika out dari empty wrapper
       
 [STRUCTURE]
