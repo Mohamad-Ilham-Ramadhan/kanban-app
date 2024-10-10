@@ -501,7 +501,7 @@ export default function Main() {
     $shadowRect.style.top = `${$thisRect.top}px`
     $shadowRect.style.left = `${$thisRect.left}px`
     $shadowRect.style.zIndex = '100';
-    $shadowRect.style.backgroundColor = 'red';
+    // $shadowRect.style.backgroundColor = 'red';
     document.body.appendChild($shadowRect)
   
     // let isDragged = false
