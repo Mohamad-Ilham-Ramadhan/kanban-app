@@ -162,18 +162,19 @@ export default function Main() {
           e.clientY < $wrapperRect.top ||
           e.clientY > $wrapperRect.bottom
         ) {
-          // console.log('apa ini')
+          // console.log('exit column')
           Array.from($wrapper.children).forEach(($el) => {
+            
             if ($el.classList.contains('empty-column')) return;
+            
             if ($el instanceof HTMLElement) {
               if (Number($el.dataset.index) <= Number($this.dataset.index))
                 return;
-  
+              
               $el.dataset.index = String(Number($el.dataset.index) - 1);
-  
-              const destinationY =
-                Number($el.dataset.destinationY) -
-                (marginBottom + $thisRect.height);
+              
+              const destinationY = Number($el.dataset.destinationY) - (marginBottom + $thisRect.height);
+
               $el.style.transform = `translate(0px, ${destinationY}px)`;
               $el.dataset.destinationY = String(destinationY);
   
@@ -203,6 +204,7 @@ export default function Main() {
           !!$swapCards.length &&
           !!$swapCards[0].getAnimations().length == false
         ) {
+          console.log('ini apa lagi ini?');
           const $swapCard = $swapCards[0] as HTMLElement;
           if (
             Number($this.dataset.index) < Number($swapCard.dataset.index) &&
@@ -234,9 +236,7 @@ export default function Main() {
                 }px`;
                 $shadowRect.style.left = `${$el.getBoundingClientRect().left}px`;
   
-                const destinationY =
-                  Number($el.dataset.destinationY) -
-                  (marginBottom + $thisRect.height);
+                const destinationY = Number($el.dataset.destinationY) - (marginBottom + $thisRect.height);
                 $el.style.transform = `translate(0px, ${destinationY}px)`;
                 $el.dataset.destinationY = String(destinationY);
   
@@ -248,7 +248,6 @@ export default function Main() {
             e.movementY < 0 &&
             $wrapper !== null
           ) {
-
             const min = Math.min(
               Number($this.dataset.index),
               Number($swapCard.dataset.index)
@@ -297,13 +296,13 @@ export default function Main() {
 
       if (isOut) {
         // and
-        const $neoWrapper = document
-          .elementsFromPoint(e.clientX, e.clientY)
-          .find(($el) => {
+        const $neoWrapper = document.elementsFromPoint(e.clientX, e.clientY).find(($el) => {
             return $el.classList.contains("tasks-wrapper");
           }) as HTMLElement | undefined;
 
-        if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('')) {
+        console.log('$neoWrapper', $neoWrapper);
+        
+        if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('empty-column')) {
           console.log('into empty column');
           $wrapper = $neoWrapper;
           isOut = false;
