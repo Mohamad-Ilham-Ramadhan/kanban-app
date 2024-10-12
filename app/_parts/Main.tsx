@@ -166,7 +166,7 @@ export default function Main() {
           Array.from($wrapper.children).forEach(($el) => {
             
             if ($el.classList.contains('empty-column')) return;
-            
+
             if ($el instanceof HTMLElement) {
               if (Number($el.dataset.index) <= Number($this.dataset.index))
                 return;
@@ -300,10 +300,11 @@ export default function Main() {
             return $el.classList.contains("tasks-wrapper");
           }) as HTMLElement | undefined;
 
-        console.log('$neoWrapper', $neoWrapper);
+        // console.log('$neoWrapper', $neoWrapper);
         
         if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('empty-column')) {
-          console.log('into empty column');
+          // console.log('into empty column');
+
           $wrapper = $neoWrapper;
           isOut = false;
           $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`;
@@ -402,9 +403,10 @@ export default function Main() {
         // $shadowRect.remove();
         return;
       }
-      console.log('$wrapper', $wrapper, '$initialWrapper', $initialWrapper);
+      // console.log('$wrapper', $wrapper, '$initialWrapper', $initialWrapper);
+
       if ($wrapper == null && $initialWrapper !== null) {
-        console.log('outcast!')
+        // console.log('outcast!')
         // if outside of wrapper when cancelDrag
         movedCards.forEach(($el) => {
           if ($this === $el) return
@@ -913,7 +915,7 @@ export default function Main() {
           id="main-scroll"
           className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
-            console.log('scrolling');
+            // console.log('scrolling');
             const $this = e.currentTarget;
             document.documentElement.style.userSelect = 'none';
             setScrolling(true)
