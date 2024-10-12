@@ -162,8 +162,9 @@ export default function Main() {
           e.clientY < $wrapperRect.top ||
           e.clientY > $wrapperRect.bottom
         ) {
-          console.log('apa ini')
+          // console.log('apa ini')
           Array.from($wrapper.children).forEach(($el) => {
+            if ($el.classList.contains('empty-column')) return;
             if ($el instanceof HTMLElement) {
               if (Number($el.dataset.index) <= Number($this.dataset.index))
                 return;
@@ -303,7 +304,7 @@ export default function Main() {
           }) as HTMLElement | undefined;
 
         if (!!$neoWrapper && $neoWrapper.firstElementChild?.classList.contains('')) {
-          // console.log('into empty column');
+          console.log('into empty column');
           $wrapper = $neoWrapper;
           isOut = false;
           $shadowRect.style.top = `${$wrapper.getBoundingClientRect().top}px`;
