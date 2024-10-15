@@ -991,7 +991,7 @@ export default function Main() {
                           </div>
                         ))
                       ) : (
-                        <div className="empty-column border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100%-40px)]"></div>
+                        <div className="empty-column border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-[calc(100vh-248px)]"></div>
                         // null
                       )}
                     </div>
@@ -1001,7 +1001,7 @@ export default function Main() {
                 <div className="rounded-lg flex flex-col shrink-0 w-[280px] mr-10">
                   <div className="h-10"></div>
                   <div
-                    className="rounded-lg bg-red-700 h-full flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
+                    className="rounded-lg bg-red-700 h-[calc(100vh-248px)] flex justify-center items-center font-bold text-2xl bg-gradient-to-b from-slate-200 to-slate-100 dark:from-dark-light dark:to-board hover:cursor-pointer text-slate-400 hover:text-primary"
                     onClick={(e) => {
                       setModalCreateNewColumnOpen(true);
                     }}
