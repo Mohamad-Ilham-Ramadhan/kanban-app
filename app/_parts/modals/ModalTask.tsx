@@ -117,8 +117,8 @@ export default function ModalTask({ isOpen, onRequestClose }: CustomModalProps) 
             document.body
           )}
 
-          <div className="text-[.8rem] text-gray-500 mb-4">
-            {currentTask?.description}
+          <div className="text-[.8rem] text-gray-500 font-semibold mb-6">
+            {currentTask?.description ? currentTask?.description : 'No description.'}
           </div>
           <Label>{`Subtasks (${String(
             currentTask?.subtasks.reduce(
@@ -140,6 +140,9 @@ export default function ModalTask({ isOpen, onRequestClose }: CustomModalProps) 
               }}
             />
           ))}
+          {currentTask?.subtasks.length === 0 && (
+            <div className="text-[.8rem] text-gray-500 font-semibold">No subtasks.</div>
+          )}
           <div className="mb-4"></div>
 
           <Label>Current Status</Label>
