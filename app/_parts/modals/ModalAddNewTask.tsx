@@ -1,44 +1,51 @@
 import { useState } from "react";
-import * as yup from "yup";
-import { v4 as uuidv4 } from "uuid";
-import Modal from "@/app/_components/Modal";
 import { Formik, FieldArray } from "formik";
-import Input from "@/app/_components/Input";
-import Label from "@/app/_components/Label";
-import Select from "@/app/_components/Select";
-import Option from "@/app/_components/Option";
-import Textarea from "@/app/_components/Textarea";
-import ButtonPill from "@/app/_components/buttons/ButtonPill";
+import Modal from "../../_components/Modal";
+import { v4 as uuidv4 } from "uuid";
+import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { addNewTask } from "../../_redux/reducers/boardReducer";
+import Input from "../../_components/Input";
+import Label from "../../_components/Label";
+import Textarea from "../../_components/Textarea";
 import XIcon from "../../_assets/icons/x.svg";
+import ButtonPill from "../../_components/buttons/ButtonPill";
+import Select from "../../_components/Select";
+import Option from "../../_components/Option";
+import { CustomModalProps } from '@/app/_components/Modal';
 import { RootState } from "@/app/_redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { editActiveTask } from "@/app/_redux/reducers/boardReducer";
-import { CustomModalProps } from "@/app/_components/Modal";
+import { useSelector } from "react-redux";
 
-export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalProps) {
-  // @ts-ignore
-  const state: RootState = useSelector<RootState>((state) => state);
-  const board = state.board.boards[state.board.activeBoard];
-  const currentColumn = board.columns[state.board.activeColumn]
-  const currentTask = currentColumn.tasks[state.board.activeTask];
-
+export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalProps) {
   const dispatch = useDispatch();
+   //   @ts-ignore
+  const state: RootState = useSelector<RootState>((state) => state);
+
+
+//   const board =
+//     state.board.boards.length > 0
+//       ? state.board.boards[state.board.activeBoard]
+//       : null;
+const board = state.board.boards[state.board.activeBoard];
+
 
   const [selectStatusOpen, setSelectStatusOpen] = useState(false);
-  
+
+
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+    >
       <Formik
         initialValues={{
-         id: currentTask?.id,
-          title: currentTask?.title,
-          description: currentTask?.description,
-          subtasks: currentTask?.subtasks,
-          status: { ...currentColumn, index: state.board.activeColumn },
+          title: "",
+          description: "",
+          subtasks: [{ id: uuidv4(), text: "", isDone: false }],
+          status: { ...board.columns[0], index: 0 },
         }}
         validationSchema={yup.object().shape({
           title: yup.string().required(),
-          description: yup.string().required(),
           subtasks: yup.array().of(
             yup.object().shape({
               id: yup.string().required(),
@@ -49,7 +56,8 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
           // status: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
-          dispatch(editActiveTask(values));
+          dispatch(addNewTask(values));
+         //  setModalAddNewTaskOpen(false);
         }}
       >
         {({
@@ -63,7 +71,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
           return (
             <form onSubmit={handleSubmit}>
               <div className="text-lg dark:text-white font-bold mb-4">
-                Edit Task
+                Add New Task
               </div>
               <div className="mb-4">
                 <Label htmlFor="title">Title</Label>
@@ -71,7 +79,6 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
                   <Input
                     id="title"
                     value={values.title}
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)}
                     onChange={handleChange}
                     error={errors.title ? true : false}
                   />
@@ -126,17 +133,14 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
                               </div>
                             ) : null}
                           </div>
-                          {values.subtasks.length === 1 ? null : (
-                            <button
-                              className="w-[50px] flex justify-center items-center"
-                              type="button"
-                              onClick={() => {
-                                remove(index);
-                              }}
-                            >
-                              <XIcon className="text-gray-400" />
-                            </button>
-                          )}
+                          <button
+                            className="w-[50px] flex justify-center items-center"
+                            onClick={() => {
+                              remove(index);
+                            }}
+                          >
+                            <XIcon className="text-gray-400" />
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -196,9 +200,9 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
                 text="Create Task"
                 size="small"
                 className="w-full"
-                onClick={(e: React.MouseEvent) => {
+                onClick={(e) => {
                   e.preventDefault();
-                  submitForm()
+                  submitForm(); 
                   onRequestClose(e);
                 }}
                 type="submit"
