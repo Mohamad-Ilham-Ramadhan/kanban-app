@@ -46,7 +46,7 @@ export default function Main() {
 
   // drag card-task feature
   const [preventDrag, setPreventDrag] = useState(false);
-  // const [preventMainScroll, setPreventMainScroll] = useState(false) // prevent main scrollbar to scroll when draggin on mobile view
+  const [preventMainScroll, setPreventMainScroll] = useState(false) // prevent main scrollbar to scroll when draggin on mobile view
 
 
   // css cursor drag scrollbar 
@@ -519,7 +519,7 @@ export default function Main() {
     const setBgTimeoutId = window.setTimeout(() => {
       // theme ==> 0 = dark, 1 = light
       $this.style.backgroundColor = state.board?.theme === 0 ? '#23242c' : '#e2e8f0'
-      // setPreventMainScroll(true)
+      setPreventMainScroll(true)
     }, holdToDrag)
   
     const $mainScroll = document.getElementById(`main-scroll`);
@@ -820,7 +820,7 @@ export default function Main() {
   
       document.removeEventListener('touchmove', touchMove)
       document.removeEventListener('touchend', touchEnd)
-      // setPreventMainScroll(false)
+      setPreventMainScroll(false)
   
       // open modal task automatically handled by @click handler
       if (isDragged == false) {
@@ -956,7 +956,7 @@ export default function Main() {
                     </div>
 
                     <div 
-                      className={clsx("flex flex-col h-full tasks-wrapper", c.tasks.length === 0 ? 'empty' : '')}
+                      className={clsx("flex flex-col h-full pb-8 tasks-wrapper", c.tasks.length === 0 ? 'empty' : '')}
                       data-column-index={columnIndex}
                       data-is-animating="0"
                     >
