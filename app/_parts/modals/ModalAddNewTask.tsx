@@ -4,7 +4,7 @@ import Modal from "../../_components/Modal";
 import { v4 as uuidv4 } from "uuid";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { addNewTask } from "../../_redux/reducers/boardReducer";
+import { addNewTask, Board } from "../../_redux/reducers/boardReducer";
 import Input from "../../_components/Input";
 import Label from "../../_components/Label";
 import Textarea from "../../_components/Textarea";
@@ -20,15 +20,13 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
   const dispatch = useDispatch();
    //   @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
-
-
-//   const board =
-//     state.board.boards.length > 0
-//       ? state.board.boards[state.board.activeBoard]
-//       : null;
-const board = state.board.boards[state.board.activeBoard];
-
-
+  const board: Board = state.board.boards[state.board.activeBoard];
+  const titlesSet = new Set();
+  board.columns.forEach( column => {
+    column.tasks.forEach( task => {
+      titlesSet.add(task.title.toLocaleLowerCase().trim())
+    });
+  })
   const [selectStatusOpen, setSelectStatusOpen] = useState(false);
 
 
@@ -45,7 +43,9 @@ const board = state.board.boards[state.board.activeBoard];
           status: { ...board.columns[0], index: 0 },
         }}
         validationSchema={yup.object().shape({
-          title: yup.string().required(),
+          title: yup.string().required('Required').test('unique-title', 'Used', (value) => {
+            return titlesSet.has(value?.toLowerCase().trim()) ? false : true;
+          }),
           subtasks: yup.array().of(
             yup.object().shape({
               id: yup.string().required(),
@@ -56,6 +56,7 @@ const board = state.board.boards[state.board.activeBoard];
           // status: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
+          console.log('onSubmit')
           dispatch(addNewTask(values));
          //  setModalAddNewTaskOpen(false);
         }}
@@ -67,6 +68,8 @@ const board = state.board.boards[state.board.activeBoard];
           handleSubmit,
           submitForm,
           setFieldValue,
+          isValid,
+          validateForm
         }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -84,7 +87,7 @@ const board = state.board.boards[state.board.activeBoard];
                   />
                   {errors.title ? (
                     <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                      Required
+                      {errors.title}
                     </div>
                   ) : null}
                 </div>
@@ -135,6 +138,7 @@ const board = state.board.boards[state.board.activeBoard];
                           </div>
                           <button
                             className="w-[50px] flex justify-center items-center"
+                            type="button"
                             onClick={() => {
                               remove(index);
                             }}
@@ -202,8 +206,11 @@ const board = state.board.boards[state.board.activeBoard];
                 className="w-full"
                 onClick={(e) => {
                   e.preventDefault();
-                  submitForm(); 
-                  onRequestClose(e);
+                  validateForm().then( result => {
+                    if (Object.keys(result).length > 0) return;
+                    submitForm()
+                    onRequestClose(e);
+                  })
                 }}
                 type="submit"
               />
