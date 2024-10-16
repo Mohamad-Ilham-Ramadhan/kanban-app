@@ -24,17 +24,29 @@ export default function ModalCreateNewBoardOpen() {
 
   const boards = state.board.boards;
   const modalCreateNewBoardOpen = state.board.modalCreateNewBoardOpen;
-  
+  const namesSet = new Set(); // board names set
+  boards.forEach( b => namesSet.add(b.name.toLowerCase()));
   const dispatch = useDispatch();
+
+  function uniqueBoardName(value: string) {
+    console.log('uniqueBoardName', value);
+    let error;
+    if (namesSet.has(value)) error = 'forbiddenName';
+    return error;
+  }
+  
   return (
     <Modal isOpen={modalCreateNewBoardOpen} onRequestClose={() => dispatch(setModalCreateNewBoardOpen(false))}>
       <Formik
         initialValues={{
           name: "",
+          coba: '',
           columns: [""],
         }}
         validationSchema={yup.object().shape({
-          name: yup.string().required(),
+          name: yup.string().required('Required').test('unique-name', 'Used', (value) => {
+            return namesSet.has(value?.toLowerCase().trim()) ? false : true;
+          }),
           columns: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
@@ -48,7 +60,7 @@ export default function ModalCreateNewBoardOpen() {
           dispatch(setModalCreateNewBoardOpen(false));
         }}
       >
-        {({ values, errors, handleChange, submitForm, handleSubmit }) => {
+        {({ values, errors, handleChange, submitForm, handleSubmit, validateField }) => {
           return (
             <form onSubmit={handleSubmit}>
               <div className="text-lg font-bold mb-4">Add New Board</div>
@@ -59,16 +71,21 @@ export default function ModalCreateNewBoardOpen() {
                     id="name"
                     value={values.name}
                     // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddBoardname(e.target.value)}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      uniqueBoardName(e.target.value);
+                      validateField('name')
+                    }}
                     error={errors.name ? true : false}
                   />
-                  {errors.name ? (
+                  {errors.name && (
                     <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                      Required
+                      {errors.name}
                     </div>
-                  ) : null}
+                  )}
                 </div>
               </div>
+              
               <FieldArray
                 name="columns"
                 render={({ push, remove }) => (

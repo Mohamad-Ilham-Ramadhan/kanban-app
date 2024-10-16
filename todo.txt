@@ -1,5 +1,6 @@
 [WARNING]
    - [<SVG>]: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
+   - [Redux toolkit]: page.bundle.js:6 A non-serializable value was detected in an action, in the path: `register`. Value:
 [FEAT]   
 [STYLE]
 [BUG]

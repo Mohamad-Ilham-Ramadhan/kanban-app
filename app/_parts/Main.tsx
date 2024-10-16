@@ -204,7 +204,7 @@ export default function Main() {
           !!$swapCards.length &&
           !!$swapCards[0].getAnimations().length == false
         ) {
-          console.log('ini apa lagi ini?');
+          // console.log('ini apa lagi ini?');
           const $swapCard = $swapCards[0] as HTMLElement;
           if (
             Number($this.dataset.index) < Number($swapCard.dataset.index) &&

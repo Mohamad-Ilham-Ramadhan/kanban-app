@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store'
-import { staticGenerationAsyncStorage } from 'next/dist/client/components/static-generation-async-storage.external';
+// import type { PayloadAction } from '@reduxjs/toolkit'
+// import type { RootState } from '../store'
+// import { staticGenerationAsyncStorage } from 'next/dist/client/components/static-generation-async-storage.external';
 import { v4 as uuidv4 } from 'uuid';
 
 export type SubTask = {
@@ -361,7 +361,7 @@ export const boardSlice = createSlice({
                   if (index > toIndex || index < fromIndex) return t; // stay in the place
                   if (index == toIndex) return board.columns[fromColumnIndex].tasks[fromIndex]; // dragged card
                   if (index >= fromIndex){ 
-                     console.log('index >= fromIndex');
+                     // console.log('index >= fromIndex');
                      return board.columns[fromColumnIndex].tasks[index + 1]};
                   return t;
                })
