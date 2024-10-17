@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ButtonPill from "@/app/_components/buttons/ButtonPill";
 import Modal from '@/app/_components/Modal';
 import { useDispatch, useSelector } from "react-redux";
@@ -5,12 +6,20 @@ import { deleteActiveTask } from "@/app/_redux/reducers/boardReducer";
 import {CustomModalProps} from "@/app/_components/Modal";
 
 export default function ModalDeleteTask({isOpen, onRequestClose}: CustomModalProps) {
-      // @ts-ignore
-      const state: RootState = useSelector<RootState>((state) => state);
-      const board = state.board.boards[state.board.activeBoard];
-   
-      const dispatch = useDispatch();
-   
+  // @ts-ignore
+  const state: RootState = useSelector<RootState>((state) => state);
+  const board = state.board.boards[state.board.activeBoard];
+
+  const dispatch = useDispatch();
+  
+  useEffect( () => {
+    if (isOpen) {
+      setTimeout(() => {
+        document.getElementById('delete')?.focus();
+      });
+    }
+  }, [isOpen]);
+  
   return (
     <Modal
       isOpen={isOpen}
@@ -31,6 +40,7 @@ export default function ModalDeleteTask({isOpen, onRequestClose}: CustomModalPro
         </div>
         <div className="flex flex-row justify-center items-center">
           <ButtonPill
+            id="delete"
             color="text-white"
             backgroundColor="bg-red-500 hover:bg-red-500"
             text="Delete"
