@@ -27,12 +27,12 @@ export default function Aside() {
   return (
     <aside
       className={clsx(
-        "flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-[left] mobile:hidden",
+        "beauty-scroll overflow-auto flex flex-col justify-between h-[calc(100vh-96px)] w-[300px] shrink-0 bg-white dark:bg-dark-light border-r border-slate-200 dark:border-gray-700 absolute transition-[left] mobile:hidden",
         state.board.sidebar ? "left-0" : "left-[-300px]"
       )}
     >
       {/* #828fa3 */}
-      <div className="beauty-scroll overflow-auto pt-4 pr-6">
+      <div className=" pt-4 pr-6">
         <div className="text-slate-400 text-xs font-semibold uppercase tracking-[2px] pl-8 mb-5">
           all boards <span>({boards.length})</span>
         </div>
@@ -54,13 +54,13 @@ export default function Aside() {
               <span>{b.name}</span>
             </li>
           ))}
-          <li
+          <div
             className="flex items-center text-primary font-bold py-3 pl-8 hover:cursor-pointer hover:opacity-50"
             onClick={() => {dispatch(setModalCreateNewBoardOpen(true))}}
           >
             <BoardIcon className="mr-4" />
             <span>+ Create New Board</span>
-          </li>
+          </div>
         </nav>
       </div>
 
