@@ -29,7 +29,6 @@ export default function ModalCreateNewBoardOpen() {
   const dispatch = useDispatch();
 
   function uniqueBoardName(value: string) {
-    console.log('uniqueBoardName', value);
     let error;
     if (namesSet.has(value)) error = 'forbiddenName';
     return error;
