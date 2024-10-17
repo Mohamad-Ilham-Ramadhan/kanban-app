@@ -13,7 +13,7 @@ export default function Input({className, error, disabled, ...props} : InputProp
       type="text" 
       className={
          clsx(
-            "block w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-xs font-semibold", 
+            "block w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary focus:dark:border-primary outline-0 rounded py-2.5 px-4 text-xs font-semibold", 
             error ? 'border-red-500 focus:border-red-500' : '',
             disabled ? 'opacity-30' : '',
             className
