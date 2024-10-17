@@ -27,6 +27,7 @@ import IconArrowDown from '../_assets/icons/arrow-down.svg';
 import ModalMenu from './modals/ModalMenu';
 import ModalAddNewTask from './modals/ModalAddNewTask';
 import ModalDeleteBoard from './modals/ModalDeleteBoard';
+import ModalEditBoard from './modals/ModalEditBoard';
 
 export default function Header() {
     const {isMobile} = useIsMobile();
@@ -171,133 +172,10 @@ export default function Header() {
                 />
 
                 {/* modal edit board [start] */}
-                <Modal
-                  isOpen={modalEditActiveBoardOpen}
-                  onRequestClose={(e: React.MouseEvent<Element>) => {
-                    setModalEditActiveBoardOpen(false);
-                  }}
-                >
-                  <Formik
-                    initialValues={{
-                      name: board.name,
-                      columns: columns === null ? [] : columns,
-                    }}
-                    validationSchema={yup.object().shape({
-                      name: yup.string(),
-                      columns: yup.array().of(
-                        yup.object({
-                          name: yup.string().required(),
-                        })
-                      ),
-                    })}
-                    onSubmit={(values) => {
-                      dispatch(editActiveBoard(values));
-                      setModalEditActiveBoardOpen(false);
-                    }}
-                  >
-                    {({
-                      values,
-                      handleChange,
-                      handleSubmit,
-                      errors,
-                      submitForm,
-                    }) => (
-                      <form onSubmit={handleSubmit} className="asdf">
-                        <div className="font-bold text-lg mb-4">Edit board</div>
-                        <div className="mb-6">
-                          <Label htmlFor="column-name">Name</Label>
-                          <Input
-                            value={values.name}
-                            id="name"
-                            onChange={handleChange}
-                          />
-                        </div>
-
-                        <FieldArray
-                          name="columns"
-                          render={({ push, remove }) => (
-                            <>
-                              <div className="mb-4">
-                                <Label>Columns</Label>
-                                {values.columns.map((val, index) => (
-                                  <div className="flex mb-2" key={index}>
-                                    <div className="relative w-full">
-                                      <Input
-                                        value={values.columns[index].name}
-                                        id={`columns[${index}].name`}
-                                        onChange={handleChange}
-                                        error={
-                                          errors.columns !== undefined &&
-                                          errors.columns[index]
-                                            ? true
-                                            : false
-                                        }
-                                      />
-                                      {errors.columns &&
-                                      errors.columns[index] ? (
-                                        <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                                          Required
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                    {values.columns.length === 1 ? null : (
-                                      <button
-                                        className="w-[50px] flex justify-center items-center"
-                                        disabled={
-                                          values.columns[index].tasks.length > 0
-                                        }
-                                        onClick={() => {
-                                          remove(index);
-                                        }}
-                                        type="button"
-                                      >
-                                        <XIcon
-                                          className={
-                                            values.columns[index].tasks.length >
-                                            0
-                                              ? "text-gray-200 dark:text-gray-700"
-                                              : "text-gray-400"
-                                          }
-                                        />
-                                      </button>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                              {values.columns.length === 6 ? null : (
-                                <ButtonPill
-                                  text="+ Add New Column"
-                                  size="small"
-                                  className="w-full mb-4"
-                                  color="text-primary"
-                                  backgroundColor="bg-violet-50 hover:bg-violet-100 dark:bg-white dark:hover:bg-gray-200"
-                                  onClick={() => {
-                                    push({ name: "", tasks: [] });
-                                    setTimeout(() => {
-                                      document
-                                        .getElementById(
-                                          `columns[${values.columns.length}].name`
-                                        )
-                                        ?.focus();
-                                    }, 1);
-                                  }}
-                                  type="button"
-                                />
-                              )}
-                            </>
-                          )}
-                        />
-                        <ButtonPill
-                          text="Save Changes"
-                          size="small"
-                          className="w-full"
-                          onClick={submitForm}
-                          type="submit"
-                        />
-                      </form>
-                    )}
-                  </Formik>
-                </Modal>
+                <ModalEditBoard 
+                  isOpen={modalEditActiveBoardOpen} 
+                  onRequestClose={() => setModalEditActiveBoardOpen(false)}
+                />
                 {/* modal edit board [end] */}
 
                 {createPortal(

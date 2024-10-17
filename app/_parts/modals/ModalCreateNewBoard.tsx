@@ -25,7 +25,7 @@ export default function ModalCreateNewBoardOpen() {
   const boards = state.board.boards;
   const modalCreateNewBoardOpen = state.board.modalCreateNewBoardOpen;
   const namesSet = new Set(); // board names set
-  boards.forEach( b => namesSet.add(b.name.toLowerCase()));
+  boards.forEach( b => namesSet.add(b.name.toLowerCase().trim()));
   const dispatch = useDispatch();
 
   function uniqueBoardName(value: string) {
