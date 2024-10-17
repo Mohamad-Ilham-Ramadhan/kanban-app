@@ -56,7 +56,7 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
           // status: yup.array().of(yup.string().required()),
         })}
         onSubmit={(values) => {
-          console.log('onSubmit')
+          // console.log('onSubmit')
           dispatch(addNewTask(values));
          //  setModalAddNewTaskOpen(false);
         }}
