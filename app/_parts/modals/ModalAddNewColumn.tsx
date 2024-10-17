@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import * as yup from 'yup'
 import Modal from '@/app/_components/Modal';
 import { Formik, FieldArray } from 'formik';
@@ -10,12 +11,21 @@ import { addNewColumns } from '@/app/_redux/reducers/boardReducer';
 import { CustomModalProps } from '@/app/_components/Modal';
 
 export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalProps) {
-   // @ts-ignore
-   const state: RootState = useSelector<RootState>((state) => state);
-   const board = state.board.boards[state.board.activeBoard];
-   const columns = board.columns;
+  // @ts-ignore
+  const state: RootState = useSelector<RootState>((state) => state);
+  const board = state.board.boards[state.board.activeBoard];
+  const columns = board.columns;
 
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        document.getElementById('columns[0].name')?.focus()
+      })
+    }
+  }, [isOpen]);
+  
   return (
     <Modal
       isOpen={isOpen}
