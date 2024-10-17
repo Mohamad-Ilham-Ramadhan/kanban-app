@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik, FieldArray } from "formik";
 import Modal from "../../_components/Modal";
 import { v4 as uuidv4 } from "uuid";
@@ -29,7 +29,14 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
   })
   const [selectStatusOpen, setSelectStatusOpen] = useState(false);
 
-
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        document.getElementById('title')?.focus();
+      })
+    }
+  }, [isOpen])
+  
   return (
     <Modal
       isOpen={isOpen}
