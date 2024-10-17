@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react";
+import { useEffect} from "react";
 import { Formik, FieldArray } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
@@ -33,6 +33,14 @@ export default function ModalCreateNewBoardOpen() {
     if (namesSet.has(value)) error = 'forbiddenName';
     return error;
   }
+
+  useEffect(() => {
+    if (modalCreateNewBoardOpen) {
+      setTimeout(() => {
+        document.getElementById('name')?.focus();
+      })
+    }
+  }, [modalCreateNewBoardOpen])
   
   return (
     <Modal isOpen={modalCreateNewBoardOpen} onRequestClose={() => dispatch(setModalCreateNewBoardOpen(false))}>
