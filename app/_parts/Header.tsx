@@ -9,9 +9,6 @@ import XIcon from "../_assets/icons/x.svg";
 import ButtonPill from "../_components/buttons/ButtonPill";
 import Modal from '../_components/Modal';
 import Input from '../_components/Input';
-import Select from '../_components/Select';
-import Option from '../_components/Option';
-import Textarea from '../_components/Textarea';
 import ButtonIcon from '../_components/buttons/ButtonIcon';
 import Label from '../_components/Label';
 import { Formik, FieldArray } from 'formik';
@@ -19,7 +16,6 @@ import {v4 as uuidv4} from 'uuid';
 import * as yup from "yup";
 import { CssTransition } from "@mui/base";
 import {Unstable_Popup as BasePopup} from "@mui/base/Unstable_Popup";
-
 import {
    deleteActiveBoard,
    editActiveBoard,
@@ -30,6 +26,7 @@ import LogoMobile from '../_assets/logo-mobile.svg';
 import IconArrowDown from '../_assets/icons/arrow-down.svg';
 import ModalMenu from './modals/ModalMenu';
 import ModalAddNewTask from './modals/ModalAddNewTask';
+import ModalDeleteBoard from './modals/ModalDeleteBoard';
 
 export default function Header() {
     const {isMobile} = useIsMobile();
@@ -168,44 +165,10 @@ export default function Header() {
                   </CssTransition>
                 </BasePopup>
 
-                <Modal /* Modal delete current active board */
+                <ModalDeleteBoard
                   isOpen={modalDeleteBoardOpen}
-                  onRequestClose={(e: React.MouseEvent<Element>) => {
-                    setModalDeleteBoardOpen(false);
-                  }}
-                >
-                  <>
-                    <div className="font-bold text-red-500 text-lg mb-4">
-                      Delete this board?
-                    </div>
-                    <div className="text-gray-400 text-xs font-semibold leading-6 mb-6">
-                      Are you sure you want to delete the &apos;{board.name}
-                      &apos; board? This action will remove all columns and
-                      tasks and cannot be reversed.
-                    </div>
-                    <div className="flex flex-row justify-center items-center">
-                      <ButtonPill
-                        color="text-white"
-                        backgroundColor="bg-red-500 hover:bg-red-500"
-                        text="Delete"
-                        size="small"
-                        className="w-full transition-opacity hover:opacity-70 mr-4"
-                        onClick={() => {
-                          dispatch(deleteActiveBoard());
-                          setModalDeleteBoardOpen(false);
-                        }}
-                      />
-                      <ButtonPill
-                        color="text-primary"
-                        backgroundColor="bg-gray-100 hover:bg-gray-100"
-                        text="Cancel"
-                        size="small"
-                        className="w-full transition-opacity hover:opacity-70"
-                        onClick={() => setModalDeleteBoardOpen(false)}
-                      />
-                    </div>
-                  </>
-                </Modal>
+                  onRequestClose={() => setModalDeleteBoardOpen(false)}
+                />
 
                 {/* modal edit board [start] */}
                 <Modal

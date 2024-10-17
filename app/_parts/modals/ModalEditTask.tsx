@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as yup from "yup";
 import { v4 as uuidv4 } from "uuid";
-import Modal from "@/app/_components/Modal";
+import Modal, { CustomModalProps } from "@/app/_components/Modal";
 import { Formik, FieldArray } from "formik";
 import Input from "@/app/_components/Input";
 import Label from "@/app/_components/Label";
@@ -13,7 +13,6 @@ import XIcon from "../../_assets/icons/x.svg";
 import { RootState } from "@/app/_redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { editActiveTask } from "@/app/_redux/reducers/boardReducer";
-import { CustomModalProps } from "@/app/_components/Modal";
 
 export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalProps) {
   // @ts-ignore
