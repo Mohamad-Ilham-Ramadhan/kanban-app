@@ -11,6 +11,13 @@ export default function ModalDeleteBoard({ isOpen, onRequestClose }: CustomModal
   const board = state.board.boards[state.board.activeBoard];
    const dispatch = useDispatch();
 
+   useEffect(() => {
+      if (isOpen) {
+         setTimeout(() => {
+            document.getElementById('delete')?.focus();
+         })
+      }
+   }, [isOpen]);
   return (
     <Modal /* Modal delete current active board */
       isOpen={isOpen}
@@ -30,6 +37,7 @@ export default function ModalDeleteBoard({ isOpen, onRequestClose }: CustomModal
             color="text-white"
             backgroundColor="bg-red-500 hover:bg-red-500"
             text="Delete"
+            id="delete"
             size="small"
             className="w-full transition-opacity hover:opacity-70 mr-4"
             onClick={(e) => {
