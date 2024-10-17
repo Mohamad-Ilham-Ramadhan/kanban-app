@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import Modal from "@/app/_components/Modal";
@@ -25,6 +25,14 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
   const dispatch = useDispatch();
 
   const [selectStatusOpen, setSelectStatusOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        document.getElementById('title')?.focus()
+      })
+    }
+  }, [isOpen]);
   
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
