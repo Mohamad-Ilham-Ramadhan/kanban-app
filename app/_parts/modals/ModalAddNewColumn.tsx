@@ -9,6 +9,7 @@ import { RootState } from '@/app/_redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewColumns } from '@/app/_redux/reducers/boardReducer';
 import { CustomModalProps } from '@/app/_components/Modal';
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
 
 export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalProps) {
   // @ts-ignore
@@ -38,7 +39,22 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalP
         validationSchema={yup.object().shape({
           columns: yup.array().of(
             yup.object({
-              name: yup.string().required(),
+              name: yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+                // @ts-ignore
+                const columns = context.from[1].value.columns;
+                const match = context?.path?.match(/\d+/)
+                let index;
+                if (match !== null) {
+                  index = Number(match[0])
+                }
+                let unique = true;
+                for (let i = 0; i < columns.length; i++) {
+                  const {name} = columns[i];
+                  if (i === index) break;
+                  if (name.toLowerCase().trim() === value.toLocaleLowerCase().trim()) unique = false
+                }
+                return unique;
+              }),
             })
           ),
         })}
@@ -47,7 +63,7 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalP
           // onRequestClose();
         }}
       >
-        {({ values, handleChange, handleSubmit, errors, submitForm }) => (
+        {({ values, handleChange, handleSubmit, errors, submitForm, isValid }) => (
           <form onSubmit={handleSubmit} className="asdf">
             <div className="font-bold text-lg mb-4">Add New Column</div>
             <div className="mb-6">
@@ -88,7 +104,8 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalP
                           />
                           {errors.columns && errors.columns[index] ? (
                             <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                              Required
+                              {/* @ts-ignore */}
+                              {errors.columns[index].name}
                             </div>
                           ) : null}
                         </div>
@@ -143,7 +160,7 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalP
               onClick={(e) => {
                 e.preventDefault();
                 submitForm(); 
-                onRequestClose(e);
+                if (isValid) onRequestClose(e);
               }}
               type="submit"
             />
