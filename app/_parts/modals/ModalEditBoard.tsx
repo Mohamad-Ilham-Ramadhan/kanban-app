@@ -45,7 +45,23 @@ export default function ModalEditBoard({ isOpen, onRequestClose }: CustomModalPr
           }),
           columns: yup.array().of(
             yup.object({
-              name: yup.string().required(),
+              name: yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+                // @ts-ignore
+                const columns = context.from[1].value.columns;
+                const match = context?.path?.match(/\d+/)
+                let index;
+                if (match !== null) {
+                  index = Number(match[0])
+                }
+                let unique = true;
+                for (let i = 0; i < columns.length; i++) {
+                  const {name} = columns[i];
+                  if (!name) break;
+                  if (i === index) break;
+                  if (name.toLowerCase().trim() === value.toLocaleLowerCase().trim()) unique = false
+                }
+                return unique;
+              }),
             })
           ),
         })}
@@ -53,7 +69,7 @@ export default function ModalEditBoard({ isOpen, onRequestClose }: CustomModalPr
           dispatch(editActiveBoard(values));
         }}
       >
-        {({ values, handleChange, handleSubmit, errors, submitForm, validateForm }) => (
+        {({ values, handleChange, handleSubmit, errors, submitForm, isValid }) => (
           <form onSubmit={handleSubmit} className="asdf">
             <div className="font-bold text-lg mb-4">Edit board</div>
             <div className="mb-6">
@@ -90,7 +106,8 @@ export default function ModalEditBoard({ isOpen, onRequestClose }: CustomModalPr
                           />
                           {errors.columns && errors.columns[index] ? (
                             <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                              Required
+                              {/* @ts-ignore */}
+                              {errors.columns[index].name}
                             </div>
                           ) : null}
                         </div>
@@ -143,12 +160,8 @@ export default function ModalEditBoard({ isOpen, onRequestClose }: CustomModalPr
               size="small"
               className="w-full"
               onClick={(e) => {
-               validateForm().then( (result) => {
-                  if (Object.keys(result).length === 0) {
-                     submitForm()
-                     onRequestClose(e);
-                  }
-               })
+                submitForm()
+                if (isValid) onRequestClose(e);
               }}
               type="submit"
             />
