@@ -54,7 +54,22 @@ export default function ModalCreateNewBoardOpen() {
           name: yup.string().required('Required').test('unique-name', 'Used', (value) => {
             return namesSet.has(value?.toLowerCase().trim()) ? false : true;
           }),
-          columns: yup.array().of(yup.string().required()),
+          columns: yup.array().of(yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+            // @ts-ignore
+            const columns = context.from[0].value.columns;
+            const match = context?.path?.match(/\d+/);
+            let index;
+            if (match !== null) {
+              index = Number(match[0])
+            }
+            let unique = true;
+            for (let i = 0; i < columns.length; i++) {
+              const name = columns[i];
+              if (i === index) break;
+              if (name.toLowerCase().trim() === value.toLocaleLowerCase().trim()) unique = false
+            }
+            return unique;
+          })),
         })}
         onSubmit={(values) => {
           dispatch(
@@ -67,7 +82,7 @@ export default function ModalCreateNewBoardOpen() {
           dispatch(setModalCreateNewBoardOpen(false));
         }}
       >
-        {({ values, errors, handleChange, submitForm, handleSubmit, validateField }) => {
+        {({ values, errors, handleChange, submitForm, handleSubmit, validateField, isValid }) => {
           return (
             <form onSubmit={handleSubmit}>
               <div className="text-lg font-bold mb-4">Add New Board</div>
@@ -116,7 +131,7 @@ export default function ModalCreateNewBoardOpen() {
                             />
                             {errors.columns && errors.columns[index] ? (
                               <div className="absolute top-1/2 right-4 -translate-y-1/2 text-xs font-semibold text-red-500">
-                                Required
+                                {errors.columns[index]}
                               </div>
                             ) : null}
                           </div>
@@ -161,7 +176,11 @@ export default function ModalCreateNewBoardOpen() {
                 text="Create New Board"
                 size="small"
                 className="w-full mb-4"
-                onClick={submitForm}
+                onClick={() => {
+                  console.log('isValid', isValid);
+                  if (!isValid) return;
+                  submitForm();
+                }}
                 type="submit"
               />
             </form>
