@@ -76,7 +76,6 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
           submitForm,
           setFieldValue,
           isValid,
-          validateForm
         }) => {
           return (
             <form onSubmit={handleSubmit}>

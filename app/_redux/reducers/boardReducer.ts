@@ -277,8 +277,8 @@ export const boardSlice = createSlice({
       editActiveBoard(state, {payload: {name, columns}}) {
          // column management
          state.boards[state.activeBoard].columns = columns.map((c: Column) => {
-            if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
-            else return {id: uuidv4(), name: c.name, tasks: []}
+            if (c.id) return {id: c.id, name: c.name.trim(), tasks: c.tasks}
+            else return {id: uuidv4(), name: c.name.trim(), tasks: []}
          });
          // edit active board's name
          state.boards[state.activeBoard].name = name
