@@ -309,9 +309,9 @@ export const boardSlice = createSlice({
       },
       addNewColumns: (state, {payload}: {payload: Column[]}) => {
          state.boards[state.activeBoard].columns = payload.map((c: Column) => {
-            if (c.id) return {id: c.id, name: c.name, tasks: c.tasks}
-            else return {id: uuidv4(), name: c.name, tasks: []}
-         })
+            if (c.id) return {id: c.id, name: c.name.trim(), tasks: c.tasks}
+            else return {id: uuidv4(), name: c.name.trim(), tasks: []}
+         });
       },
       toggleSubtask(state, {payload: p}) {
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask].subtasks[p.subtaskIndex].isDone = !p.isDone;
