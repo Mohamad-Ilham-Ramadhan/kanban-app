@@ -213,11 +213,9 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
                 className="w-full"
                 onClick={(e) => {
                   e.preventDefault();
-                  validateForm().then( result => {
-                    if (Object.keys(result).length > 0) return;
-                    submitForm()
-                    onRequestClose(e);
-                  })
+                  if (!isValid) return;
+                  submitForm()
+                  onRequestClose(e);
                 }}
                 type="submit"
               />
