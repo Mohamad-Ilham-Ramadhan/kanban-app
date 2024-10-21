@@ -336,9 +336,9 @@ export const boardSlice = createSlice({
          // no change column
          state.boards[state.activeBoard].columns[state.activeColumn].tasks[state.activeTask] = {
             id: payload.id,
-            title: payload.title,
-            description: payload.description,
-            subtasks: payload.subtasks
+            title: payload.title.trim(),
+            description: payload.description.trim(),
+            subtasks: payload.subtasks.map( (st: SubTask) => ({...st, text: st.text.trim()}))
          }
          if (payload.status.index !== state.activeColumn) {
             const task = state.boards[state.activeBoard].columns[state.activeColumn].tasks.splice(state.activeTask, 1)[0];
