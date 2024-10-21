@@ -288,8 +288,8 @@ export const boardSlice = createSlice({
          task.subtasks = task.subtasks.map( (st: SubTask) => ({...st, text: st.text.trim()}))
          state.boards[state.activeBoard].columns[action.payload.status.index].tasks.push({
             id: uuidv4(),
-            title: task.title,
-            description: task.description,
+            title: task.title.trim(),
+            description: task.description.trim(),
             subtasks: task.subtasks,
          })
       },
