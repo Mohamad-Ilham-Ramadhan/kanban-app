@@ -266,7 +266,7 @@ export const boardSlice = createSlice({
       createNewBoard(state, action)  {
          state.boards.push({
             id: uuidv4(),
-            name: action.payload.name,
+            name: action.payload.name.trim(),
             columns: action.payload.columns.map((c: string) => ({
                id: uuidv4(),
                name: c.trim(),
