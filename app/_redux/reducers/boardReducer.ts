@@ -281,7 +281,7 @@ export const boardSlice = createSlice({
             else return {id: uuidv4(), name: c.name.trim(), tasks: []}
          });
          // edit active board's name
-         state.boards[state.activeBoard].name = name
+         state.boards[state.activeBoard].name = name.trim();
       },
       addNewTask(state, action) {
          const task = action.payload;
