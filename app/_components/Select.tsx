@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useField } from "formik";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { CSSTransition } from "react-transition-group";
@@ -33,6 +32,12 @@ export default function Select({
     let listboxRect;
 
     if (listbox !== null && btn !== null) {
+      if (!open) {
+        btn.focus();
+      }
+      if (open) {
+        (listbox.firstElementChild as HTMLButtonElement)?.focus();
+      }
       btnRect = btn.getBoundingClientRect();
       listboxRect = listbox.getBoundingClientRect();
       listbox.style.left = `${btnRect?.left}px`;
@@ -51,7 +56,7 @@ export default function Select({
       <button
         onClick={onButtonClick}
         className={clsx(
-          "block relative w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-left text-xs font-semibold",
+          "block relative w-full bg-transparent border-2 border-slate-300 dark:border-gray-600 focus:border-primary outline-0 rounded py-2.5 px-4 text-left text-xs font-semibold focus:outline focus:outline-1 focus:outline-orange-300",
           className
         )}
         type="button"
@@ -82,7 +87,7 @@ export default function Select({
             <div>
               <ul
                 ref={listboxRef}
-                className="listbox absolute z-[1000] py-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow"
+                className="listbox absolute z-[1000] p-3 rounded overflow-hidden bg-white dark:bg-dark drop-shadow"
               >
                 {/* {data.map((value) => (
                   <li
