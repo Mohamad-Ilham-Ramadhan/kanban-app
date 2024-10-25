@@ -177,7 +177,6 @@ export default function ModalCreateNewBoardOpen() {
                 size="small"
                 className="w-full mb-4"
                 onClick={() => {
-                  console.log('isValid', isValid);
                   if (!isValid) return;
                   submitForm();
                 }}
