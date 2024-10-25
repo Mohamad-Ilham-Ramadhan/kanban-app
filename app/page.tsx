@@ -35,7 +35,7 @@ export default function Home() {
 
   const showSidebarTransitionRef = useRef(null);
   return (
-    <>
+    <div className="h-screen relative bg-red-300 flex flex-col">
       <Header />
 
       <ModalCreateNewBoardOpen />
@@ -56,8 +56,6 @@ export default function Home() {
       </CSSTransition>
 
       <Main />
-
-      {/* <CobaComponent /> */}
-    </>
+    </div>
   );
 }

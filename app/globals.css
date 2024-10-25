@@ -137,7 +137,7 @@ body {
   font-family: 'Plus Jakarta Sans';
   color: #000;
   background-color: theme('colors.light-theme-bg');
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 /* dark theme */
 html.dark body {

@@ -900,7 +900,7 @@ export default function Main() {
   const {isMobile} = useIsMobile()
 
   return (
-    <main className="flex flex-row fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark"> 
+    <main className="flex flex-row fixed top-0 left-0 z-10 pt-[96px] w-screen h-screen bg-slate-100 dark:bg-dark">  
       <Aside />
       <section
         className={clsx(
@@ -913,7 +913,7 @@ export default function Main() {
         , document.body)}
         <div 
           id="main-scroll"
-          className="beauty-scroll w-[100vw] overflow-auto relative cursor-move transition-all"
+          className="beauty-scroll w-[100vw] h-full overflow-auto relative cursor-move transition-all"
           onMouseDown={(e) => {
             // console.log('scrolling');
             const $this = e.currentTarget;
@@ -956,7 +956,7 @@ export default function Main() {
                     </div>
 
                     <div 
-                      className={clsx("flex flex-col h-full pb-8 tasks-wrapper", c.tasks.length === 0 ? 'empty' : '')}
+                      className={clsx("flex flex-col h-fit pb-8 tasks-wrapper", c.tasks.length === 0 ? 'empty' : '')}
                       data-column-index={columnIndex}
                       data-is-animating="0"
                     >
