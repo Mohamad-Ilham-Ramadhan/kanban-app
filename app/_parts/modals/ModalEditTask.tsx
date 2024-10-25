@@ -147,7 +147,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
                         </div>
                       ))}
                     </div>
-                    {values.subtasks.length === 6 ? null : (
+                    {values.subtasks.length === 7 ? null : (
                       <ButtonPill
                         text="+ Add New Subtask"
                         size="small"
@@ -200,7 +200,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
               </div>
 
               <ButtonPill
-                text="Create Task"
+                text="Save Changes"
                 size="small"
                 className="w-full"
                 onClick={(e: React.MouseEvent) => {
