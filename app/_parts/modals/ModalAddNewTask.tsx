@@ -154,7 +154,7 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
                         </div>
                       ))}
                     </div>
-                    {values.subtasks.length === 6 ? null : (
+                    {values.subtasks.length === 7 ? null : (
                       <ButtonPill
                         text="+ Add New Subtask"
                         size="small"
