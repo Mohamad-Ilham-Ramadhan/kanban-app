@@ -75,7 +75,7 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
           handleSubmit,
           submitForm,
           setFieldValue,
-          isValid,
+          validateForm
         }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -212,9 +212,11 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
                 className="w-full"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (!isValid) return;
-                  submitForm()
-                  onRequestClose(e);
+                  validateForm().then( result => {
+                    if (Object.keys(result).length > 0) return;
+                    submitForm()
+                    onRequestClose(e);
+                  })
                 }}
                 type="submit"
               />
