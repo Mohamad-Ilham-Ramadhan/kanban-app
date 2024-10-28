@@ -8,7 +8,6 @@ import Label from "@/app/_components/Label";
 import XIcon from "../../_assets/icons/x.svg";
 import ButtonPill from "@/app/_components/buttons/ButtonPill";
 import Modal from "@/app/_components/Modal";
-import { Board } from "@/app/_redux/reducers/boardReducer";
 import { RootState } from "@/app/_redux/store";
 import {
   createNewBoard,
@@ -51,10 +50,10 @@ export default function ModalCreateNewBoardOpen() {
           columns: [""],
         }}
         validationSchema={yup.object().shape({
-          name: yup.string().required('Required').test('unique-name', 'Used', (value) => {
+          name: yup.string().trim().required('Required').test('unique-name', 'Used', (value) => {
             return namesSet.has(value?.toLowerCase().trim()) ? false : true;
           }),
-          columns: yup.array().of(yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+          columns: yup.array().of(yup.string().trim().required('Required').test('unique-name', 'Used', (value, context) => {
             // @ts-ignore
             const columns = context.from[0].value.columns;
             const match = context?.path?.match(/\d+/);
