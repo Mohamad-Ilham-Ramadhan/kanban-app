@@ -45,7 +45,6 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
         }}
         validationSchema={yup.object().shape({
           title: yup.string().trim().required(),
-          description: yup.string().required(),
           subtasks: yup.array().of(
             yup.object().shape({
               id: yup.string().required(),
@@ -66,6 +65,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
           handleSubmit,
           submitForm,
           setFieldValue,
+          isValid,
         }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -206,7 +206,7 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
                 onClick={(e: React.MouseEvent) => {
                   e.preventDefault();
                   submitForm()
-                  onRequestClose(e);
+                  if (isValid) onRequestClose(e);
                 }}
                 type="submit"
               />
