@@ -44,12 +44,12 @@ export default function ModalEditTask({ isOpen, onRequestClose }: CustomModalPro
           status: { ...currentColumn, index: state.board.activeColumn },
         }}
         validationSchema={yup.object().shape({
-          title: yup.string().required(),
+          title: yup.string().trim().required(),
           description: yup.string().required(),
           subtasks: yup.array().of(
             yup.object().shape({
               id: yup.string().required(),
-              text: yup.string().required(),
+              text: yup.string().trim().required(),
               isDone: yup.boolean().required(),
             })
           ),
