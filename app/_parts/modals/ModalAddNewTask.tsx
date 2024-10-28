@@ -50,13 +50,13 @@ export default function ModalAddNewTask({isOpen, onRequestClose}: CustomModalPro
           status: { ...board.columns[0], index: 0 },
         }}
         validationSchema={yup.object().shape({
-          title: yup.string().required('Required').test('unique-title', 'Used', (value) => {
+          title: yup.string().trim().required('Required').test('unique-title', 'Used', (value) => {
             return titlesSet.has(value?.toLowerCase().trim()) ? false : true;
           }),
           subtasks: yup.array().of(
             yup.object().shape({
               id: yup.string().required(),
-              text: yup.string().required(),
+              text: yup.string().trim().required(),
               isDone: yup.boolean().required(),
             })
           ),
