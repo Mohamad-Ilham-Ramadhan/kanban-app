@@ -39,13 +39,13 @@ export default function ModalEditBoard({ isOpen, onRequestClose }: CustomModalPr
           columns: columns === null ? [] : columns,
         }}
         validationSchema={yup.object().shape({
-          name: yup.string().required('Required').test('unique-name', 'Used', (value) => {
+          name: yup.string().trim().required('Required').test('unique-name', 'Used', (value) => {
             value = value?.toLocaleLowerCase().trim();
             return !namesSet.has(value?.toLowerCase().trim()) || value === board.name.toLocaleLowerCase().trim() ? true : false;
           }),
           columns: yup.array().of(
             yup.object({
-              name: yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+              name: yup.string().trim().required('Required').test('unique-name', 'Used', (value, context) => {
                 // @ts-ignore
                 const columns = context.from[1].value.columns;
                 const match = context?.path?.match(/\d+/)
