@@ -39,7 +39,7 @@ export default function ModalAddNewColumn({isOpen, onRequestClose}: CustomModalP
         validationSchema={yup.object().shape({
           columns: yup.array().of(
             yup.object({
-              name: yup.string().required('Required').test('unique-name', 'Used', (value, context) => {
+              name: yup.string().trim().required('Required').test('unique-name', 'Used', (value, context) => {
                 // @ts-ignore
                 const columns = context.from[1].value.columns;
                 const match = context?.path?.match(/\d+/)
