@@ -12,8 +12,6 @@ import Header from "./_parts/Header";
 import Main from "./_parts/Main";
 import ModalCreateNewBoardOpen from "./_parts/modals/ModalCreateNewBoard";
 
-import CobaComponent from "./coba/cobaComponent";
-
 export default function Home() {
   // @ts-ignore
   const state: RootState = useSelector<RootState>((state) => state);
